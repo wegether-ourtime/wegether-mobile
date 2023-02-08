@@ -1,7 +1,8 @@
 import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import HomeScreen from '../screens/HomeScreen/HomeScreen';
-// import LoginScreen from '../screens/LoginScreen/LoginScreen';
+import LoginScreen from '../screens/LoginScreen/LoginScreen';
+import EventScreen from '../screens/EventScreen/EventScreen';
 // import PinScreen from '../screens/PinScreen/PinScreen';
 // import OtpScreen from '../screens/OtpScreen/OtpScreen';
 // import ConditionScreen from '../screens/RegisterScreen/ConditionScreen';
@@ -20,8 +21,8 @@ const AppAuthNavigator: React.FC = () => {
   return (
     <Stack.Navigator screenOptions={{headerShown: false}}>
       <Stack.Screen name="HomeScreen" component={HomeScreen} />
-      {/* <Stack.Screen name="LoginScreen" component={LoginScreen} />
-      <Stack.Screen name="OtpScreen" component={OtpScreen} />
+      <Stack.Screen name="LoginScreen" component={LoginScreen} />
+      {/* <Stack.Screen name="OtpScreen" component={OtpScreen} />
       <Stack.Screen name="PinScreen" component={PinScreen} />
       <Stack.Screen name="ConditionScreen" component={ConditionScreen} />
       <Stack.Screen name="TelNumberScreen" component={TelNumberScreen} />

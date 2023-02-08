@@ -7,7 +7,6 @@ import LoadingNavigator from './LoadingNavigator';
 const Stack = createStackNavigator();
 
 const AppNavigator: React.FC = () => {
-  console.log('work')
   return (
     <Stack.Navigator
       screenOptions={{headerShown: false, gestureEnabled: false}}>
