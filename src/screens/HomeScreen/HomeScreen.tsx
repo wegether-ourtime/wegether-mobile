@@ -8,6 +8,7 @@ import {colors} from '../../common/assets';
 // import HomeCarousel from '../../components/Carousel/HomeCarousel';
 // import {MainButton} from '../../components/Button/MainButton';
 // import {colors, font} from '../../assets';
+import * as RootNavigation from '../../navigations/RootNavigation';
 
 const HomeScreen: React.FC<any> = ({navigation}) => {
   return (
@@ -20,7 +21,12 @@ const HomeScreen: React.FC<any> = ({navigation}) => {
           <MainButton
             label="Login with Facebook"
             color={colors.orange}
-            onPress={() => navigation.navigate('LoginScreen')}
+            onPress={() => {
+              // navigation.navigate('EventScreen')
+              RootNavigation.navigate('Main', {
+                screen: 'EventScreen',
+              });
+            }}
           />
 
           <MainButton

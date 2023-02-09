@@ -5,12 +5,14 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {colors, font, icons} from '../../common/assets';
 import {normalize} from '../../common/function/Normalize';
 import {stylesCentral} from '../../common/styles/StylesCentral';
+import { Map } from '../../components/Map/Map';
 import EventTapNavigator from '../../navigations/topTabs/EventNavigator';
 
 const EventScreen: React.FC<any> = ({navigation}) => {
   const insets = useSafeAreaInsets();
   return (
     <View style={[stylesCentral.container, {paddingTop: insets.top}]}>
+      <Map></Map>
       <View style={{flex: 2}}>
         <View style={styles.headCard}>
           <View>
