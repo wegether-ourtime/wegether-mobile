@@ -6,7 +6,6 @@ import {normalize} from '../../common/function/Normalize';
 import {stylesApp} from '../../common/styles/AppStyle';
 
 export const Touchable: React.FC<any> = props => {
-  console.log(props.style);
   return (
     <TouchableOpacity
       style={[

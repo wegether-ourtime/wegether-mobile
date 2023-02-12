@@ -12,7 +12,6 @@ const AppNavigator: React.FC = () => {
       screenOptions={{
         headerShown: false,
         gestureEnabled: false,
-        cardStyle: {backgroundColor: '#F5F5F5'},
       }}>
       <Stack.Screen
         name="initPage"

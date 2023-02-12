@@ -1,6 +1,7 @@
 import {Icon, normalize} from '@rneui/themed';
 import React from 'react';
 import {Image, StyleSheet, Text, View} from 'react-native';
+import {colors, font} from '../../common/assets';
 
 interface Props {
   name?: string;
@@ -10,24 +11,29 @@ interface Props {
 export const Category: React.FC<Props> = props => {
   const {name, icon} = props;
   return (
-    <View style={styles.category}>
-      <Text>{name}</Text>
-      {/* <Image source={icon} /> */}
+    <View style={styles.main}>
+      <Image source={icon} />
+      <Text style={styles.text}>{name}</Text>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  category: {
-    // width: '300',
-    padding: normalize(10),
-    backgroundColor: '#3E51FF',
-    display: 'flex',
+  main: {
+    backgroundColor: colors.white,
+    padding: normalize(12),
+    margin: normalize(6),
+    alignSelf: 'flex-start',
+    borderRadius: normalize(24),
     flexDirection: 'row',
-    alignItems: 'flex-start',
-
-    // flex: none;
-    // order: 0;
-    // flex-grow: 0;
+    flexWrap: 'nowrap',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  text: {
+    color: colors.primary,
+    paddingLeft: normalize(12),
+    fontFamily: font.medium,
+    fontSize: normalize(14),
   },
 });

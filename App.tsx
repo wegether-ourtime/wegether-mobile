@@ -1,5 +1,5 @@
 import React, {createContext, useEffect, useState} from 'react';
-import {NavigationContainer} from '@react-navigation/native';
+import {DefaultTheme, NavigationContainer} from '@react-navigation/native';
 import {navigationRef} from './src/navigations/RootNavigation';
 // import SplashScreen from 'react-native-splash-screen';
 // import Toast from 'react-native-toast-message';
@@ -11,16 +11,6 @@ import {BackHandler} from 'react-native';
 // import dayjs from 'dayjs';
 import {AuthProvider} from './src/contexts/AuthContext';
 import AppNavigator from './src/navigations/AppNavigator';
-// dayjs.extend(buddhaEra);
-// import {
-//   firebaseInitialize,
-//   getFCMToken,
-//   requestUserPermission,
-// } from './src/firebase/notification';
-// import { Platform } from 'react-native';
-// import AsyncStorage from '@react-native-async-storage/async-storage';
-// import { mixpanel } from './mixpanel';
-// import { checkNotifications } from 'react-native-permissions';
 
 type ActionContextType = {
   actiontaskId: string | null;
@@ -38,20 +28,7 @@ const App = () => {
   const [actiontaskId, setActiontaskId] = useState<string | null>('');
   useEffect(() => {
     BackHandler.addEventListener('hardwareBackPress', () => true);
-    // SplashScreen.hide();
-    // if (Platform.OS === "ios") {
-    //   firebaseInitialize()
-    // }
-    // checkPermission()
   }, []);
-
-  // const checkPermission = () => {
-  //   checkNotifications().then(({ status, settings }) => {
-  //     if (status === 'denied' || status === 'blocked') {
-  //       requestUserPermission()
-  //     }
-  //   });
-  // }
 
   return (
     <>
@@ -63,8 +40,8 @@ const App = () => {
             </SheetProvider>
           </AuthProvider> */}
           <SheetProvider>
-              <AppNavigator />
-            </SheetProvider>
+            <AppNavigator />
+          </SheetProvider>
           {/* <Toast config={toastConfig} /> */}
         </NavigationContainer>
       </ActionContext.Provider>

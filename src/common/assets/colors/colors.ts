@@ -1,5 +1,6 @@
 export default {
   primary: '#3E51FF', // primary
+  background: '#F5F5F5',
 
   orange: '#FB8705',
   darkOrange: '#E85737',

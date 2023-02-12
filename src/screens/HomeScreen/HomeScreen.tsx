@@ -3,11 +3,11 @@ import React from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {stylesApp} from '../../common/styles/AppStyle';
 import {normalize} from '../../common/function/Normalize';
-import {MainButton} from '../../components/Input/Button';
+import {MainButton} from '../../components/Button/MainButton';
 import {colors, font, image} from '../../common/assets';
 import * as RootNavigation from '../../navigations/RootNavigation';
 import {TouchableOpacity} from 'react-native-gesture-handler';
-import {Touchable} from '../../components/Input/Touchable';
+import {Touchable} from '../../components/Button/Touchable';
 
 const HomeScreen: React.FC<any> = ({navigation}) => {
   const screen = Dimensions.get('window');
@@ -15,7 +15,7 @@ const HomeScreen: React.FC<any> = ({navigation}) => {
   const imageWidth = screen.width;
   return (
     <SafeAreaView style={stylesApp.container}>
-      <View style={[{height: '100%'}]}>
+      <View style={[{height: '100%'}, styles.main]}>
         <View style={[{paddingTop: '50%'}]}>
           <Image
             source={image.wegether}
@@ -48,13 +48,10 @@ const HomeScreen: React.FC<any> = ({navigation}) => {
         <Touchable
           label={'Don’t have any account ? Sign Up'}
           fontColor={'#757575'}
-          style={[styles.button, { marginTop: normalize(50)}]}
+          style={[styles.button, {marginTop: normalize(50)}]}
           fontSize={normalize(15)}
           onPress={() => {
-            // navigation.navigate('EventScreen')
-            RootNavigation.navigate('Main', {
-              screen: 'EventScreen',
-            });
+            navigation.navigate('RegisterScreen');
           }}></Touchable>
       </View>
     </SafeAreaView>
@@ -63,7 +60,9 @@ const HomeScreen: React.FC<any> = ({navigation}) => {
 export default HomeScreen;
 
 const styles = StyleSheet.create({
-  main: {},
+  main: {
+    flex: 1,
+  },
   button: {
     margin: normalize(20),
     marginBottom: normalize(0),

@@ -53,7 +53,6 @@ const MainNavigator: React.FC = () => {
         }}
       />
       <Stack.Screen name="EventScreen" component={EventScreen} />
-      <Stack.Screen name="InterestScreen" component={InterestScreen} />
       <Stack.Screen name="ProfileScreen" component={ProfileScreen} />
     </Stack.Navigator>
   );
