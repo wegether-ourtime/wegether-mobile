@@ -1,6 +1,8 @@
 export default {
-  orange: '#FB8705', // primary
-  darkOrange: '#E85737', // secondary
+  primary: '#3E51FF', // primary
+
+  orange: '#FB8705',
+  darkOrange: '#E85737',
   fontBlack: '#1F2933',
   gray: '#6B7580',
   grayPlaceholder: '#B0B8BF',

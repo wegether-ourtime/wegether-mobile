@@ -9,7 +9,11 @@ const Stack = createStackNavigator();
 const AppNavigator: React.FC = () => {
   return (
     <Stack.Navigator
-      screenOptions={{headerShown: false, gestureEnabled: false}}>
+      screenOptions={{
+        headerShown: false,
+        gestureEnabled: false,
+        cardStyle: {backgroundColor: '#F5F5F5'},
+      }}>
       <Stack.Screen
         name="initPage"
         component={LoadingNavigator}
