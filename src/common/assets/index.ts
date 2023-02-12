@@ -1,7 +1,7 @@
-import _image from './images/image';
+import _image from './images';
 import _colors from './colors/colors';
 import _fonts from './fonts';
-import _icons from './icons/icons';
+import _icons from './icons';
 
 export const image = _image;
 export const colors = _colors;

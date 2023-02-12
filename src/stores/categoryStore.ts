@@ -1,16 +1,28 @@
 import {create} from 'zustand';
 import axios from 'axios';
 import {BASE_URL} from '../config';
+import Category from '../models/Category';
 
-export const useCategoryStore = create(set => ({
-  categorys: [],
+interface CategoryState {
+  categories: Category[];
+  category: Category | null;
+  loading: boolean;
+  getCategories: (criteria: any) => void;
+  getCategory: (categoryId: string) => void;
+  createCategory: (createCategory: string) => void;
+  updateCategory: (categoryId: string) => void;
+  deleteCategory: (categoryId: string) => void;
+}
+
+export const useCategoryStore = create<CategoryState>(set => ({
+  categories: [],
   category: null,
   loading: false,
-  getCategorys: async (criteria: any) => {
+  getCategories: async (criteria: any) => {
     const {data} = await axios.get(`${BASE_URL}/category`, {...criteria});
-    const categorys = data;
+    const categories = data;
 
-    set({categorys});
+    set({categories});
   },
   getCategory: async (categoryId: string) => {
     const {data} = await axios.get(`${BASE_URL}/category/${categoryId}`);

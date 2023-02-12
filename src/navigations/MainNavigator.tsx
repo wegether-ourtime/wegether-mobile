@@ -21,6 +21,7 @@ import {StackNavigationHelpers} from '@react-navigation/stack/lib/typescript/src
 import MainTapNavigator from './bottomTabs/MainTapNavigator';
 import EventScreen from '../screens/EventScreen/EventScreen';
 import ProfileScreen from '../screens/ProfileScreen/ProfileScreen';
+import InterestScreen from '../screens/InterestScreen/InterestScreen';
 // import NotificationList from '../screens/ProfileScreen/NotificationList';
 // import DeleteSuccess from '../screens/ProfileScreen/DeleteProfile/DeleteSuccess';
 
@@ -29,6 +30,7 @@ export type StackParamList = {
   //   navigation: StackNavigationHelpers;
   //   route: RouteProp<{params: {id: string}}, 'params'>;
   // };
+  InterestScreen: any;
   EventScreen: any;
   MainScreen: any;
   ProfileScreen: any;
@@ -51,6 +53,7 @@ const MainNavigator: React.FC = () => {
         }}
       />
       <Stack.Screen name="EventScreen" component={EventScreen} />
+      <Stack.Screen name="InterestScreen" component={InterestScreen} />
       <Stack.Screen name="ProfileScreen" component={ProfileScreen} />
     </Stack.Navigator>
   );

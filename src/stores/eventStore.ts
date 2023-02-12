@@ -2,7 +2,18 @@ import {create} from 'zustand';
 import axios from 'axios';
 import {BASE_URL} from '../config';
 
-export const useEventStore = create(set => ({
+interface EventState {
+  events: Event[];
+  event: Event | null;
+  loading: boolean;
+  getEvents: (criteria: any) => void;
+  getEvent: (eventId: string) => void;
+  createEvent: (createEvent: string) => void;
+  updateEvent: (eventId: string) => void;
+  deleteEvent: (eventId: string) => void;
+}
+
+export const useEventStore = create<EventState>(set => ({
   events: [],
   event: null,
   loading: false,
