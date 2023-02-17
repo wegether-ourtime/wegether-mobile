@@ -24,6 +24,7 @@ import {
   responsiveHeigth,
   responsiveWidth,
 } from '../../common/function/responsive';
+import ScanScreen from '../../screens/ScanScreen/ScanScreen';
 
 const Tab = createBottomTabNavigator();
 
@@ -44,8 +45,7 @@ const MainTapNavigator: React.FC<any> = ({navigation}) => {
     {
       name: 'scan',
       title: 'หน้าสแกน qr code',
-      // component: ScanScreen,
-      component: EventScreen,
+      component: ScanScreen,
       activeIcon: icons.qr,
       inactiveIcon: icons.qr,
     },

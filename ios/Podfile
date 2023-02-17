@@ -14,6 +14,8 @@ target 'wegether' do
   # pod 'FirebaseCore', :modular_headers => true
   # pod 'GoogleUtilities', :modular_headers => true
   # $RNFirebaseAsStaticFramework = true
+  permissions_path = '../node_modules/react-native-permissions/ios'
+  pod 'Permission-Camera', :path => "#{permissions_path}/Camera"
 
   # Flags change depending on the env values.
   flags = get_default_flags()
