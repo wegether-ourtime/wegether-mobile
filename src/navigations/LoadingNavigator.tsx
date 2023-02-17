@@ -1,24 +1,21 @@
 import {View, Text, StyleSheet} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as RootNavigation from '../navigations/RootNavigation';
 
 const LoadingNavigator: React.FC<any> = ({navigation}) => {
   useEffect(() => {
     const getData = async () => {
       try {
         const value = await AsyncStorage.getItem('token');
-        // const fcmtoken = await AsyncStorage.getItem('fcmtoken')
-        if (value !== null) {
-          // if(fcmtoken !== null){
-          //   navigation.push('Main');
-          // }
-          // else{
-          //   navigation.push('Auth');
-          // }
+        if (!value) {
           navigation.push('Auth');
-        } else {
-          navigation.push('Auth');
-        }
+        } 
+        // else {
+        //   RootNavigation.navigate('Main', {
+        //     screen: 'EventScreen',
+        //   });
+        // }
       } catch (e) {
         console.log(e, 'get async token');
       }

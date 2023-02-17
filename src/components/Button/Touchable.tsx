@@ -2,7 +2,7 @@ import {Button} from '@rneui/themed';
 import {Text, ViewStyle} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {colors, font} from '../../common/assets';
-import {normalize} from '../../common/function/Normalize';
+import {normalize} from '../../common/function/normalize';
 import {stylesApp} from '../../common/styles/AppStyle';
 
 export const Touchable: React.FC<any> = props => {

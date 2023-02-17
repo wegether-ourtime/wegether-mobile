@@ -1,7 +1,7 @@
 import {Button} from '@rneui/themed';
 import {ViewStyle} from 'react-native';
 import {colors, font} from '../../common/assets';
-import {normalize} from '../../common/function/Normalize';
+import {normalize} from '../../common/function/normalize';
 import {stylesApp} from '../../common/styles/AppStyle';
 
 // interface MainButtonProps {

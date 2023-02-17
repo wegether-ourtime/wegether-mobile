@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/AntDesign';
 import { colors, font } from '../../common/assets';
-import { normalize } from '../../common/function/Normalize';
+import { normalize } from '../../common/function/normalize';
 
 interface Prop {
   title?: string;

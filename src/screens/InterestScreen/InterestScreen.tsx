@@ -15,7 +15,7 @@ import {stylesApp} from '../../common/styles/AppStyle';
 import {Category} from '../../components/Category/Category';
 import {Touchable} from '../../components/Button/Touchable';
 import {colors, icons} from '../../common/assets';
-import {normalize} from '../../common/function/Normalize';
+import {normalize} from '../../common/function/normalize';
 import * as RootNavigation from '../../navigations/RootNavigation';
 import {useUserCategoryStore} from '../../stores/userCategoryStore';
 import CustomHeader from '../../components/Text/CustomHeader';

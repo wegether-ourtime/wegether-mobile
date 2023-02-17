@@ -1,5 +1,9 @@
-export default interface User {
-  userId: string;
+export interface Login {
+  email: string;
+  password: string;
+}
+
+export interface Register {
   email: string;
   password: string;
   idNo: string;

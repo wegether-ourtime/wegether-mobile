@@ -2,7 +2,7 @@ import {View, Text, StyleSheet, Image, Dimensions} from 'react-native';
 import React from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {stylesApp} from '../../common/styles/AppStyle';
-import {normalize} from '../../common/function/Normalize';
+import {normalize} from '../../common/function/normalize';
 import {MainButton} from '../../components/Button/MainButton';
 import {colors, font, image} from '../../common/assets';
 import * as RootNavigation from '../../navigations/RootNavigation';
@@ -29,9 +29,11 @@ const HomeScreen: React.FC<any> = ({navigation}) => {
           fontColor={colors.primary}
           style={styles.button}
           onPress={() => {
-            // navigation.navigate('EventScreen')
+            // navigation.navigate('Main', {
+            //   navbar: true,
+            // });
             RootNavigation.navigate('Main', {
-              screen: 'EventScreen',
+              screen: 'MainScreen',
             });
           }}></Touchable>
         <Touchable
@@ -40,10 +42,7 @@ const HomeScreen: React.FC<any> = ({navigation}) => {
           fontColor={colors.white}
           style={styles.button}
           onPress={() => {
-            // navigation.navigate('EventScreen')
-            RootNavigation.navigate('Main', {
-              screen: 'EventScreen',
-            });
+            navigation.navigate('LoginScreen');
           }}></Touchable>
         <Touchable
           label={'Don’t have any account ? Sign Up'}

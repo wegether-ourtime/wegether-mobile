@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import {colors, font, icons} from '../../common/assets';
 import fonts from '../../common/assets/fonts';
-import {normalize} from '../../common/function/Normalize';
+import {normalize} from '../../common/function/normalize';
 import {getStatusToText, numberWithCommas} from '../../common/function/utility';
 import * as RootNavigation from '../../navigations/RootNavigation';
 

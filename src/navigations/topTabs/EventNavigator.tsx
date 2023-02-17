@@ -8,27 +8,28 @@ import fonts from '../../common/assets/fonts';
 import {colors} from '../../common/assets';
 import SuggestionScreen from '../../screens/EventScreen/SuggestionScreen';
 import IncomingScreen from '../../screens/EventScreen/IncomingScreen';
+import EventScreen from '../../screens/EventScreen/EventScreen';
 // import NewEventScreen from '../../screens/MainScreen/NewEventScreen';
 // import EventScreen from '../../screens/MainScreen/EventScreen';
 
 const renderTabBar = (props: any) => (
   <TabBar
     {...props}
-    indicatorStyle={{backgroundColor: colors.orange}}
+    indicatorStyle={{backgroundColor: colors.primary}}
     style={{backgroundColor: colors.white}}
     renderLabel={({route, focused, color}) => (
       <Text
-        style={[styles.label, {color: focused ? colors.orange : colors.gray}]}>
+        style={[styles.label, {color: focused ? colors.primary : colors.gray}]}>
         {route.title}
       </Text>
     )}
   />
 );
 
-// const renderScene = SceneMap({
-//   task: EventScreen,
-//   newEvent: NewEventScreen,
-// });
+const renderScene = SceneMap({
+  task: EventScreen,
+  incoming: IncomingScreen,
+});
 
 interface Prop {}
 
@@ -36,8 +37,8 @@ const EventTapNavigator: React.FC<Prop> = (props: Prop) => {
   const layout = useWindowDimensions();
   const [index, setIndex] = useState(0);
   const [routes] = useState([
-    {key: 'suggestion', title: 'กิจกรรมแนะนำ'},
-    {key: 'incoming', title: 'กิจกรรมของคุณ'},
+    {key: 'suggestion', title: 'Suggestion'},
+    {key: 'incoming', title: 'Incoming'},
   ]);
   const renderScene = ({route}: any) => {
     switch (route.key) {

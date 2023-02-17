@@ -38,35 +38,38 @@ const MainTapNavigator: React.FC<any> = ({navigation}) => {
       name: 'home',
       title: 'หน้าหลัก',
       component: EventScreen,
-      activeIcon: icons.home_active,
+      activeIcon: icons.home,
       inactiveIcon: icons.home,
     },
-    // {
-    //   name: 'scan',
-    //   title: 'หน้าสแกน qr code',
-    //   component: ScanScreen,
-    //   activeIcon: icons.task_active,
-    //   inactiveIcon: icons.task,
-    // },
-    // {
-    //   name: 'createEvent',
-    //   title: 'รายได้',
-    //   component: CreateEventScreen,
-    //   activeIcon: icons.pocket_active,
-    //   inactiveIcon: icons.pocket,
-    // },
-    // {
-    //   name: 'chat',
-    //   title: 'ข้อความ',
-    //   component: ChatScreen,
-    //   activeIcon: icons.profileActive,
-    //   inactiveIcon: icons.profile,
-    // },
+    {
+      name: 'scan',
+      title: 'หน้าสแกน qr code',
+      // component: ScanScreen,
+      component: EventScreen,
+      activeIcon: icons.qr,
+      inactiveIcon: icons.qr,
+    },
+    {
+      name: 'createEvent',
+      title: 'หน้าเพิ่มกิจกรรม',
+      // component: CreateEventScreen,
+      component: EventScreen,
+      activeIcon: icons.add,
+      inactiveIcon: icons.add,
+    },
+    {
+      name: 'chat',
+      title: 'ข้อความ',
+      // component: ChatScreen,
+      component: EventScreen,
+      activeIcon: icons.chat,
+      inactiveIcon: icons.chat,
+    },
     {
       name: 'profile',
       title: 'หน้าโปรไฟล์',
       component: ProfileScreen,
-      activeIcon: icons.profileActive,
+      activeIcon: icons.profile,
       inactiveIcon: icons.profile,
     },
   ];
@@ -121,15 +124,15 @@ const MainTapNavigator: React.FC<any> = ({navigation}) => {
                           }
                         />
 
-                        <Text
+                        {/* <Text
                           style={{
                             fontFamily: fonts.medium,
                             fontSize: normalize(14),
-                            color: isFocused ? colors.orange : colors.gray,
+                            color: isFocused ? colors.primary : colors.gray,
                             marginTop: item.name === 'profile' ? 4 : 2,
                           }}>
                           {item.title}
-                        </Text>
+                        </Text> */}
                       </View>
                     </TouchableOpacity>
                   );

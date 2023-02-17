@@ -2,34 +2,52 @@ import {create} from 'zustand';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {BASE_URL} from '../config';
+import User from '../models/User';
+import {Login, Register} from '../models/Auth';
 
-export const useUserStore = create(set => ({
-  user: undefined,
+interface UserState {
+  user: User | null;
+  loading: boolean;
+  login: (dto: Login) => any;
+  logout: () => void;
+  register: (dto: Register) => void;
+}
+
+export const useAuthStore = create<UserState>(set => ({
+  user: null,
   loading: false,
-  login: async (email: string, password: string) => {
-    const {data} = await axios.post(`${BASE_URL}/auth/login`, {
-      email,
-      password,
-    });
+  login: async ({email, password}) => {
+    try {
+      const {data} = await axios.post(`${BASE_URL}/auth/login`, {
+        email,
+        password,
+      });
 
-    const user = {
-      email: data.user.email,
-      token: data.jwt,
-    };
-    // await SecureStorage.setItem('user', JSON.stringify(user));
-    await AsyncStorage.setItem('user', JSON.stringify(user));
-    set({user});
+      const user = {
+        ...data.user,
+        token: data.accessToken,
+      };
+
+      // await SecureStorage.setItem('user', JSON.stringify(user));
+      await AsyncStorage.setItem('user', JSON.stringify(user));
+      set({user});
+    } catch (e) {
+      console.log(e);
+    }
+    return 'can use';
   },
   logout: async () => {
     await AsyncStorage.removeItem('user');
     set({user: undefined});
   },
-  register: async (email: string, password: string) => {
-    await axios.post(`${BASE_URL}/auth/register`, {
-      username: email,
-      email,
-      password,
-    });
+  register: async dto => {
+    try {
+      console.log(dto);
+      const res = await axios.post(`${BASE_URL}/auth/register`, dto);
+      console.log(res.data);
+    } catch (e) {
+      throw e;
+    }
   },
   // setUser: (user: any) => set({user}),
   // setLoading: loading => set({loading}),
