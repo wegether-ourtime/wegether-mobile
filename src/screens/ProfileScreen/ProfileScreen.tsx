@@ -1,11 +1,12 @@
 import {Avatar} from '@rneui/base';
-import {View, Image, StyleSheet, Text} from 'react-native';
+import {View, Image, StyleSheet, Text, Alert} from 'react-native';
 import {font} from '../../common/assets';
 import colors from '../../common/assets/colors/colors';
 import icons from '../../common/assets/icons';
 import images from '../../common/assets/images';
 import {normalize} from '../../common/function/normalize';
 import {stylesCentral} from '../../common/styles/StylesCentral';
+import {ProfileOption} from '../../components/Option/ProfileOption';
 import MyEventNavigator from '../../navigations/topTabs/MyEventNavigator';
 import {useAuthStore} from '../../stores/authStore';
 
@@ -27,9 +28,7 @@ const ProfileScreen: React.FC<any> = ({navigation}) => {
           <Text style={styles.name}>Chanwit Saisin</Text>
         </View>
       </View>
-      <View>
-
-      </View>
+      <ProfileOption style={styles.option}></ProfileOption>
       <MyEventNavigator></MyEventNavigator>
     </View>
   );
@@ -41,7 +40,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'space-between',
-    marginBottom: normalize(130)
+    marginBottom: normalize(130),
   },
   cover: {
     height: normalize(200),
@@ -58,12 +57,22 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white,
   },
   user: {
+    width: '60%',
+    height: '100%',
     position: 'absolute',
     left: normalize(140),
-    bottom: normalize(-50),
+    top: normalize(220),
   },
   name: {
+    marginRight: normalize(40),
     fontFamily: font.medium,
-    fontSize: normalize(20),
+    fontSize: normalize(18),
+  },
+  option: {
+    zIndex: 3,
+    elevation: 3,
+    width: '100%',
+    height: '50%',
+    // backgroundColor: 'red'
   },
 });
