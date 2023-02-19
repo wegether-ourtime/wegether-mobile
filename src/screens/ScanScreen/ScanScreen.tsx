@@ -19,7 +19,6 @@ const ScanScreen: React.FC<any> = ({navigation}) => {
   const [hasPermission, setHasPermission] = React.useState(false);
   const devices = useCameraDevices('triple-camera');
   const device = devices.back;
-  console.log(devices);
 
   const [frameProcessor, barcodes] = useScanBarcodes([BarcodeFormat.QR_CODE], {
     checkInverted: true,
@@ -27,7 +26,6 @@ const ScanScreen: React.FC<any> = ({navigation}) => {
 
   useEffect(() => {
     (async () => {
-      console.log(await Camera.getCameraPermissionStatus())
       const status = await Camera.requestCameraPermission();
       setHasPermission(status === 'authorized');
     })();

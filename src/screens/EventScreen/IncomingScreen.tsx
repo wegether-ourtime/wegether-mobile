@@ -11,25 +11,39 @@ import fonts from '../../common/assets/fonts';
 // import Tasklists from '../../components/TaskList/Tasklists';
 // import {TaskDatasource} from '../../datasource/TaskDatasource';
 import {stylesCentral} from '../../common/styles/StylesCentral';
+import { Event } from '../../components/Event/Event';
 // import * as ImagePicker from 'react-native-image-picker';
-// import {dataUpdateStatusEntity} from '../../entities/TaskScreenEntities';
 import * as RootNavigation from '../../navigations/RootNavigation';
+import {useEventStore} from '../../stores/eventStore';
 
 interface Prop {}
 
 const IncomingScreen: React.FC<Prop> = (props: Prop) => {
+  const events = useEventStore(state => state.events);
+  const getEvents = () => useEventStore.getState().getEvents({});
+
+  useFocusEffect(
+    React.useCallback(() => {
+      getEvents();
+    }, []),
+  );
+
+  useEffect(() => {
+    getEvents();
+  }, [!events]);
+
   const [data, setData] = useState<any>([]);
   const [loading, setLoading] = useState<boolean>(false);
   return (
     <>
-      {data.length > 0 ? (
+      {events.length > 0 ? (
         <View style={[{flex: 1, backgroundColor: colors.grayBg, padding: 8}]}>
           <FlatList
             keyExtractor={element => element.item.taskNo}
             data={data}
             extraData={data}
             renderItem={
-              ({item}: any) => null
+              ({item}: any) => <Event></Event>
               //   <Tasklists
               //     {...item.item}
               //     id={item.item.taskNo}

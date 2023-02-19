@@ -3,14 +3,10 @@ import React from 'react';
 import {useState} from 'react';
 import {View, useWindowDimensions, Text, StyleSheet} from 'react-native';
 import {TabView, SceneMap, TabBar} from 'react-native-tab-view';
-import fonts from '../../common/assets/fonts';
-// import font from "../../../android/app/build/intermediates/assets/debug/mergeDebugAssets/fonts/font";
 import {colors} from '../../common/assets';
-import SuggestionScreen from '../../screens/EventScreen/SuggestionScreen';
-import IncomingScreen from '../../screens/EventScreen/IncomingScreen';
-import EventScreen from '../../screens/EventScreen/EventScreen';
-// import NewEventScreen from '../../screens/MainScreen/NewEventScreen';
-// import EventScreen from '../../screens/MainScreen/EventScreen';
+import fonts from '../../common/assets/fonts';
+import HostedScreen from '../../screens/EventScreen/HostedScreen';
+import JoinedScreen from '../../screens/EventScreen/JoinedScreen';
 
 const renderTabBar = (props: any) => (
   <TabBar
@@ -26,29 +22,22 @@ const renderTabBar = (props: any) => (
   />
 );
 
-interface Prop {}
+const renderScene = SceneMap({
+  joined: JoinedScreen,
+  hosted: HostedScreen,
+});
 
-const EventTapNavigator: React.FC<Prop> = (props: Prop) => {
+const MyEventNavigator: React.FC = () => {
   const layout = useWindowDimensions();
+
   const [index, setIndex] = useState(0);
   const [routes] = useState([
-    {key: 'suggestion', title: 'Suggestion'},
-    {key: 'incoming', title: 'Incoming'},
+    {key: 'joined', title: 'กิจกรรมที่เคยเข้าร่วม'},
+    {key: 'hosted', title: 'กิจกรรมที่เป็นผู้สร้าง'},
   ]);
-  const renderScene = ({route}: any) => {
-    switch (route.key) {
-      case 'suggestion':
-        return <SuggestionScreen />;
-      case 'incoming':
-        return <IncomingScreen />;
-      default:
-        return null;
-    }
-  };
 
   return (
     <TabView
-      key={index}
       navigationState={{index, routes}}
       renderTabBar={renderTabBar}
       renderScene={renderScene}
@@ -59,11 +48,11 @@ const EventTapNavigator: React.FC<Prop> = (props: Prop) => {
   );
 };
 
-export default EventTapNavigator;
+export default MyEventNavigator;
 
 const styles = StyleSheet.create({
   label: {
     fontFamily: fonts.bold,
-    fontSize: normalize(16),
+    fontSize: normalize(14),
   },
 });

@@ -24,7 +24,12 @@ const LoginScreen: React.FC<any> = ({navigation}) => {
   const user = useAuthStore(state => state.user);
   const login = () => {
     // validateInput()
-    const res = useAuthStore.getState().login({...form});
+    useAuthStore.getState().login({...form});
+    if (user) {
+      RootNavigation.navigate('Main', {
+        screen: 'MainScreen',
+      });
+    }
   };
 
   const onChangeText = (field: string, value: string) =>
@@ -80,12 +85,7 @@ const LoginScreen: React.FC<any> = ({navigation}) => {
           color={colors.primary}
           fontColor={colors.white}
           style={styles.button}
-          onPress={() => {
-            // login();
-            RootNavigation.navigate('Main', {
-              screen: 'EventScreen',
-            });
-          }}></Touchable>
+          onPress={() => login()}></Touchable>
       </View>
     </SafeAreaView>
   );

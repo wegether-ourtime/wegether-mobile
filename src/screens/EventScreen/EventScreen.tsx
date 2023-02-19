@@ -7,18 +7,10 @@ import {colors, font, icons} from '../../common/assets';
 import {normalize} from '../../common/function/normalize';
 import {stylesCentral} from '../../common/styles/StylesCentral';
 import {Filter} from '../../components/Input/Filter';
-import {Map} from '../../components/Map/Map';
 import EventTapNavigator from '../../navigations/topTabs/EventNavigator';
-import {useEventStore} from '../../stores/eventStore';
 
 const EventScreen: React.FC<any> = ({navigation}) => {
   const insets = useSafeAreaInsets();
-  const events = useEventStore(state => state.events);
-  const getEvents = () => useEventStore.getState().getEvents({});
-
-  useEffect(() => {
-    getEvents();
-  }, [!events]);
 
   return (
     <View style={[stylesCentral.container, {paddingTop: insets.top}]}>
@@ -55,12 +47,11 @@ const styles = StyleSheet.create({
   activeContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: colors.grayBg,
     padding: normalize(5),
   },
   activeFont: {
     fontFamily: font.medium,
-    fontSize: normalize(14),
+    fontSize: normalize(25),
     marginLeft: normalize(18),
     color: colors.fontBlack,
   },

@@ -1,24 +1,30 @@
 import {create} from 'zustand';
 import axios from 'axios';
 import {BASE_URL} from '../config';
+import Event from '../models/Event';
 
 interface EventState {
   events: Event[];
   event: Event | null;
+  criteria: any | null;
   loading: boolean;
   getEvents: (criteria: any) => void;
   getEvent: (eventId: string) => void;
   createEvent: (createEvent: string) => void;
   updateEvent: (eventId: string) => void;
   deleteEvent: (eventId: string) => void;
+  setCriteria: (criteria: any) => void;
 }
 
 export const useEventStore = create<EventState>(set => ({
   events: [],
   event: null,
+  criteria: null,
   loading: false,
   getEvents: async (criteria: any) => {
-    const {data} = await axios.get(`${BASE_URL}/event`, {...criteria});
+    const {data} = await axios.get(`${BASE_URL}/event`, {
+      params: {...criteria},
+    });
     const events = data;
 
     set({events});
@@ -46,5 +52,8 @@ export const useEventStore = create<EventState>(set => ({
     set({});
   },
   setEvent: (event: any) => set({event}),
+  setCriteria: (criteria: any) => {
+    set({criteria});
+  },
   //   setLoading: loading => set({loading}),
 }));

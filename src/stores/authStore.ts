@@ -29,7 +29,8 @@ export const useAuthStore = create<UserState>(set => ({
       };
 
       // await SecureStorage.setItem('user', JSON.stringify(user));
-      await AsyncStorage.setItem('user', JSON.stringify(user));
+      // await AsyncStorage.setItem('user', JSON.stringify(user));
+      await AsyncStorage.setItem('token', user.token);
       set({user});
     } catch (e) {
       console.log(e);
@@ -42,9 +43,7 @@ export const useAuthStore = create<UserState>(set => ({
   },
   register: async dto => {
     try {
-      console.log(dto);
       const res = await axios.post(`${BASE_URL}/auth/register`, dto);
-      console.log(res.data);
     } catch (e) {
       throw e;
     }

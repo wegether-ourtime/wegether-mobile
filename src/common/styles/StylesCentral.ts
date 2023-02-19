@@ -5,7 +5,7 @@ import {colors, font} from '../assets';
 export const stylesCentral = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.white,
+    // backgroundColor: colors.white,
   },
   center: {
     alignItems: 'center',

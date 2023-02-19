@@ -8,9 +8,11 @@ const LoadingNavigator: React.FC<any> = ({navigation}) => {
     const getData = async () => {
       try {
         const value = await AsyncStorage.getItem('token');
-        if (!value) {
+        if (value) {
+          navigation.push('Main');
+        } else {
           navigation.push('Auth');
-        } 
+        }
         // else {
         //   RootNavigation.navigate('Main', {
         //     screen: 'EventScreen',
