@@ -9,23 +9,31 @@ import {FlatList, Image, StyleSheet, Text, View} from 'react-native';
 import {colors, icons} from '../../common/assets';
 import {normalize} from '../../common/function/normalize';
 import {color} from '@rneui/themed/dist/config';
-
-const data = [
-  {
-    id: 1,
-    name: 'Edit Profile',
-    // icon: <Entypo name="sound-mute" size={24} color="black" />,
-  },
-  {
-    id: 2,
-    name: 'Log out',
-    // icon: <Entypo name="block" size={24} color="black" />,
-  },
-];
+import {useAuthStore} from '../../stores/authStore';
+import * as RootNavigation from '../../navigations/RootNavigation';
 
 export const ProfileOption: React.FC<any> = props => {
+  const {style} = props;
+  const logout = async () => {
+    useAuthStore.getState().logout();
+    RootNavigation.navigate('Auth', {});
+  };
+  const data = [
+    {
+      id: 1,
+      name: 'Edit Profile',
+      icon: icons.editProfile,
+    },
+    {
+      id: 2,
+      name: 'Log out',
+      icon: icons.logout,
+      onSelect: () => logout(),
+    },
+  ];
+
   return (
-    <View style={[styles.main, props.style]}>
+    <View style={[styles.main, style]}>
       <MenuProvider style={styles.container}>
         <Menu style={{}}>
           <MenuTrigger>
@@ -37,9 +45,11 @@ export const ProfileOption: React.FC<any> = props => {
               data={data}
               keyExtractor={item => item.name}
               renderItem={({item}) => (
-                <MenuOption>
-                  <Text>{item.name}</Text>
-                  {/* <Text>{item.icon}</Text> */}
+                <MenuOption style={styles.option} onSelect={item.onSelect}>
+                  <Image
+                    source={item.icon}
+                    style={{marginTop: normalize(2)}}></Image>
+                  <Text style={{marginLeft: normalize(20)}}>{item.name}</Text>
                 </MenuOption>
               )}
             />
@@ -79,5 +89,9 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.2,
     shadowRadius: 5,
     elevation: 15,
+  },
+  option: {
+    flexDirection: 'row',
+    marginVertical: normalize(5),
   },
 });

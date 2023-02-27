@@ -4,7 +4,7 @@ import {navigationRef} from './src/navigations/RootNavigation';
 // import SplashScreen from 'react-native-splash-screen';
 // import Toast from 'react-native-toast-message';
 import {SheetProvider} from 'react-native-actions-sheet';
-// import './src/sheet/Sheets';
+import './src/sheets';
 // import { toastConfig } from './src/config/toast-config';
 import {BackHandler} from 'react-native';
 // import buddhaEra from 'dayjs/plugin/buddhistEra';

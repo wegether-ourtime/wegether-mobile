@@ -1,29 +1,37 @@
 import {useState} from 'react';
-import {StyleSheet, Text, TextInput, View} from 'react-native';
+import {StyleSheet, Text, TextInput, View, Image} from 'react-native';
+import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {colors} from '../../common/assets';
-import {normalize} from '../../common/function/normalize';
+import {colors, icons} from '../../common/assets';
+import images from '../../common/assets/images';
+import {height, normalize} from '../../common/function/normalize';
 import {stylesApp} from '../../common/styles/AppStyle';
 import {stylesCentral} from '../../common/styles/StylesCentral';
 import {Touchable} from '../../components/Button/Touchable';
+import {CalendarInput} from '../../components/Input/Calendar';
+import TextInputArea from '../../components/Input/TextInputArea';
+import TimeInput from '../../components/Input/Time';
 import CustomHeader from '../../components/Text/CustomHeader';
 import {useAuthStore} from '../../stores/authStore';
+import {useEventStore} from '../../stores/eventStore';
 
 const CreateEventScreen: React.FC<any> = ({navigation}) => {
   const [form, setForm] = useState<any>({
-    email: null,
-    password: null,
-    confirmPassword: null,
-    fullName: null,
-    idNo: null,
-    telNo: null,
+    eventName: null,
+    event: null,
+    startDate: null,
+    endDate: null,
+    startTime: null,
+    endTime: null,
+    location: null,
+    eventDetail: null,
   });
+  // const [time, setTime] = useState<Date | undefined>(undefined);
+  const [toggleModalUpload, setToggleModalUpload] = useState<boolean>(false);
+  const [eventImg, setEventImg] = useState(null);
 
-  const register = () => {
-    // if (form.password !== form.confirmPassword) {
-    //   console.log('wrong');
-    // }
-    useAuthStore.getState().register({...form});
+  const onSubmit = () => {
+    useEventStore.getState().createEvent({...form});
   };
 
   const onChangeText = (field: string, value: string) =>
@@ -37,70 +45,70 @@ const CreateEventScreen: React.FC<any> = ({navigation}) => {
         onPressBack={() => navigation.goBack()}
       />
       <View style={styles.main}>
-        <TextInput
-          value={form.fullname}
-          style={styles.input}
-          editable={true}
-          placeholder={'Full Name'}
-          // placeholderTextColor={colors.disable}
-          // onTextInput={value => {
-          //   console.log(value.)
-          // }}
-          onChangeText={value => onChangeText('fullName', value)}
-        />
-        <TextInput
-          value={form.telNo}
-          style={styles.input}
-          editable={true}
-          placeholder={'Telephone Number'}
-          // placeholderTextColor={colors.disable}
-          onChangeText={value => onChangeText('telNo', value)}
-        />
-        <TextInput
-          value={form.idNo}
-          style={styles.input}
-          editable={true}
-          placeholder={'ID Card Number'}
-          // placeholderTextColor={colors.disable}
-          onChangeText={value => onChangeText('idNo', value)}
-        />
-        <TextInput
-          value={form.email}
-          style={styles.input}
-          editable={true}
-          placeholder={'Email'}
-          // placeholderTextColor={colors.disable}
-          onChangeText={value => onChangeText('email', value)}
-        />
-        <TextInput
-          value={form.password}
-          style={styles.input}
-          editable={true}
-          secureTextEntry={true}
-          maxLength={12}
-          placeholder={'Password'}
-          // placeholderTextColor={colors.disable}
-          onChangeText={value => onChangeText('password', value)}
-        />
-        <TextInput
-          value={form.confirmPassword}
-          style={styles.input}
-          editable={true}
-          secureTextEntry={true}
-          maxLength={12}
-          placeholder={'Confirm Password'}
-          // placeholderTextColor={colors.disable}
-          onChangeText={value => onChangeText('confirmPassword', value)}
-        />
-        <Touchable
-          label={'Post'}
-          color={colors.primary}
-          fontColor={colors.white}
-          style={[styles.button, {marginTop: normalize(30)}]}
-          onPress={() => {
-            register();
-            // navigation.navigate('InterestScreen');
-          }}></Touchable>
+        <ScrollView
+          style={{flex: 1}}
+          contentContainerStyle={{
+            paddingBottom: normalize(130),
+          }}>
+          <View
+            style={[
+              styles.input,
+              {
+                padding: normalize(0),
+                height: normalize(200),
+                alignItems: 'center',
+                justifyContent: 'center',
+              },
+            ]}>
+            <Image
+              source={eventImg ?? images.cover}
+              style={{height: '100%', width: '100%'}}
+            />
+          </View>
+          <TextInput
+            value={form.telNo}
+            style={styles.input}
+            editable={true}
+            placeholder={'Event Name'}
+            // placeholderTextColor={colors.disable}
+            onChangeText={value => onChangeText('eventName', value)}
+          />
+          <CalendarInput></CalendarInput>
+          <TextInput
+            value={form.telNo}
+            style={styles.input}
+            editable={true}
+            placeholder={'Time Input'}
+            // placeholderTextColor={colors.disable}
+            onChangeText={value => onChangeText('telNo', value)}
+          />
+          <TouchableOpacity style={styles.input} onPress={() => {}}>
+            <Text style={{color: colors.grayPlaceholder}}>Location</Text>
+          </TouchableOpacity>
+          <TextInput
+            value={form.idNo}
+            style={[
+              styles.input,
+              {
+                minHeight: normalize(100),
+                paddingTop: normalize(15),
+                textAlignVertical: 'top',
+              },
+            ]}
+            editable={true}
+            placeholder={'รายละเอียดเพิ่มเติม'}
+            multiline
+            onChangeText={value => onChangeText('eventDetail', value)}
+          />
+          <Touchable
+            label={'Post'}
+            color={colors.primary}
+            fontColor={colors.white}
+            style={[styles.button, {marginTop: normalize(30)}]}
+            onPress={() => {
+              onSubmit();
+            }}></Touchable>
+        </ScrollView>
       </View>
     </SafeAreaView>
   );
@@ -109,7 +117,9 @@ export default CreateEventScreen;
 
 const styles = StyleSheet.create({
   main: {
-    flex: 1,
+    // flex: 0,
+    // flexDirection: 'column',
+    height: '100%',
   },
   button: {
     margin: normalize(20),

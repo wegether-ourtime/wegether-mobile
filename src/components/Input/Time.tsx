@@ -4,6 +4,11 @@ import React, {useState} from 'react';
 
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import dayjs from 'dayjs';
+import { normalize } from '../../common/function/normalize';
+import { colors, icons} from '../../common/assets/';
+import fonts from '../../common/assets/fonts';
+import { SheetManager } from 'react-native-actions-sheet';
+import { stylesApp } from '../../common/styles/AppStyle';
 // import DatePicker from 'react-native-modern-datepicker';
 // import Modal from 'react-native-modal/dist/modal';
 
@@ -13,7 +18,23 @@ interface Props {
   label?: string;
   placeholder?: string;
 }
-const InputTime = ({
+
+export const TimeInput: React.FC<any> = props => {
+  const onPress = () => {
+    SheetManager.show('TimerInputSheet');
+  };
+
+  return (
+    <View style={stylesApp.main}>
+      <TouchableOpacity style={styles.input} onPress={onPress}>
+        <Text>Haha</Text>
+        {/* <Icon name="left" size={30} color="black" /> */}
+      </TouchableOpacity>
+    </View>
+  );
+};
+
+const TimeSheet = ({
   onChange,
   value,
   label,
@@ -32,7 +53,7 @@ const InputTime = ({
         {label && (
           <Text
             style={{
-              fontFamily: font.medium,
+              fontFamily: fonts.medium,
               fontSize: normalize(16),
               color: colors.fontBlack,
             }}>
@@ -56,8 +77,7 @@ const InputTime = ({
         {!value ? (
           <Text
             style={{
-              fontFamily: font.medium,
-
+              fontFamily: fonts.medium,
               fontSize: normalize(16),
               color: colors.grayPlaceholder,
             }}>
@@ -66,7 +86,7 @@ const InputTime = ({
         ) : (
           <Text
             style={{
-              fontFamily: font.medium,
+              fontFamily: fonts.medium,
 
               fontSize: normalize(16),
               color: colors.inputText,
@@ -74,13 +94,13 @@ const InputTime = ({
             {value ? dayjs(value).format('HH:mm') : ''}
           </Text>
         )}
-        <Image
+        {/* <Image
           source={icons.timeIcon}
           style={{
             width: normalize(25),
             height: normalize(25),
           }}
-        />
+        /> */}
       </TouchableOpacity>
       {/* <DatePicker
         mode="time"
@@ -93,7 +113,7 @@ const InputTime = ({
         mode="time"
         cancelTextIOS="ยกเลิก"
         is24Hour
-        locale="th"
+        // locale="th"
         confirmTextIOS="ตกลง"
         timePickerModeAndroid="spinner"
         onCancel={() => setIsOpen(false)}
@@ -102,54 +122,8 @@ const InputTime = ({
           setIsOpen(false);
         }}
       />
-      {/* {isOpen && (
-        <Modal isVisible={isOpen}>
-          <View
-            style={{
-              width: '100%',
-              flexDirection: 'row',
-              justifyContent: 'flex-end',
-              position: 'relative',
-              top: 32,
-              right: 24,
-              zIndex: 10,
-            }}>
-            <TouchableOpacity
-              onPress={() => {
-                setIsOpen(false);
-              }}
-              style={{
-                padding: 4,
-              }}>
-              <Image
-                source={icons.closeBlack}
-                style={{
-                  width: 16,
-                  height: 16,
-                }}
-              />
-            </TouchableOpacity>
-          </View>
-          <DatePicker
-            mode="time"
-            style={{
-              borderRadius: 12,
-            }}
-            onTimeChange={e => {
-              onChange?.(e);
-              setIsOpen(false);
-            }}
-            options={{
-              defaultFont: font.medium,
-              mainColor: colors.orange,
-              headerFont: font.medium,
-            }}
-            selected={value}
-          />
-        </Modal>
-      )} */}
     </>
   );
 };
 
-export default InputTime;
+export default TimeInput;

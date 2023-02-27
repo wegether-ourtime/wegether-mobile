@@ -12,7 +12,7 @@ import {useAuthStore} from '../../stores/authStore';
 
 const ProfileScreen: React.FC<any> = ({navigation}) => {
   const user = useAuthStore(state => state.user);
-  console.log(user);
+  console.log('user', user);
   return (
     <View style={[stylesCentral.container]}>
       <View style={styles.userDetail}>

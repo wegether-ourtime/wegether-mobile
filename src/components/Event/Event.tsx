@@ -17,8 +17,29 @@ import {getStatusToText, numberWithCommas} from '../../common/function/utility';
 import * as RootNavigation from '../../navigations/RootNavigation';
 
 export const Event: React.FC<any> = props => {
+  const date = `${new Date(props.startDate).toLocaleDateString('th-TH', {
+    year: 'numeric',
+    month: 'numeric',
+    day: 'numeric',
+  })} - ${new Date(props.endDate).toLocaleDateString('th-TH', {
+    year: 'numeric',
+    month: 'numeric',
+    day: 'numeric',
+  })}`;
+
+  const time = `${new Date(props.startDate).toLocaleDateString('th-TH', {
+    hour: 'numeric',
+    minute: 'numeric',
+  })} - ${new Date(props.endDate).toLocaleDateString('th-TH', {
+    hour: 'numeric',
+    minute: 'numeric',
+  })}`;
+
   return (
     <View style={styles.main}>
+      {/* <View style={styles.top}>
+        <Text>Test</Text>
+      </View> */}
       <Image source={images.cover} style={styles.eventImage} />
       <View style={styles.eventDetail}>
         <View style={styles.eventHost}>
@@ -30,8 +51,10 @@ export const Event: React.FC<any> = props => {
             source={images.profile}
           />
         </View>
-        <Text style={styles.evetnName}>{props.name}</Text>
-        <Text style={[]}>{props.description}</Text>
+        <Text style={styles.eventName}>{props.name}</Text>
+        <Text style={[styles.eventDatetime]}>{date}</Text>
+        <Text style={[styles.eventDatetime]}>{time}</Text>
+        <Text style={[styles.eventDescription]}>{props.detail}</Text>
       </View>
     </View>
   );
@@ -47,6 +70,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
+  top: {
+    // width: '100%',
+    height: '20%',
+  },
   eventImage: {
     height: '90%',
     width: '50%',
@@ -61,12 +88,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
   },
-  evetnName: {
-    fontFamily: font.medium,
-    fontSize: normalize(16),
-  },
   eventHost: {
-    height: '40%',
+    // height: '40%',
     width: '100%',
     // backgroundColor: 'green',
     alignItems: 'flex-end',
@@ -77,5 +100,20 @@ const styles = StyleSheet.create({
   },
   profileContainer: {
     padding: normalize(5),
+  },
+  eventName: {
+    width: '100%',
+    fontFamily: font.medium,
+    fontSize: normalize(16),
+  },
+  eventDescription: {
+    width: '100%',
+    fontFamily: font.light,
+    fontSize: normalize(12),
+  },
+  eventDatetime: {
+    width: '100%',
+    fontFamily: font.light,
+    fontSize: normalize(12),
   },
 });

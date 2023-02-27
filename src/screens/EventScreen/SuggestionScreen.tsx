@@ -21,6 +21,7 @@ interface Prop {}
 
 const SuggestionScreen: React.FC<Prop> = (props: Prop) => {
   const events = useEventStore(state => state.events);
+  const loading = useEventStore(state => state.loading);
   const criteria = useEventStore(state => state.criteria);
   const getEvents = () => useEventStore.getState().getEvents(criteria);
 
@@ -35,8 +36,6 @@ const SuggestionScreen: React.FC<Prop> = (props: Prop) => {
   }, [!events]);
 
   // const [data, setData] = useState<any>([]);
-  const [loading, setLoading] = useState<boolean>(false);
-
   return (
     <>
       <View style={[{flex: 1, backgroundColor: colors.grayBg, padding: 8}]}>
@@ -49,61 +48,12 @@ const SuggestionScreen: React.FC<Prop> = (props: Prop) => {
               <Event
                 name={item.eventName}
                 image={item.eventImage}
-                description={item.description}></Event>
+                detail={item.eventDetail}
+                startDate={item.startDate}
+                endDate={item.endDate}
+                // location={item.location}
+              ></Event>
             )
-
-            //   <Tasklists
-            //     {...item.item}
-            //     id={item.item.taskNo}
-            //     status={item.item.status}
-            //     title={item.item.farmerPlot.plantName}
-            //     price={item.item.totalPrice}
-            //     date={item.item.dateAppointment}
-            //     address={item.item.farmerPlot.locationName}
-            //     distance={item.item.distance}
-            //     user={`${item.item.farmer.firstname} ${item.item.farmer.lastname}`}
-            //     img={item.image_profile_url}
-            //     preparation={item.item.comment}
-            //     tel={item.item.farmer.telephoneNo}
-            //     taskId={item.item.id}
-            //     farmArea={item.item.farmAreaAmount}
-            //     toggleModalStartTask={toggleModalStartTask}
-            //     fetchTask={getData}
-            //     setToggleModalStartTask={setToggleModalStartTask}
-            //     setShowModalStartTask={() =>
-            //       showModalStartTask(
-            //         item.item.id,
-            //         item.item.dronerId,
-            //         item.item.taskNo,
-            //         `${item.item.droner.firstname} ${item.item.droner.lastname}`,
-            //       )
-            //     }
-            //     startTask={startTask}
-            //     maxRatting={maxRatting}
-            //     setDefaultRating={setDefaultRating}
-            //     defaultRating={defaultRating}
-            //     starImgFilled={starImgFilled}
-            //     starImgCorner={starImgCorner}
-            //     toggleModalUpload={toggleModalUpload}
-            //     imgUploaded={imgUploaded}
-            //     finishImg={finishImg}
-            //     onAddImage={onAddImage}
-            //     closeFinishModal={closeFinishModal}
-            //     onChangImgFinish={onChangImgFinish}
-            //     toggleModalReview={toggleModalReview}
-            //     setComment={setComment}
-            //     comment={comment}
-            //     toggleModalSuccess={toggleModalSuccess}
-            //     setToggleModalSuccess={setToggleModalSuccess}
-            //     onFinishTask={onFinishTask}
-            //     setToggleModalUpload={() =>
-            //       openModalUpload(
-            //         item.item.id,
-            //         `${item.item.droner.firstname} ${item.item.droner.lastname}`,
-            //       )
-            //     }
-            //     onCloseSuccessModal={onCloseSuccessModal}
-            //   />
           }
         />
         <View />

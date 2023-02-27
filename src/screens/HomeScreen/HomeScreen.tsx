@@ -29,9 +29,6 @@ const HomeScreen: React.FC<any> = ({navigation}) => {
           fontColor={colors.primary}
           style={styles.button}
           onPress={() => {
-            // navigation.navigate('Main', {
-            //   navbar: true,
-            // });
             RootNavigation.navigate('Main', {
               screen: 'MainScreen',
             });

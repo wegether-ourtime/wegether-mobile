@@ -22,34 +22,40 @@ export const useEventStore = create<EventState>(set => ({
   criteria: null,
   loading: false,
   getEvents: async (criteria: any) => {
+    set({loading: true});
     const {data} = await axios.get(`${BASE_URL}/event`, {
       params: {...criteria},
     });
     const events = data;
 
-    set({events});
+    set({events, loading: false});
   },
   getEvent: async (eventId: string) => {
+    set({loading: true});
     const {data} = await axios.get(`${BASE_URL}/event/${eventId}`);
     const event = data;
 
-    set({event});
+    set({event, loading: false});
   },
   createEvent: async (createEvent: any) => {
+    set({loading: true});
     const {data} = await axios.post(`${BASE_URL}/event`, {...createEvent});
     const event = data;
 
-    set({event});
+    set({event, loading: false});
   },
   updateEvent: async (eventId: string) => {
+    set({loading: true});
     const {data} = await axios.post(`${BASE_URL}/event`, {});
     const event = data;
 
-    set({event});
+    set({event, loading: false});
   },
   deleteEvent: async (eventId: string) => {
+    set({loading: true});
     await axios.delete(`${BASE_URL}/event/${eventId}`);
-    set({});
+
+    set({loading: false});
   },
   setEvent: (event: any) => set({event}),
   setCriteria: (criteria: any) => {

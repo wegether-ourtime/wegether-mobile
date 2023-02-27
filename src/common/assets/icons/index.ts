@@ -12,4 +12,6 @@ export default {
   search: require('./search.png'),
   filter: require('./filter.png'),
   option: require('./option.png'),
+  editProfile: require('./edit-profile.png'),
+  logout: require('./logout.png'),
 };
