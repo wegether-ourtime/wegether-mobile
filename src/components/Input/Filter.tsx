@@ -1,5 +1,7 @@
 import {useState} from 'react';
 import {Image, StyleSheet, Text, TextInput, View} from 'react-native';
+import {SheetManager} from 'react-native-actions-sheet';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 import {colors, font} from '../../common/assets';
 import icons from '../../common/assets/icons';
 import {normalize} from '../../common/function/normalize';
@@ -13,15 +15,26 @@ export const Filter: React.FC<any> = props => {
   const onChangeText = (field: string, value: string) =>
     setCriteria({...criteria, [field]: value});
 
+  const onSearch = () => {
+    useEventStore.getState().getEvents(criteria);
+  };
+
   return (
     <View style={styles.main}>
-      <Image source={icons.search} />
+      <TouchableOpacity onPress={onSearch}>
+        <Image source={icons.search} />
+      </TouchableOpacity>
       <TextInput
         style={styles.input}
         placeholder={'What are you interest in?'}
         editable={true}
         onChangeText={value => onChangeText('search', value)}></TextInput>
-      <Image source={icons.filter} />
+      <TouchableOpacity
+        onPress={() => {
+          SheetManager.show('FilterEventSheet');
+        }}>
+        <Image source={icons.filter} />
+      </TouchableOpacity>
     </View>
   );
 };

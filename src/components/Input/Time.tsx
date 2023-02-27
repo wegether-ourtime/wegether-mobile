@@ -1,129 +1,79 @@
-import {View, Text, TouchableOpacity, Image} from 'react-native';
+import {View, Text, TouchableOpacity, Image, StyleSheet} from 'react-native';
 import React, {useState} from 'react';
-// import DatePicker from 'react-native-modern-datepicker';
-
-import DateTimePickerModal from 'react-native-modal-datetime-picker';
-import dayjs from 'dayjs';
-import { normalize } from '../../common/function/normalize';
-import { colors, icons} from '../../common/assets/';
+import {normalize} from '../../common/function/normalize';
+import {colors, icons} from '../../common/assets/';
 import fonts from '../../common/assets/fonts';
-import { SheetManager } from 'react-native-actions-sheet';
-import { stylesApp } from '../../common/styles/AppStyle';
-// import DatePicker from 'react-native-modern-datepicker';
-// import Modal from 'react-native-modal/dist/modal';
-
-interface Props {
-  onChange?: (date: Date) => void;
-  value?: Date;
-  label?: string;
-  placeholder?: string;
-}
+import ActionSheet, {
+  SheetManager,
+  SheetProps,
+} from 'react-native-actions-sheet';
 
 export const TimeInput: React.FC<any> = props => {
+  const [startTime, setStartDate] = useState<Date>(new Date());
+  const [endTime, setEndDate] = useState<Date>();
+
   const onPress = () => {
-    SheetManager.show('TimerInputSheet');
+    SheetManager.show('TimeInputSheet');
   };
 
   return (
-    <View style={stylesApp.main}>
+    <View>
       <TouchableOpacity style={styles.input} onPress={onPress}>
-        <Text>Haha</Text>
+        <Text style={{color: colors.grayPlaceholder}}>
+          {startTime.toTimeString()}
+          {endTime ? `${' - ' + endTime.toTimeString()}` : ''}
+        </Text>
         {/* <Icon name="left" size={30} color="black" /> */}
       </TouchableOpacity>
     </View>
   );
 };
 
-const TimeSheet = ({
-  onChange,
-  value,
-  label,
-  placeholder = 'เลือกเวลา',
-}: Props): JSX.Element => {
-  const [isOpen, setIsOpen] = useState(false);
+export const TimeSheet = (props: SheetProps<{tel: string}>) => {
   return (
-    <>
-      <View
-        style={{
-          width: '100%',
-          alignItems: 'flex-start',
-          marginTop: 10,
-          marginBottom: 8,
-        }}>
-        {label && (
-          <Text
-            style={{
-              fontFamily: fonts.medium,
-              fontSize: normalize(16),
-              color: colors.fontBlack,
-            }}>
-            {label}
-          </Text>
-        )}
-      </View>
-      <TouchableOpacity
-        style={{
-          width: '100%',
-          padding: normalize(5),
-          paddingVertical: normalize(7),
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          borderRadius: 8,
-          borderWidth: 1,
-          borderColor: colors.grayPlaceholder,
-        }}
-        onPress={() => setIsOpen(true)}>
-        {!value ? (
-          <Text
-            style={{
-              fontFamily: fonts.medium,
-              fontSize: normalize(16),
-              color: colors.grayPlaceholder,
-            }}>
-            {placeholder}
-          </Text>
-        ) : (
-          <Text
-            style={{
-              fontFamily: fonts.medium,
-
-              fontSize: normalize(16),
-              color: colors.inputText,
-            }}>
-            {value ? dayjs(value).format('HH:mm') : ''}
-          </Text>
-        )}
-        {/* <Image
-          source={icons.timeIcon}
-          style={{
-            width: normalize(25),
-            height: normalize(25),
-          }}
+    <ActionSheet
+      containerStyle={{
+        height: normalize(300),
+      }}
+      id={props.sheetId}
+      useBottomSafeAreaPadding
+      gestureEnabled={true}>
+      <View style={styles.container}>
+        <Text>Choose Time</Text>
+        {/* <View style={{alignItems: 'center'}}>
+          <Text style={styles.h1}>โทรศัพท์หา</Text>
+        </View> */}
+        {/* <MainButton
+          label={'เกษตรกร'}
+          color={colors.orange}
+          // onPress={() => dialCall(props.payload?.tel)}
+        />
+        <MainButton
+          label={'ติดต่อเจ้าหน้าที่'}
+          color={colors.white}
+          fontColor={'red'}
+          borderColor={colors.disable}
+          // onPress={() => dialCall()}
         /> */}
-      </TouchableOpacity>
-      {/* <DatePicker
-        mode="time"
-        options={{
-          headerFont: font.medium,
-        }}
-      /> */}
-      <DateTimePickerModal
-        isVisible={isOpen}
-        mode="time"
-        cancelTextIOS="ยกเลิก"
-        is24Hour
-        // locale="th"
-        confirmTextIOS="ตกลง"
-        timePickerModeAndroid="spinner"
-        onCancel={() => setIsOpen(false)}
-        onConfirm={date => {
-          onChange?.(date);
-          setIsOpen(false);
-        }}
-      />
-    </>
+      </View>
+    </ActionSheet>
   );
 };
 
 export default TimeInput;
+
+const styles = StyleSheet.create({
+  container: {
+    paddingHorizontal: normalize(16),
+    paddingVertical: normalize(15),
+  },
+  input: {
+    height: normalize(50),
+    marginVertical: normalize(10),
+    margin: normalize(30),
+    padding: normalize(15),
+    borderColor: colors.disable,
+    borderWidth: 0.5,
+    borderRadius: normalize(8),
+  },
+});

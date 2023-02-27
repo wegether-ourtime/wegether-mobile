@@ -9,7 +9,7 @@ import {stylesApp} from '../../common/styles/AppStyle';
 import {stylesCentral} from '../../common/styles/StylesCentral';
 import {Touchable} from '../../components/Button/Touchable';
 import {CalendarInput} from '../../components/Input/Calendar';
-import TextInputArea from '../../components/Input/TextInputArea';
+import TextInputArea from '../../components/Input/TextArea';
 import TimeInput from '../../components/Input/Time';
 import CustomHeader from '../../components/Text/CustomHeader';
 import {useAuthStore} from '../../stores/authStore';
@@ -74,14 +74,7 @@ const CreateEventScreen: React.FC<any> = ({navigation}) => {
             onChangeText={value => onChangeText('eventName', value)}
           />
           <CalendarInput></CalendarInput>
-          <TextInput
-            value={form.telNo}
-            style={styles.input}
-            editable={true}
-            placeholder={'Time Input'}
-            // placeholderTextColor={colors.disable}
-            onChangeText={value => onChangeText('telNo', value)}
-          />
+          <TimeInput></TimeInput>
           <TouchableOpacity style={styles.input} onPress={() => {}}>
             <Text style={{color: colors.grayPlaceholder}}>Location</Text>
           </TouchableOpacity>

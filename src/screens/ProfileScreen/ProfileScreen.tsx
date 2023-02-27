@@ -1,5 +1,7 @@
 import {Avatar} from '@rneui/base';
+import {useState} from 'react';
 import {View, Image, StyleSheet, Text, Alert} from 'react-native';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 import {font} from '../../common/assets';
 import colors from '../../common/assets/colors/colors';
 import icons from '../../common/assets/icons';
@@ -12,7 +14,8 @@ import {useAuthStore} from '../../stores/authStore';
 
 const ProfileScreen: React.FC<any> = ({navigation}) => {
   const user = useAuthStore(state => state.user);
-  console.log('user', user);
+  const [toggleOption, setToggleOption] = useState<boolean>(false);
+
   return (
     <View style={[stylesCentral.container]}>
       <View style={styles.userDetail}>
@@ -72,7 +75,7 @@ const styles = StyleSheet.create({
     zIndex: 3,
     elevation: 3,
     width: '100%',
-    height: '50%',
+    height: '100%',
     // backgroundColor: 'red'
   },
 });

@@ -5,7 +5,7 @@ export const BASE_URL = 'http://localhost:3000';
 
 axios.interceptors.request.use(async (config: any) => {
   const token = await AsyncStorage.getItem('token');
-  console.log('token', token);
+  // console.log('token', token);
   config.headers.Authorization = `Bearer ${token}`;
   return config;
 });
