@@ -10,7 +10,7 @@ interface EventState {
   loading: boolean;
   getEvents: (criteria: any) => void;
   getEvent: (eventId: string) => void;
-  createEvent: (createEvent: string) => void;
+  createEvent: (createEvent: any) => void;
   updateEvent: (eventId: string) => void;
   deleteEvent: (eventId: string) => void;
   setCriteria: (criteria: any) => void;

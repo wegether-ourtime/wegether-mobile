@@ -26,14 +26,14 @@ const SuggestionScreen: React.FC<Prop> = (props: Prop) => {
   const getEvents = () => useEventStore.getState().getEvents(criteria);
 
   useFocusEffect(
-    React.useCallback(() => {
+    useCallback(() => {
       getEvents();
     }, []),
   );
 
   useEffect(() => {
     getEvents();
-  }, [!events]);
+  }, []);
 
   // const [data, setData] = useState<any>([]);
   return (
@@ -43,18 +43,17 @@ const SuggestionScreen: React.FC<Prop> = (props: Prop) => {
           keyExtractor={item => item.eventId}
           data={events}
           extraData={events}
-          renderItem={
-            ({index, item}: any) => (
-              <Event
-                name={item.eventName}
-                image={item.eventImage}
-                detail={item.eventDetail}
-                startDate={item.startDate}
-                endDate={item.endDate}
-                // location={item.location}
-              ></Event>
-            )
-          }
+          renderItem={({index, item}: any) => (
+            <Event
+              eventId={item.eventId}
+              eventName={item.eventName}
+              eventImage={item.eventImage}
+              eventDetail={item.eventDetail}
+              startDate={item.startDate}
+              endDate={item.endDate}
+              // location={item.location}
+            ></Event>
+          )}
         />
         <View />
       </View>

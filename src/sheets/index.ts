@@ -1,4 +1,5 @@
 import {registerSheet} from 'react-native-actions-sheet';
+import { CancleEventSheet } from '../components/Event/CancleEvent';
 import { FilterEventSheet } from '../components/Event/FilterEvent';
 import {CalendarSheet} from '../components/Input/Calendar';
 import {TimeSheet} from '../components/Input/Time';
@@ -10,5 +11,6 @@ import {TimeSheet} from '../components/Input/Time';
 registerSheet('CalendarInputSheet', CalendarSheet);
 registerSheet('TimeInputSheet', TimeSheet);
 registerSheet('FilterEventSheet', FilterEventSheet);
+registerSheet('CancleEventSheet', CancleEventSheet);
 
 export {};

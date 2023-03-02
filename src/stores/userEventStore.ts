@@ -9,9 +9,9 @@ interface UserEventState {
   loading: boolean;
   getUserEvents: (criteria: any) => void;
   getUserEvent: (userEventId: string) => void;
-  createUserEvent: (createEvent: string) => void;
+  createUserEvent: (createUserEvent: any) => void;
   updateUserEvent: (userEventId: string) => void;
-  deleteUserEvent: (userEventId: string) => void;
+  deleteUserEvent: (userEventId: any) => void;
 }
 
 export const useUserEventStore = create<UserEventState>(set => ({
@@ -30,9 +30,9 @@ export const useUserEventStore = create<UserEventState>(set => ({
 
     set({userEvent});
   },
-  createUserEvent: async (createEvent: any) => {
+  createUserEvent: async (createUserEvent: any) => {
     const {data} = await axios.post(`${BASE_URL}/user-event`, {
-      ...createEvent,
+      ...createUserEvent,
     });
     const userEvent = data;
 

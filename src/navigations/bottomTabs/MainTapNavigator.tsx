@@ -26,6 +26,7 @@ import {
 } from '../../common/function/responsive';
 import ScanScreen from '../../screens/ScanScreen/ScanScreen';
 import CreateEventScreen from '../../screens/CreateEventScreen/CreateEventScreen';
+import ChatListScreen from '../../screens/ChatListScreen/ChatListScreen';
 
 const Tab = createBottomTabNavigator();
 
@@ -60,8 +61,7 @@ const MainTapNavigator: React.FC<any> = ({navigation}) => {
     {
       name: 'chat',
       title: 'ข้อความ',
-      // component: ChatScreen,
-      component: EventScreen,
+      component: ChatListScreen,
       activeIcon: icons.chat,
       inactiveIcon: icons.chat,
     },

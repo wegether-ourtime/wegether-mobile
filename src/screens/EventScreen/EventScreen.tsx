@@ -24,7 +24,10 @@ const EventScreen: React.FC<any> = ({navigation}) => {
                 color: colors.fontBlack,
               }}></Text>
             <View style={styles.activeContainer}>
-              <Text style={styles.activeFont}>Join with Wegether</Text>
+              <Text style={styles.activeFont}>Join with</Text>
+            </View>
+            <View style={styles.activeContainer}>
+              <Text style={styles.activeFont}>Wegether</Text>
             </View>
           </View>
         </View>

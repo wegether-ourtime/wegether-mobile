@@ -1,6 +1,8 @@
 export default {
   primary: '#3E51FF', // primary
+  secondary: '#F8F9FA',
   background: '#F5F5F5',
+  white: '#FFFFFF',
 
   orange: '#FB8705',
   darkOrange: '#E85737',
@@ -12,7 +14,6 @@ export default {
   transSubOrange: '#FFFBF6',
   green: '#2EC66E',
   greenDark: '#014D40',
-  white: '#FFFFFF',
   grayBg: '#FAFAFB',
   greyWhite: '#F2F2F2',
   primaryBlue: '#2BB0ED',

@@ -10,6 +10,8 @@ import ProfileScreen from '../screens/ProfileScreen/ProfileScreen';
 import ScanScreen from '../screens/ScanScreen/ScanScreen';
 import CreateEventScreen from '../screens/CreateEventScreen/CreateEventScreen';
 import ChatScreen from '../screens/ChatScreen/ChatScreen';
+import EventDetailScreen from '../screens/EventDetailScreen/EventDetailScreen';
+import ChatListScreen from '../screens/ChatListScreen/ChatListScreen';
 
 export type StackParamList = {
   // DeleteProfileScreen: {
@@ -17,14 +19,13 @@ export type StackParamList = {
   //   route: RouteProp<{params: {id: string}}, 'params'>;
   // };
   EventScreen: any;
+  EventDetailScreen: any;
   MainScreen: any;
   ProfileScreen: any;
   ScanScreen: any;
   CreateEventScreen: any;
+  ChatListScreen: any;
   ChatScreen: any;
-  // DeleteSuccess: {
-  //   navigation: StackNavigationHelpers;
-  // };
 };
 export type StackNativeScreenProps<T extends keyof StackParamList> =
   NativeStackScreenProps<StackParamList, T>;
@@ -41,8 +42,10 @@ const MainNavigator: React.FC = () => {
         }}
       />
       <Stack.Screen name="EventScreen" component={EventScreen} />
+      <Stack.Screen name="EventDetailScreen" component={EventDetailScreen} />
       <Stack.Screen name="ScanScreen" component={ScanScreen} />
       <Stack.Screen name="CreateEventScreen" component={CreateEventScreen} />
+      <Stack.Screen name="ChatListScreen" component={ChatListScreen} />
       <Stack.Screen name="ChatScreen" component={ChatScreen} />
       <Stack.Screen name="ProfileScreen" component={ProfileScreen} />
     </Stack.Navigator>
