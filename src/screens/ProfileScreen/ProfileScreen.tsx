@@ -72,8 +72,8 @@ const styles = StyleSheet.create({
     fontSize: normalize(18),
   },
   option: {
-    zIndex: 3,
-    elevation: 3,
+    zIndex: 1,
+    elevation: 1,
     width: '100%',
     height: '100%',
     // backgroundColor: 'red'

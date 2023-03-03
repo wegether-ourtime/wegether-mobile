@@ -1,11 +1,12 @@
 import {create} from 'zustand';
 import axios from 'axios';
 import {BASE_URL} from '../config';
-import Event from '../models/Event';
+import Event, { EventForm } from '../models/Event';
 
 interface EventState {
   events: Event[];
   event: Event | null;
+  form: EventForm| null;
   criteria: any | null;
   loading: boolean;
   getEvents: (criteria: any) => void;
@@ -13,12 +14,14 @@ interface EventState {
   createEvent: (createEvent: any) => void;
   updateEvent: (eventId: string) => void;
   deleteEvent: (eventId: string) => void;
+  setForm: (form: any) => void;
   setCriteria: (criteria: any) => void;
 }
 
 export const useEventStore = create<EventState>(set => ({
   events: [],
   event: null,
+  form: null,
   criteria: null,
   loading: false,
   getEvents: async (criteria: any) => {
@@ -58,8 +61,9 @@ export const useEventStore = create<EventState>(set => ({
     set({loading: false});
   },
   setEvent: (event: any) => set({event}),
+  setForm: (form: any) => set({form}),
   setCriteria: (criteria: any) => {
     set({criteria});
   },
-  //   setLoading: loading => set({loading}),
+  setLoading: (loading: boolean) => set({loading}),
 }));

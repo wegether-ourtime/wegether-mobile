@@ -26,7 +26,7 @@ const IncomingScreen: React.FC<Prop> = (props: Prop) => {
 
   useEffect(() => {
     getEvents();
-  }, []);
+  }, [!events]);
 
   return (
     <>

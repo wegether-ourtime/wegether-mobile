@@ -7,7 +7,10 @@ import ActionSheet, {
   SheetProps,
 } from 'react-native-actions-sheet';
 import fonts from '../../common/assets/fonts';
-import {colors} from '../../common/assets';
+import {colors, font} from '../../common/assets';
+import DateRangePicker from 'rn-select-date-range';
+import moment from 'moment';
+import { Touchable } from '../Button/Touchable';
 
 export const CalendarInput: React.FC<any> = props => {
   const [startDate, setStartDate] = useState<Date>(new Date());
@@ -30,17 +33,49 @@ export const CalendarInput: React.FC<any> = props => {
   );
 };
 
-export const CalendarSheet = (props: SheetProps<{tel: string}>) => {
+export const CalendarSheet = (
+  props: SheetProps<{startDate: Date; endDate: Date}>,
+) => {
+  // const startDate = props.payload?.startDate;
+  // const endDate = props.payload?.endDate;
+  const [selectedRange, setRange] = useState({});
+
+  const onPressSave = () => {
+    
+  }
+
   return (
     <ActionSheet
       containerStyle={{
-        height: normalize(300),
+        height: normalize(450),
       }}
       id={props.sheetId}
       useBottomSafeAreaPadding
       gestureEnabled={true}>
       <View style={styles.container}>
-        <Text>Choose Date</Text>
+        <Text style={styles.header}>Choose Date</Text>
+        <View style={{ marginVertical: normalize(10)}}>
+          <DateRangePicker
+            onSelectDateRange={range => {
+              setRange(range);
+            }}
+            blockSingleDateSelection={true}
+            // responseFormat="YYYY-MM-DD"
+            maxDate={moment().add(31, 'days')}
+            minDate={moment()}
+            selectedDateContainerStyle={styles.selectedDateContainerStyle}
+            selectedDateStyle={styles.selectedDateStyle}
+            clearBtnTitle={''}
+            confirmBtnTitle={''}
+          />
+          <Touchable
+            label={'Save'}
+            color={colors.primary}
+            fontColor={colors.white}
+            style={[styles.button]}
+            onPress={onPressSave}></Touchable>
+        </View>
+
         {/* <View style={{alignItems: 'center'}}>
           <Text style={styles.h1}>โทรศัพท์หา</Text>
         </View> */}
@@ -66,13 +101,35 @@ const styles = StyleSheet.create({
     paddingHorizontal: normalize(16),
     paddingVertical: normalize(15),
   },
+  header: {
+    fontFamily: font.medium,
+    fontSize: normalize(20),
+  },
   input: {
     height: normalize(50),
     marginVertical: normalize(10),
     margin: normalize(30),
-    padding: normalize(15),
+    paddingLeft: normalize(15),
     borderColor: colors.disable,
     borderWidth: 0.5,
     borderRadius: normalize(8),
+    justifyContent: 'center',
+  },
+  selectedDateContainerStyle: {
+    height: normalize(30),
+    width: normalize(30),
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: colors.primary,
+    borderRadius: normalize(30),
+    // color:'black'
+  },
+  selectedDateStyle: {
+    color: 'white',
+  },
+  button: {
+    margin: normalize(20),
+    marginBottom: normalize(0),
+    padding: normalize(10),
   },
 });

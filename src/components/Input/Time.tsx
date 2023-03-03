@@ -7,6 +7,7 @@ import ActionSheet, {
   SheetManager,
   SheetProps,
 } from 'react-native-actions-sheet';
+import RNDateTimePicker from '@react-native-community/datetimepicker';
 
 export const TimeInput: React.FC<any> = props => {
   const [startTime, setStartDate] = useState<Date>(new Date());
@@ -20,8 +21,19 @@ export const TimeInput: React.FC<any> = props => {
     <View>
       <TouchableOpacity style={styles.input} onPress={onPress}>
         <Text style={{color: colors.grayPlaceholder}}>
-          {startTime.toTimeString()}
-          {endTime ? `${' - ' + endTime.toTimeString()}` : ''}
+          {`${new Date(startTime).toLocaleTimeString('th-TH', {
+            hour: 'numeric',
+            minute: 'numeric',
+          })}`}
+          {endTime
+            ? `${
+                ' - ' +
+                `${new Date(endTime).toLocaleTimeString('th-TH', {
+                  hour: 'numeric',
+                  minute: 'numeric',
+                })}`
+              }`
+            : ''}
         </Text>
         {/* <Icon name="left" size={30} color="black" /> */}
       </TouchableOpacity>
@@ -40,6 +52,7 @@ export const TimeSheet = (props: SheetProps<{tel: string}>) => {
       gestureEnabled={true}>
       <View style={styles.container}>
         <Text>Choose Time</Text>
+        <RNDateTimePicker mode="time" value={new Date()}/>
         {/* <View style={{alignItems: 'center'}}>
           <Text style={styles.h1}>โทรศัพท์หา</Text>
         </View> */}
@@ -71,9 +84,10 @@ const styles = StyleSheet.create({
     height: normalize(50),
     marginVertical: normalize(10),
     margin: normalize(30),
-    padding: normalize(15),
+    paddingLeft: normalize(15),
     borderColor: colors.disable,
     borderWidth: 0.5,
     borderRadius: normalize(8),
+    justifyContent: 'center',
   },
 });

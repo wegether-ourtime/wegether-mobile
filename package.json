@@ -38,6 +38,7 @@
     "react-native-tab-view": "^3.3.4",
     "react-native-toast-message": "^2.1.5",
     "react-native-vision-camera": "^2.15.4",
+    "rn-select-date-range": "^5.0.0",
     "socket.io-client": "^4.6.0",
     "vision-camera-code-scanner": "^0.2.0",
     "zustand": "^4.3.2"

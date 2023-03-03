@@ -14,18 +14,10 @@ import TimeInput from '../../components/Input/Time';
 import CustomHeader from '../../components/Text/CustomHeader';
 import {useAuthStore} from '../../stores/authStore';
 import {useEventStore} from '../../stores/eventStore';
+import * as RootNavigation from '../../navigations/RootNavigation';
 
 const CreateEventScreen: React.FC<any> = ({navigation}) => {
-  const [form, setForm] = useState<any>({
-    eventName: null,
-    event: null,
-    startDate: null,
-    endDate: null,
-    startTime: null,
-    endTime: null,
-    location: null,
-    eventDetail: null,
-  });
+  const form = useEventStore(state => state.form);
   // const [time, setTime] = useState<Date | undefined>(undefined);
   const [toggleModalUpload, setToggleModalUpload] = useState<boolean>(false);
   const [eventImg, setEventImg] = useState(null);
@@ -35,7 +27,7 @@ const CreateEventScreen: React.FC<any> = ({navigation}) => {
   };
 
   const onChangeText = (field: string, value: string) =>
-    setForm({...form, [field]: value});
+    useEventStore.getState().setForm({...form, [field]: value});
 
   return (
     <SafeAreaView style={[stylesApp.container]}>
@@ -66,7 +58,7 @@ const CreateEventScreen: React.FC<any> = ({navigation}) => {
             />
           </View>
           <TextInput
-            value={form.telNo}
+            value={form?.eventName}
             style={styles.input}
             editable={true}
             placeholder={'Event Name'}
@@ -75,11 +67,21 @@ const CreateEventScreen: React.FC<any> = ({navigation}) => {
           />
           <CalendarInput></CalendarInput>
           <TimeInput></TimeInput>
-          <TouchableOpacity style={styles.input} onPress={() => {}}>
-            <Text style={{color: colors.grayPlaceholder}}>Location</Text>
+          <TouchableOpacity
+            style={styles.input}
+            onPress={() => {
+              RootNavigation.navigate('Main', {
+                screen: 'LocationScreen',
+              });
+            }}>
+            {form?.location ? (
+              <Text style={{color: colors.fontBlack}}>{form.location.name}</Text>
+            ) : (
+              <Text style={{color: colors.grayPlaceholder}}>Location</Text>
+            )}
           </TouchableOpacity>
           <TextInput
-            value={form.idNo}
+            value={form?.eventDetail}
             style={[
               styles.input,
               {

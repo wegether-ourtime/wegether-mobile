@@ -33,7 +33,7 @@ const SuggestionScreen: React.FC<Prop> = (props: Prop) => {
 
   useEffect(() => {
     getEvents();
-  }, []);
+  }, [!events]);
 
   // const [data, setData] = useState<any>([]);
   return (

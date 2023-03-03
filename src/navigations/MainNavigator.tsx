@@ -12,6 +12,7 @@ import CreateEventScreen from '../screens/CreateEventScreen/CreateEventScreen';
 import ChatScreen from '../screens/ChatScreen/ChatScreen';
 import EventDetailScreen from '../screens/EventDetailScreen/EventDetailScreen';
 import ChatListScreen from '../screens/ChatListScreen/ChatListScreen';
+import LocationScreen from '../screens/LocationScreen/LocationScreen';
 
 export type StackParamList = {
   // DeleteProfileScreen: {
@@ -26,6 +27,7 @@ export type StackParamList = {
   CreateEventScreen: any;
   ChatListScreen: any;
   ChatScreen: any;
+  LocationScreen: any;
 };
 export type StackNativeScreenProps<T extends keyof StackParamList> =
   NativeStackScreenProps<StackParamList, T>;
@@ -48,6 +50,7 @@ const MainNavigator: React.FC = () => {
       <Stack.Screen name="ChatListScreen" component={ChatListScreen} />
       <Stack.Screen name="ChatScreen" component={ChatScreen} />
       <Stack.Screen name="ProfileScreen" component={ProfileScreen} />
+      <Stack.Screen name="LocationScreen" component={LocationScreen} />
     </Stack.Navigator>
   );
 };
