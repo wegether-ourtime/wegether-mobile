@@ -11,13 +11,13 @@ export default interface Event {
 }
 
 export interface EventForm {
-  eventId: string;
+  eventId: string | null;
   eventName: string;
   eventDetail: string;
-  startDate: string;
-  endDate: string;
-  startTime: string;
-  endTime: string;
-  eventCategories: any;
-  location: any;
+  startDate: Date | null;
+  endDate: Date | null;
+  startTime: Date | null;
+  endTime: Date | null;
+  eventCategories: any | null;
+  location: any | null;
 }

@@ -21,7 +21,16 @@ interface EventState {
 export const useEventStore = create<EventState>(set => ({
   events: [],
   event: null,
-  form: null,
+  form: {
+    eventName: '',
+    eventDetail: '',
+    startDate: null,
+    endDate: null,
+    startTime: null,
+    endTime: null,
+    eventCategories: null,
+    location: null,
+  } as EventForm,
   criteria: null,
   loading: false,
   getEvents: async (criteria: any) => {
@@ -42,7 +51,6 @@ export const useEventStore = create<EventState>(set => ({
   },
   createEvent: async (createEvent: any) => {
     set({loading: true});
-    console.log(createEvent);
     const {data} = await axios.post(`${BASE_URL}/event`, {...createEvent});
     const event = data;
 

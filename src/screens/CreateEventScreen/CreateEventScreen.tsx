@@ -15,14 +15,17 @@ import CustomHeader from '../../components/Text/CustomHeader';
 import {useAuthStore} from '../../stores/authStore';
 import {useEventStore} from '../../stores/eventStore';
 import * as RootNavigation from '../../navigations/RootNavigation';
+import {launchImageLibrary} from 'react-native-image-picker';
 
 const CreateEventScreen: React.FC<any> = ({navigation}) => {
   const form = useEventStore(state => state.form);
   const user = useAuthStore(state => state.user);
   // const [time, setTime] = useState<Date | undefined>(undefined);
   const [toggleModalUpload, setToggleModalUpload] = useState<boolean>(false);
-  const [eventImg, setEventImg] = useState(null);
-  // const validateField = Object.values(form).every(x => x === null || x === '');
+  const [eventImg, setEventImg] = useState<any>();
+  const validateField = form
+    ? !Object.values(form).some(x => x === null || x === '')
+    : null;
 
   const onSubmit = () => {
     useEventStore.getState().createEvent({
@@ -43,6 +46,7 @@ const CreateEventScreen: React.FC<any> = ({navigation}) => {
       />
       <View style={styles.main}>
         <ScrollView
+          keyboardShouldPersistTaps="always"
           style={{flex: 1}}
           contentContainerStyle={{
             paddingBottom: normalize(130),
@@ -57,10 +61,41 @@ const CreateEventScreen: React.FC<any> = ({navigation}) => {
                 justifyContent: 'center',
               },
             ]}>
-            <Image
-              source={eventImg ?? images.cover}
-              style={{height: '100%', width: '100%'}}
-            />
+            {eventImg ? (
+              <Image
+                source={eventImg}
+                style={{
+                  height: '100%',
+                  width: '100%',
+                }}
+              />
+            ) : (
+              <TouchableOpacity
+                containerStyle={{
+                  height: '100%',
+                  width: '100%',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+                onPress={async () => {
+                  const img = await launchImageLibrary(
+                    {
+                      mediaType: 'photo',
+                    },
+                    res => {
+                      setEventImg(res.assets?.[0]);
+                    },
+                  );
+                }}>
+                <Image
+                  source={icons.addButton}
+                  style={{
+                    height: normalize(25),
+                    width: normalize(25),
+                  }}
+                />
+              </TouchableOpacity>
+            )}
           </View>
           <TextInput
             value={form?.eventName}
@@ -104,13 +139,11 @@ const CreateEventScreen: React.FC<any> = ({navigation}) => {
           />
           <Touchable
             label={'Post'}
-            // disabled={!validateField ? true : false}
-            color={colors.primary}
+            disable={validateField}
+            color={!validateField ? colors.disable : colors.primary}
             fontColor={colors.white}
             style={[styles.button, {marginTop: normalize(30)}]}
-            onPress={() => {
-              onSubmit();
-            }}></Touchable>
+            onPress={() => onSubmit()}></Touchable>
         </ScrollView>
       </View>
     </SafeAreaView>
