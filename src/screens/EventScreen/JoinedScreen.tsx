@@ -8,21 +8,25 @@ import Spinner from 'react-native-loading-spinner-overlay';
 import Toast from 'react-native-toast-message';
 import {colors, image, icons} from '../../common/assets';
 import fonts from '../../common/assets/fonts';
-// import Tasklists from '../../components/TaskList/Tasklists';
-// import {TaskDatasource} from '../../datasource/TaskDatasource';
+import {EventType} from '../../common/enums/eventStatus';
 import {stylesCentral} from '../../common/styles/StylesCentral';
 import {Event} from '../../components/Event/Event';
-// import * as ImagePicker from 'react-native-image-picker';
-// import {dataUpdateStatusEntity} from '../../entities/TaskScreenEntities';
 import * as RootNavigation from '../../navigations/RootNavigation';
+import {useAuthStore} from '../../stores/authStore';
 import {useEventStore} from '../../stores/eventStore';
 
 interface Prop {}
 
 const JoinedScreen: React.FC<Prop> = (props: Prop) => {
+  const user = useAuthStore(state => state.user);
   const events = useEventStore(state => state.events);
   const criteria = useEventStore(state => state.criteria);
-  const getEvents = () => useEventStore.getState().getEvents(criteria);
+  const getEvents = () =>
+    useEventStore.getState().getEvents({
+      eventType: EventType.JOINED,
+      uesrId: user?.userId,
+      ...criteria,
+    });
 
   useFocusEffect(
     React.useCallback(() => {
@@ -32,7 +36,7 @@ const JoinedScreen: React.FC<Prop> = (props: Prop) => {
 
   useEffect(() => {
     getEvents();
-  }, [!events]);
+  }, []);
 
   // const [data, setData] = useState<any>([]);
   const [loading, setLoading] = useState<boolean>(false);

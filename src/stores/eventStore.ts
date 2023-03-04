@@ -1,12 +1,12 @@
 import {create} from 'zustand';
 import axios from 'axios';
 import {BASE_URL} from '../config';
-import Event, { EventForm } from '../models/Event';
+import Event, {EventForm} from '../models/Event';
 
 interface EventState {
   events: Event[];
   event: Event | null;
-  form: EventForm| null;
+  form: EventForm | null;
   criteria: any | null;
   loading: boolean;
   getEvents: (criteria: any) => void;
@@ -42,6 +42,7 @@ export const useEventStore = create<EventState>(set => ({
   },
   createEvent: async (createEvent: any) => {
     set({loading: true});
+    console.log(createEvent);
     const {data} = await axios.post(`${BASE_URL}/event`, {...createEvent});
     const event = data;
 

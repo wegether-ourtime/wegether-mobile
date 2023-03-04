@@ -8,6 +8,7 @@ import ActionSheet, {
   SheetProps,
 } from 'react-native-actions-sheet';
 import RNDateTimePicker from '@react-native-community/datetimepicker';
+import {Touchable} from '../Button/Touchable';
 
 export const TimeInput: React.FC<any> = props => {
   const [startTime, setStartDate] = useState<Date>(new Date());
@@ -42,32 +43,42 @@ export const TimeInput: React.FC<any> = props => {
 };
 
 export const TimeSheet = (props: SheetProps<{tel: string}>) => {
+  const onPressSave = () => {};
+
   return (
     <ActionSheet
       containerStyle={{
-        height: normalize(300),
+        height: normalize(550),
       }}
       id={props.sheetId}
       useBottomSafeAreaPadding
       gestureEnabled={true}>
       <View style={styles.container}>
         <Text>Choose Time</Text>
-        <RNDateTimePicker mode="time" value={new Date()}/>
-        {/* <View style={{alignItems: 'center'}}>
-          <Text style={styles.h1}>โทรศัพท์หา</Text>
-        </View> */}
-        {/* <MainButton
-          label={'เกษตรกร'}
-          color={colors.orange}
-          // onPress={() => dialCall(props.payload?.tel)}
-        />
-        <MainButton
-          label={'ติดต่อเจ้าหน้าที่'}
-          color={colors.white}
-          fontColor={'red'}
-          borderColor={colors.disable}
-          // onPress={() => dialCall()}
-        /> */}
+        <View>
+          <Text>Start with</Text>
+          <RNDateTimePicker
+            mode="time"
+            value={new Date()}
+            is24Hour={false}
+            display="spinner"
+          />
+        </View>
+        <View>
+          <Text>End with</Text>
+          <RNDateTimePicker
+            mode="time"
+            value={new Date()}
+            is24Hour={false}
+            display="spinner"
+          />
+        </View>
+        <Touchable
+          label={'Save'}
+          color={colors.primary}
+          fontColor={colors.white}
+          style={[styles.button]}
+          onPress={onPressSave}></Touchable>
       </View>
     </ActionSheet>
   );
@@ -89,5 +100,10 @@ const styles = StyleSheet.create({
     borderWidth: 0.5,
     borderRadius: normalize(8),
     justifyContent: 'center',
+  },
+  button: {
+    margin: normalize(20),
+    marginBottom: normalize(0),
+    padding: normalize(10),
   },
 });

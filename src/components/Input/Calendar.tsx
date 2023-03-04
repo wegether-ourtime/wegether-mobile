@@ -75,22 +75,6 @@ export const CalendarSheet = (
             style={[styles.button]}
             onPress={onPressSave}></Touchable>
         </View>
-
-        {/* <View style={{alignItems: 'center'}}>
-          <Text style={styles.h1}>โทรศัพท์หา</Text>
-        </View> */}
-        {/* <MainButton
-          label={'เกษตรกร'}
-          color={colors.orange}
-          // onPress={() => dialCall(props.payload?.tel)}
-        />
-        <MainButton
-          label={'ติดต่อเจ้าหน้าที่'}
-          color={colors.white}
-          fontColor={'red'}
-          borderColor={colors.disable}
-          // onPress={() => dialCall()}
-        /> */}
       </View>
     </ActionSheet>
   );

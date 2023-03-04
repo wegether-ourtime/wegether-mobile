@@ -18,12 +18,17 @@ import * as RootNavigation from '../../navigations/RootNavigation';
 
 const CreateEventScreen: React.FC<any> = ({navigation}) => {
   const form = useEventStore(state => state.form);
+  const user = useAuthStore(state => state.user);
   // const [time, setTime] = useState<Date | undefined>(undefined);
   const [toggleModalUpload, setToggleModalUpload] = useState<boolean>(false);
   const [eventImg, setEventImg] = useState(null);
+  // const validateField = Object.values(form).every(x => x === null || x === '');
 
   const onSubmit = () => {
-    useEventStore.getState().createEvent({...form});
+    useEventStore.getState().createEvent({
+      ...form,
+      userEvents: [{userId: user?.userId, isHost: true}],
+    });
   };
 
   const onChangeText = (field: string, value: string) =>
@@ -75,7 +80,9 @@ const CreateEventScreen: React.FC<any> = ({navigation}) => {
               });
             }}>
             {form?.location ? (
-              <Text style={{color: colors.fontBlack}}>{form.location.name}</Text>
+              <Text style={{color: colors.fontBlack}}>
+                {form.location.name}
+              </Text>
             ) : (
               <Text style={{color: colors.grayPlaceholder}}>Location</Text>
             )}
@@ -97,6 +104,7 @@ const CreateEventScreen: React.FC<any> = ({navigation}) => {
           />
           <Touchable
             label={'Post'}
+            // disabled={!validateField ? true : false}
             color={colors.primary}
             fontColor={colors.white}
             style={[styles.button, {marginTop: normalize(30)}]}

@@ -4,6 +4,7 @@ import {Image, Text, View} from 'react-native';
 import {FlatList} from 'react-native-gesture-handler';
 import Spinner from 'react-native-loading-spinner-overlay';
 import {colors, image, icons} from '../../common/assets';
+import {EventType} from '../../common/enums/eventStatus';
 import {Event} from '../../components/Event/Event';
 import {useAuthStore} from '../../stores/authStore';
 import {useEventStore} from '../../stores/eventStore';
@@ -16,7 +17,13 @@ const IncomingScreen: React.FC<Prop> = (props: Prop) => {
   const loading = useEventStore(state => state.loading);
   const criteria = useEventStore(state => state.criteria);
   const getEvents = () =>
-    useEventStore.getState().getEvents({uesrId: user?.userId, ...criteria});
+    useEventStore
+      .getState()
+      .getEvents({
+        eventType: EventType.INCOMING,
+        uesrId: user?.userId,
+        ...criteria,
+      });
 
   useFocusEffect(
     useCallback(() => {
@@ -26,7 +33,7 @@ const IncomingScreen: React.FC<Prop> = (props: Prop) => {
 
   useEffect(() => {
     getEvents();
-  }, [!events]);
+  }, []);
 
   return (
     <>
