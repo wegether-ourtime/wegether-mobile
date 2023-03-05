@@ -2,10 +2,12 @@ import {Avatar} from '@rneui/base';
 import {useState} from 'react';
 import {View, Image, StyleSheet, Text, Alert} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
+import Spinner from 'react-native-loading-spinner-overlay/lib';
 import {font} from '../../common/assets';
 import colors from '../../common/assets/colors/colors';
 import icons from '../../common/assets/icons';
 import images from '../../common/assets/images';
+import {FileResource} from '../../common/enums/fileResource';
 import {normalize} from '../../common/function/normalize';
 import {stylesCentral} from '../../common/styles/StylesCentral';
 import {ProfileOption} from '../../components/Option/ProfileOption';
@@ -14,18 +16,29 @@ import {useAuthStore} from '../../stores/authStore';
 
 const ProfileScreen: React.FC<any> = ({navigation}) => {
   const user = useAuthStore(state => state.user);
+  // const user = useUserStore(state => state.loadgin)
   const [toggleOption, setToggleOption] = useState<boolean>(false);
+  const coverImg = user?.files.find(
+    (f: any) => f.resource == FileResource.USER_COVER,
+  )?.path;
+  const profileImg = user?.files.find(
+    (f: any) => f.resource == FileResource.USER_PROFILE,
+  )?.path;
 
   return (
     <View style={[stylesCentral.container]}>
       <View style={styles.userDetail}>
+        {/* <Image
+          style={styles.cover}
+          source={coverImg ? {uri: coverImg} : images.cover}></Image> */}
         <Image style={styles.cover} source={images.cover}></Image>
         <Avatar
           avatarStyle={styles.profile}
           containerStyle={styles.profileContainer}
           size={normalize(100)}
           rounded
-          source={images.profile}
+          source={profileImg ? {uri: profileImg} : icons.profileActive}
+          // source={images.profile}
         />
         <View style={styles.user}>
           <Text style={styles.name}>Chanwit Saisin</Text>
@@ -33,6 +46,11 @@ const ProfileScreen: React.FC<any> = ({navigation}) => {
       </View>
       <ProfileOption style={styles.option}></ProfileOption>
       <MyEventNavigator></MyEventNavigator>
+      {/* <Spinner
+        visible={!coverImg && !profileImg}
+        textContent={'Loading...'}
+        textStyle={{color: '#FFF'}}
+      /> */}
     </View>
   );
 };

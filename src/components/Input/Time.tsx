@@ -1,19 +1,20 @@
 import {View, Text, TouchableOpacity, Image, StyleSheet} from 'react-native';
 import React, {useState} from 'react';
 import {normalize} from '../../common/function/normalize';
-import {colors, icons} from '../../common/assets/';
+import {colors, font, icons} from '../../common/assets/';
 import fonts from '../../common/assets/fonts';
 import ActionSheet, {
   SheetManager,
   SheetProps,
 } from 'react-native-actions-sheet';
-import RNDateTimePicker from '@react-native-community/datetimepicker';
+import RNDateTimePicker, {
+  DateTimePickerEvent,
+} from '@react-native-community/datetimepicker';
 import {Touchable} from '../Button/Touchable';
 
 export const TimeInput: React.FC<any> = props => {
   const [startTime, setStartDate] = useState<Date>(new Date());
   const [endTime, setEndDate] = useState<Date>();
-
   const onPress = () => {
     SheetManager.show('TimeInputSheet');
   };
@@ -44,6 +45,9 @@ export const TimeInput: React.FC<any> = props => {
 
 export const TimeSheet = (props: SheetProps<{tel: string}>) => {
   const onPressSave = () => {};
+  const onChange = (event: DateTimePickerEvent, value: any) => {
+    console.log(value);
+  };
 
   return (
     <ActionSheet
@@ -54,31 +58,37 @@ export const TimeSheet = (props: SheetProps<{tel: string}>) => {
       useBottomSafeAreaPadding
       gestureEnabled={true}>
       <View style={styles.container}>
-        <Text>Choose Time</Text>
-        <View>
-          <Text>Start with</Text>
-          <RNDateTimePicker
-            mode="time"
-            value={new Date()}
-            is24Hour={false}
-            display="spinner"
-          />
+        <Text style={styles.header}>Choose Time</Text>
+        <View style={{margin: normalize(20)}}>
+          <View>
+            <Text>Start with</Text>
+            <RNDateTimePicker
+              mode="time"
+              value={new Date()}
+              is24Hour={false}
+              display="spinner"
+              textColor={colors.primary}
+              onChange={(event, value) => onChange(event, value)}
+            />
+          </View>
+          <View>
+            <Text>End with</Text>
+            <RNDateTimePicker
+              mode="time"
+              value={new Date()}
+              is24Hour={false}
+              display="spinner"
+              textColor={colors.primary}
+              onChange={(event, value) => onChange(event, value)}
+            />
+          </View>
+          <Touchable
+            label={'Save'}
+            color={colors.primary}
+            fontColor={colors.white}
+            style={[styles.button]}
+            onPress={onPressSave}></Touchable>
         </View>
-        <View>
-          <Text>End with</Text>
-          <RNDateTimePicker
-            mode="time"
-            value={new Date()}
-            is24Hour={false}
-            display="spinner"
-          />
-        </View>
-        <Touchable
-          label={'Save'}
-          color={colors.primary}
-          fontColor={colors.white}
-          style={[styles.button]}
-          onPress={onPressSave}></Touchable>
       </View>
     </ActionSheet>
   );
@@ -102,8 +112,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   button: {
-    margin: normalize(20),
-    marginBottom: normalize(0),
     padding: normalize(10),
+  },
+  header: {
+    fontFamily: font.medium,
+    fontSize: normalize(20),
   },
 });

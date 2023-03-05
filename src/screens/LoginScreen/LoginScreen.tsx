@@ -21,14 +21,16 @@ const LoginScreen: React.FC<any> = ({navigation}) => {
     email: null,
     password: null,
   });
-  const user = useAuthStore(state => state.user);
-  const login = () => {
+
+  const login = async () => {
     // validateInput()
-    useAuthStore.getState().login({...form});
+    await useAuthStore.getState().login({...form});
+    const user = useAuthStore.getState().user;
     if (user) {
       RootNavigation.navigate('Main', {
         screen: 'MainScreen',
       });
+    } else {
     }
   };
 
@@ -37,7 +39,6 @@ const LoginScreen: React.FC<any> = ({navigation}) => {
 
   const validateInput = () => {
     if (!validateEmail(form.email)) {
-      console.log('ki');
     }
   };
 

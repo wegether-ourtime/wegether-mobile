@@ -16,32 +16,31 @@ import {useAuthStore} from '../../stores/authStore';
 import {useEventStore} from '../../stores/eventStore';
 import * as RootNavigation from '../../navigations/RootNavigation';
 import {launchImageLibrary} from 'react-native-image-picker';
-import {Couter} from '../../components/Input/Couter';
 
-const CreateEventScreen: React.FC<any> = ({navigation}) => {
-  const form = useEventStore(state => state.form);
-  const user = useAuthStore(state => state.user);
-  // const [time, setTime] = useState<Date | undefined>(undefined);
-  const [toggleModalUpload, setToggleModalUpload] = useState<boolean>(false);
-  const [eventImg, setEventImg] = useState<any>();
-  const validateField = form
-    ? !Object.values(form).some(x => x === null || x === '')
-    : null;
+const EditProfileScreen: React.FC<any> = ({navigation}) => {
+  //   const form = useEventStore(state => state.form);
+  //   const user = useAuthStore(state => state.user);
+  //   // const [time, setTime] = useState<Date | undefined>(undefined);
+  //   const [toggleModalUpload, setToggleModalUpload] = useState<boolean>(false);
+  //   const [eventImg, setEventImg] = useState<any>();
+  //   const validateField = form
+  //     ? !Object.values(form).some(x => x === null || x === '')
+  //     : null;
 
-  const onSubmit = () => {
-    useEventStore.getState().createEvent({
-      ...form,
-      userEvents: [{userId: user?.userId, isHost: true}],
-    });
-  };
+  //   const onSubmit = () => {
+  //     useEventStore.getState().createEvent({
+  //       ...form,
+  //       userEvents: [{userId: user?.userId, isHost: true}],
+  //     });
+  //   };
 
-  const onChangeText = (field: string, value: string) =>
-    useEventStore.getState().setForm({...form, [field]: value});
+  //   const onChangeText = (field: string, value: string) =>
+  //     useEventStore.getState().setForm({...form, [field]: value});
 
   return (
     <SafeAreaView style={[stylesApp.container]}>
       <CustomHeader
-        title="Create Event"
+        title="Edit Profile"
         showBackBtn
         onPressBack={() => navigation.goBack()}
       />
@@ -52,7 +51,7 @@ const CreateEventScreen: React.FC<any> = ({navigation}) => {
           contentContainerStyle={{
             paddingBottom: normalize(130),
           }}>
-          <View
+          {/* <View
             style={[
               styles.input,
               {
@@ -106,21 +105,6 @@ const CreateEventScreen: React.FC<any> = ({navigation}) => {
             // placeholderTextColor={colors.disable}
             onChangeText={value => onChangeText('eventName', value)}
           />
-          <View
-            style={{
-              marginLeft: normalize(30),
-              marginVertical: normalize(10),
-              flexDirection: 'row',
-              alignItems: 'center',
-            }}>
-            <Text style={{paddingHorizontal: normalize(10)}}>
-              How many People?
-            </Text>
-            <View style={{paddingHorizontal: normalize(10)}}>
-              <Couter></Couter>
-            </View>
-          </View>
-
           <CalendarInput></CalendarInput>
           <TimeInput></TimeInput>
           <TouchableOpacity
@@ -159,13 +143,13 @@ const CreateEventScreen: React.FC<any> = ({navigation}) => {
             color={!validateField ? colors.disable : colors.primary}
             fontColor={colors.white}
             style={[styles.button, {marginTop: normalize(30)}]}
-            onPress={() => onSubmit()}></Touchable>
+            onPress={() => onSubmit()}></Touchable> */}
         </ScrollView>
       </View>
     </SafeAreaView>
   );
 };
-export default CreateEventScreen;
+export default EditProfileScreen;
 
 const styles = StyleSheet.create({
   main: {

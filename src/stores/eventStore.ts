@@ -1,7 +1,7 @@
 import {create} from 'zustand';
 import axios from 'axios';
 import {BASE_URL} from '../config';
-import Event, {EventForm} from '../models/Event';
+import Event, {EventForm, initialForm} from '../models/Event';
 
 interface EventState {
   events: Event[];
@@ -21,16 +21,7 @@ interface EventState {
 export const useEventStore = create<EventState>(set => ({
   events: [],
   event: null,
-  form: {
-    eventName: '',
-    eventDetail: '',
-    startDate: null,
-    endDate: null,
-    startTime: null,
-    endTime: null,
-    eventCategories: null,
-    location: null,
-  } as EventForm,
+  form: initialForm,
   criteria: null,
   loading: false,
   getEvents: async (criteria: any) => {

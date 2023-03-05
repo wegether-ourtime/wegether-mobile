@@ -20,4 +20,17 @@ export interface EventForm {
   endTime: Date | null;
   eventCategories: any | null;
   location: any | null;
+  maxParticipant: number | string;
 }
+
+export const initialForm = {
+  eventName: '',
+  eventDetail: '',
+  startDate: null,
+  endDate: null,
+  startTime: null,
+  endTime: null,
+  eventCategories: null,
+  location: null,
+  maxParticipant: '',
+} as EventForm;

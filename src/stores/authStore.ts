@@ -27,6 +27,7 @@ export const useAuthStore = create<UserState>(set => ({
         ...data.user,
         token: data.accessToken,
       };
+      console.log(user)
 
       // await SecureStorage.setItem('user', JSON.stringify(user));
       // await AsyncStorage.setItem('user', JSON.stringify(user));

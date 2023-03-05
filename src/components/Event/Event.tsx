@@ -15,7 +15,15 @@ import {Touchable} from '../Button/Touchable';
 
 export const Event: React.FC<any> = props => {
   const user = useAuthStore(state => state.user);
-  const {eventId, eventName, eventDetail, isHost, startDate, endDate} = props;
+  const {
+    eventId,
+    eventName,
+    eventDetail,
+    isHost,
+    startDate,
+    endDate,
+    eventImage,
+  } = props;
   const date = `${new Date(startDate).toLocaleDateString('th-TH', {
     year: 'numeric',
     month: 'numeric',
@@ -50,7 +58,10 @@ export const Event: React.FC<any> = props => {
         })
       }>
       <View style={styles.main}>
-        <Image source={images.cover} style={styles.eventImage} />
+        <Image
+          source={eventImage ? {uri: eventImage} : images.cover}
+          style={styles.eventImage}
+        />
         <View style={styles.eventDetail}>
           <View style={styles.eventHost}>
             <View style={{width: '60%'}}>

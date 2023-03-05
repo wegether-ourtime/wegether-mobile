@@ -11,6 +11,8 @@ import {BackHandler} from 'react-native';
 // import dayjs from 'dayjs';
 import {AuthProvider} from './src/contexts/AuthContext';
 import AppNavigator from './src/navigations/AppNavigator';
+import Toast from 'react-native-toast-message';
+import { toastConfig } from './src/config/toast-config';
 
 type ActionContextType = {
   actiontaskId: string | null;
@@ -42,7 +44,7 @@ const App = () => {
           <SheetProvider>
             <AppNavigator />
           </SheetProvider>
-          {/* <Toast config={toastConfig} /> */}
+          <Toast config={toastConfig} />
         </NavigationContainer>
       </ActionContext.Provider>
     </>

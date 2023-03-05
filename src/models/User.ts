@@ -7,4 +7,5 @@ export default interface User {
   fullname: string;
   createdAt: Date;
   updatedAt: Date;
+  files: any;
 }

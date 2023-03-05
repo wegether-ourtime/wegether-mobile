@@ -1,6 +1,7 @@
 import {Switch} from '@rneui/themed';
 import {useEffect, useState} from 'react';
 import {Button, Image, ScrollView, StyleSheet, Text, View} from 'react-native';
+import { SheetManager } from 'react-native-actions-sheet';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {SafeAreaView, useSafeAreaInsets} from 'react-native-safe-area-context';
 import {colors, font, icons} from '../../common/assets';
@@ -36,10 +37,11 @@ const EventDetailScreen: React.FC<any> = ({navigation, route}) => {
   };
 
   const onPressCancel = () => {
-    useUserEventStore.getState().deleteUserEvent({
-      eventId,
-      userId: user?.userId,
-    });
+    SheetManager.show('CancleEventSheet');
+    // useUserEventStore.getState().deleteUserEvent({
+    //   eventId,
+    //   userId: user?.userId,
+    // });
   };
 
   return (

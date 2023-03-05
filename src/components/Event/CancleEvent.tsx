@@ -1,8 +1,6 @@
 import {View, Text, TouchableOpacity, Image, StyleSheet} from 'react-native';
 import React, {useState} from 'react';
 import {normalize} from '../../common/function/normalize';
-import {colors, icons} from '../../common/assets/';
-import fonts from '../../common/assets/fonts';
 import ActionSheet, {
   SheetManager,
   SheetProps,

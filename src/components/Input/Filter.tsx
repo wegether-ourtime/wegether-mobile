@@ -29,6 +29,7 @@ export const Filter: React.FC<any> = props => {
         placeholder={'What are you interest in?'}
         editable={true}
         onChangeText={value => onChangeText('search', value)}></TextInput>
+
       <TouchableOpacity
         onPress={() => {
           SheetManager.show('FilterEventSheet');
