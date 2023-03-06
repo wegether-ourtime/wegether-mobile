@@ -7,7 +7,6 @@ import {colors, font, icons, image} from '../../common/assets';
 import fonts from '../../common/assets/fonts';
 import images from '../../common/assets/images';
 import {normalize} from '../../common/function/normalize';
-import {getStatusToText, numberWithCommas} from '../../common/function/utility';
 import * as RootNavigation from '../../navigations/RootNavigation';
 import {useAuthStore} from '../../stores/authStore';
 import {useUserEventStore} from '../../stores/userEventStore';
@@ -22,7 +21,7 @@ export const Event: React.FC<any> = props => {
     isHost,
     startDate,
     endDate,
-    eventImage,
+    eventImg,
   } = props;
   const date = `${new Date(startDate).toLocaleDateString('th-TH', {
     year: 'numeric',
@@ -59,7 +58,7 @@ export const Event: React.FC<any> = props => {
       }>
       <View style={styles.main}>
         <Image
-          source={eventImage ? {uri: eventImage} : images.cover}
+          source={eventImg ? {uri: eventImg} : images.cover}
           style={styles.eventImage}
         />
         <View style={styles.eventDetail}>

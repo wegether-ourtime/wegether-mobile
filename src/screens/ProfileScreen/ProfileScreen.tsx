@@ -1,5 +1,6 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {Avatar} from '@rneui/base';
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import {View, Image, StyleSheet, Text, Alert} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import Spinner from 'react-native-loading-spinner-overlay/lib';
@@ -13,44 +14,57 @@ import {stylesCentral} from '../../common/styles/StylesCentral';
 import {ProfileOption} from '../../components/Option/ProfileOption';
 import MyEventNavigator from '../../navigations/topTabs/MyEventNavigator';
 import {useAuthStore} from '../../stores/authStore';
+import {useUserStore} from '../../stores/userStore';
 
 const ProfileScreen: React.FC<any> = ({navigation}) => {
-  const user = useAuthStore(state => state.user);
-  // const user = useUserStore(state => state.loadgin)
+  const user = useUserStore(state => state.user);
+  const loading = useUserStore(state => state.loading);
+  const [coverImg, setCoverImg] = useState();
+  const [profileImg, setProfileImg] = useState();
+  const getUser = async () => {
+    // useUserStore.getState().setLoading(true)
+    const userId = await AsyncStorage.getItem('userId');
+    useUserStore.getState().getUser(userId ?? '');
+    setCoverImg(
+      user?.files?.find((f: any) => f.resource == FileResource.USER_COVER)
+        ?.path,
+    );
+    setProfileImg(
+      user?.files?.find((f: any) => f.resource == FileResource.USER_PROFILE)
+        ?.path,
+    );
+    // useUserStore.getState().setLoading(false)
+  };
   const [toggleOption, setToggleOption] = useState<boolean>(false);
-  const coverImg = user?.files.find(
-    (f: any) => f.resource == FileResource.USER_COVER,
-  )?.path;
-  const profileImg = user?.files.find(
-    (f: any) => f.resource == FileResource.USER_PROFILE,
-  )?.path;
+
+  useEffect(() => {
+    getUser();
+  }, [!user]);
 
   return (
     <View style={[stylesCentral.container]}>
       <View style={styles.userDetail}>
-        {/* <Image
+        <Image
           style={styles.cover}
-          source={coverImg ? {uri: coverImg} : images.cover}></Image> */}
-        <Image style={styles.cover} source={images.cover}></Image>
+          source={coverImg ? {uri: coverImg} : images.cover}></Image>
         <Avatar
           avatarStyle={styles.profile}
           containerStyle={styles.profileContainer}
           size={normalize(100)}
           rounded
           source={profileImg ? {uri: profileImg} : icons.profileActive}
-          // source={images.profile}
         />
         <View style={styles.user}>
-          <Text style={styles.name}>Chanwit Saisin</Text>
+          <Text style={styles.name}>{user?.fullName}</Text>
         </View>
       </View>
       <ProfileOption style={styles.option}></ProfileOption>
       <MyEventNavigator></MyEventNavigator>
-      {/* <Spinner
-        visible={!coverImg && !profileImg}
+      <Spinner
+        visible={loading}
         textContent={'Loading...'}
         textStyle={{color: '#FFF'}}
-      /> */}
+      />
     </View>
   );
 };

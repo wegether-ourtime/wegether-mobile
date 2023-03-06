@@ -1,7 +1,7 @@
 import {create} from 'zustand';
 import axios from 'axios';
 import {BASE_URL} from '../config';
-import Event, {EventForm, initialForm} from '../models/Event';
+import Event, {EventForm, initialEventForm} from '../models/Event';
 
 interface EventState {
   events: Event[];
@@ -11,8 +11,8 @@ interface EventState {
   loading: boolean;
   getEvents: (criteria: any) => void;
   getEvent: (eventId: string) => void;
-  createEvent: (createEvent: any) => void;
-  updateEvent: (eventId: string) => void;
+  createEvent: (payload: any) => any;
+  updateEvent: (eventId: string, payload: any) => void;
   deleteEvent: (eventId: string) => void;
   setForm: (form: any) => void;
   setCriteria: (criteria: any) => void;
@@ -21,47 +21,82 @@ interface EventState {
 export const useEventStore = create<EventState>(set => ({
   events: [],
   event: null,
-  form: initialForm,
+  form: initialEventForm,
   criteria: null,
   loading: false,
   getEvents: async (criteria: any) => {
-    set({loading: true});
-    const {data} = await axios.get(`${BASE_URL}/event`, {
-      params: {...criteria},
-    });
-    const events = data;
+    try {
+      set({loading: true});
+      const {data} = await axios.get(`${BASE_URL}/event`, {
+        params: {...criteria},
+      });
+      const events = data;
 
-    set({events, loading: false});
+      set({events});
+      return events;
+    } catch (err) {
+      console.log(err);
+    } finally {
+      set({loading: false});
+    }
   },
   getEvent: async (eventId: string) => {
-    set({loading: true});
-    const {data} = await axios.get(`${BASE_URL}/event/${eventId}`);
-    const event = data;
+    try {
+      set({loading: true});
+      const {data} = await axios.get(`${BASE_URL}/event/${eventId}`);
+      const event = data;
 
-    set({event, loading: false});
+      set({event});
+      return event;
+    } catch (err) {
+      console.log(err);
+    } finally {
+      set({loading: false});
+    }
   },
-  createEvent: async (createEvent: any) => {
-    set({loading: true});
-    const {data} = await axios.post(`${BASE_URL}/event`, {...createEvent});
-    const event = data;
+  createEvent: async (payload: EventForm) => {
+    try {
+      set({loading: true});
+      const {data} = await axios.post(`${BASE_URL}/event`, {...payload});
+      const event = data;
 
-    set({event, loading: false});
+      set({event, form: initialEventForm});
+      return event;
+    } catch (err) {
+      console.log(err);
+    } finally {
+      set({loading: false});
+    }
   },
-  updateEvent: async (eventId: string) => {
-    set({loading: true});
-    const {data} = await axios.post(`${BASE_URL}/event`, {});
-    const event = data;
+  updateEvent: async (eventId: string, payload: any) => {
+    try {
+      set({loading: true});
+      const {data} = await axios.post(`${BASE_URL}/event/${eventId}`, {
+        ...payload,
+      });
+      const event = data;
 
-    set({event, loading: false});
+      set({event});
+      return event;
+    } catch (err) {
+      console.log(err);
+    } finally {
+      set({loading: false});
+    }
   },
   deleteEvent: async (eventId: string) => {
-    set({loading: true});
-    await axios.delete(`${BASE_URL}/event/${eventId}`);
-
-    set({loading: false});
+    try {
+      set({loading: true});
+      await axios.delete(`${BASE_URL}/event/${eventId}`);
+    } catch (err) {
+      console.log(err);
+    } finally {
+      set({loading: false});
+    }
   },
   setEvent: (event: any) => set({event}),
   setForm: (form: any) => set({form}),
+  clearForm: () => set({form: initialEventForm}),
   setCriteria: (criteria: any) => {
     set({criteria});
   },

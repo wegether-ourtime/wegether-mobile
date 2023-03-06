@@ -7,27 +7,53 @@ import {normalize} from '../../common/function/normalize';
 import {useEventStore} from '../../stores/eventStore';
 
 export const Couter: React.FC<any> = props => {
-  const [amount, setAmount] = useState<number>(2);
   const form = useEventStore(state => state.form);
   const onPressPlus = () => {
-    setAmount(amount + 1);
+    if (typeof form?.maxParticipant !== 'number') {
+      useEventStore.getState().setForm({
+        ...form,
+        maxParticipant: 2,
+      });
+    } else {
+      useEventStore.getState().setForm({
+        ...form,
+        maxParticipant: form?.maxParticipant + 1,
+      });
+    }
   };
   const onPressMinus = () => {
-    setAmount(amount - 1);
+    if (typeof form?.maxParticipant !== 'number') {
+      useEventStore.getState().setForm({
+        ...form,
+        maxParticipant: 2,
+      });
+    } else {
+      if (form?.maxParticipant > 2) {
+        useEventStore.getState().setForm({
+          ...form,
+          maxParticipant: form?.maxParticipant - 1,
+        });
+      }
+    }
   };
   const onChange = (value: string) => {
     useEventStore.getState().setForm({
       ...form,
-      maxParticipant: parseInt(value) >= 1 ? parseInt(value) : '',
+      maxParticipant: parseInt(value) >= 2 ? parseInt(value) : 2,
     });
+  };
+  const disabledMinus = () => {
+    if (typeof form?.maxParticipant !== 'number' || form?.maxParticipant <= 2) {
+      return true;
+    } else {
+      return false;
+    }
   };
 
   return (
     <View style={styles.main}>
       <View style={styles.container}>
-        <TouchableOpacity
-          onPress={onPressMinus}
-          disabled={amount <= 2 ? true : false}>
+        <TouchableOpacity onPress={onPressMinus} disabled={disabledMinus()}>
           <Text style={{color: colors.primary}}>-</Text>
         </TouchableOpacity>
       </View>

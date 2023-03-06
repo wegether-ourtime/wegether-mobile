@@ -18,6 +18,7 @@ export const useAuthStore = create<UserState>(set => ({
   loading: false,
   login: async ({email, password}) => {
     try {
+      set({loading: true});
       const {data} = await axios.post(`${BASE_URL}/auth/login`, {
         email,
         password,
@@ -27,26 +28,35 @@ export const useAuthStore = create<UserState>(set => ({
         ...data.user,
         token: data.accessToken,
       };
-      console.log(user)
 
       // await SecureStorage.setItem('user', JSON.stringify(user));
       // await AsyncStorage.setItem('user', JSON.stringify(user));
       await AsyncStorage.setItem('token', user.token);
+      await AsyncStorage.setItem('userId', user.userId);
       set({user});
+
+      return user;
     } catch (e) {
       console.log(e);
+    } finally {
+      set({loading: false});
     }
-    return 'can use';
   },
   logout: async () => {
-    await AsyncStorage.removeItem('user');
+    await AsyncStorage.removeItem('token');
+    await AsyncStorage.removeItem('userId');
     set({user: undefined});
   },
   register: async dto => {
     try {
-      const res = await axios.post(`${BASE_URL}/auth/register`, dto);
+      set({loading: true});
+      const {data} = await axios.post(`${BASE_URL}/auth/register`, dto);
+
+      return data;
     } catch (e) {
       throw e;
+    } finally {
+      set({loading: false});
     }
   },
   // setUser: (user: any) => set({user}),

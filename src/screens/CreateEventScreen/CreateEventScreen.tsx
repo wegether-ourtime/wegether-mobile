@@ -17,22 +17,40 @@ import {useEventStore} from '../../stores/eventStore';
 import * as RootNavigation from '../../navigations/RootNavigation';
 import {launchImageLibrary} from 'react-native-image-picker';
 import {Couter} from '../../components/Input/Couter';
+import {useFileStore} from '../../stores/fileStore';
+import {FileResource} from '../../common/enums/fileResource';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import Spinner from 'react-native-loading-spinner-overlay/lib';
 
 const CreateEventScreen: React.FC<any> = ({navigation}) => {
   const form = useEventStore(state => state.form);
-  const user = useAuthStore(state => state.user);
-  // const [time, setTime] = useState<Date | undefined>(undefined);
+  const loading = useEventStore(state => state.loading);
+  // const user = useAuthStore(state => state.user);
   const [toggleModalUpload, setToggleModalUpload] = useState<boolean>(false);
   const [eventImg, setEventImg] = useState<any>();
   const validateField = form
     ? !Object.values(form).some(x => x === null || x === '')
     : null;
 
-  const onSubmit = () => {
-    useEventStore.getState().createEvent({
+  const onSubmit = async () => {
+    const userId = await AsyncStorage.getItem('userId');
+    const event = await useEventStore.getState().createEvent({
       ...form,
-      userEvents: [{userId: user?.userId, isHost: true}],
+      userEvents: [{userId, isHost: true}],
     });
+
+    const file = await useFileStore
+      .getState()
+      .uploadFile(eventImg, FileResource.EVENT, event.eventId);
+
+    if (event && file) {
+      RootNavigation.navigate('Main', {
+        screen: 'EventDetailScreen',
+        params: {eventId: event.eventId},
+      });
+    } else {
+      // err message
+    }
   };
 
   const onChangeText = (field: string, value: string) =>
@@ -64,7 +82,7 @@ const CreateEventScreen: React.FC<any> = ({navigation}) => {
             ]}>
             {eventImg ? (
               <Image
-                source={eventImg}
+                source={eventImg.assets[0]}
                 style={{
                   height: '100%',
                   width: '100%',
@@ -83,9 +101,7 @@ const CreateEventScreen: React.FC<any> = ({navigation}) => {
                     {
                       mediaType: 'photo',
                     },
-                    res => {
-                      setEventImg(res.assets?.[0]);
-                    },
+                    res => setEventImg(res),
                   );
                 }}>
                 <Image
@@ -155,13 +171,20 @@ const CreateEventScreen: React.FC<any> = ({navigation}) => {
           />
           <Touchable
             label={'Post'}
-            disable={validateField}
-            color={!validateField ? colors.disable : colors.primary}
+            // disable={!validateField}
+            // color={!validateField ? colors.disable : colors.primary}
+            disable={false}
+            color={colors.primary}
             fontColor={colors.white}
             style={[styles.button, {marginTop: normalize(30)}]}
             onPress={() => onSubmit()}></Touchable>
         </ScrollView>
       </View>
+      <Spinner
+        visible={loading}
+        textContent={'Loading...'}
+        textStyle={{color: '#FFF'}}
+      />
     </SafeAreaView>
   );
 };

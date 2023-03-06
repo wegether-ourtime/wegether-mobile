@@ -4,7 +4,7 @@ export default interface User {
   password: string;
   idNo: string;
   telNo: string;
-  fullname: string;
+  fullName: string;
   createdAt: Date;
   updatedAt: Date;
   files: any;

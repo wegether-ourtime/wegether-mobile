@@ -8,6 +8,7 @@ export default interface Event {
   endDate: string;
   eventCategories: any;
   userEvents: UserEvent[];
+  files: any[];
 }
 
 export interface EventForm {
@@ -16,21 +17,17 @@ export interface EventForm {
   eventDetail: string;
   startDate: Date | null;
   endDate: Date | null;
-  startTime: Date | null;
-  endTime: Date | null;
   eventCategories: any | null;
   location: any | null;
   maxParticipant: number | string;
 }
 
-export const initialForm = {
+export const initialEventForm = {
   eventName: '',
   eventDetail: '',
   startDate: null,
   endDate: null,
-  startTime: null,
-  endTime: null,
   eventCategories: null,
   location: null,
-  maxParticipant: '',
+  maxParticipant: 2,
 } as EventForm;

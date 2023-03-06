@@ -10,11 +10,13 @@ import fonts from '../../common/assets/fonts';
 import {colors, font} from '../../common/assets';
 import DateRangePicker from 'rn-select-date-range';
 import moment from 'moment';
-import { Touchable } from '../Button/Touchable';
+import {Touchable} from '../Button/Touchable';
+import {useEventStore} from '../../stores/eventStore';
 
 export const CalendarInput: React.FC<any> = props => {
-  const [startDate, setStartDate] = useState<Date>(new Date());
-  const [endDate, setEndDate] = useState<Date>();
+  const form = useEventStore(state => state.form);
+  // const [startDate, setStartDate] = useState<Date>(new Date());
+  // const [endDate, setEndDate] = useState<Date>();
 
   const onPress = () => {
     SheetManager.show('CalendarInputSheet');
@@ -23,10 +25,27 @@ export const CalendarInput: React.FC<any> = props => {
   return (
     <View>
       <TouchableOpacity style={styles.input} onPress={onPress}>
-        <Text style={{color: colors.grayPlaceholder}}>
-          {startDate.toDateString()}
-          {endDate ? `${' - ' + endDate.toDateString()}` : ''}
-        </Text>
+        {form?.startDate ? (
+          <Text>
+            {`${new Date(form?.startDate).toLocaleDateString('th-TH', {
+              day: 'numeric',
+              month: 'numeric',
+              year: 'numeric',
+            })}`}
+            {form?.endDate
+              ? `${
+                  ' - ' +
+                  `${new Date(form?.endDate).toLocaleDateString('th-TH', {
+                    day: 'numeric',
+                    month: 'numeric',
+                    year: 'numeric',
+                  })}`
+                }`
+              : ''}
+          </Text>
+        ) : (
+          <Text style={{color: colors.grayPlaceholder}}>Date</Text>
+        )}
         {/* <Icon name="left" size={30} color="black" /> */}
       </TouchableOpacity>
     </View>
@@ -36,13 +55,27 @@ export const CalendarInput: React.FC<any> = props => {
 export const CalendarSheet = (
   props: SheetProps<{startDate: Date; endDate: Date}>,
 ) => {
-  // const startDate = props.payload?.startDate;
-  // const endDate = props.payload?.endDate;
+  const form = useEventStore(state => state.form);
   const [selectedRange, setRange] = useState({});
 
   const onPressSave = () => {
-    
-  }
+    SheetManager.hide('CalendarInputSheet');
+  };
+
+  const onChange = (field: 'startDate' | 'endDate', value: any) => {
+    const date = new Date(value);
+    const datetime = new Date(form?.[field] ?? new Date());
+    console.log(field);
+    console.log(form);
+    useEventStore.getState().setForm({
+      ...form,
+      ['startDate']: new Date(
+        new Date(
+          new Date(datetime.setDate(date.getDate())).setMonth(date.getMonth()),
+        ).setFullYear(date.getFullYear()),
+      ),
+    });
+  };
 
   return (
     <ActionSheet
@@ -54,15 +87,16 @@ export const CalendarSheet = (
       gestureEnabled={true}>
       <View style={styles.container}>
         <Text style={styles.header}>Choose Date</Text>
-        <View style={{ marginVertical: normalize(10)}}>
+        <View style={{marginVertical: normalize(10)}}>
           <DateRangePicker
             onSelectDateRange={range => {
-              setRange(range);
+              onChange('startDate', range.firstDate);
+              onChange('endDate', range.secondDate);
             }}
             blockSingleDateSelection={true}
             // responseFormat="YYYY-MM-DD"
             maxDate={moment().add(31, 'days')}
-            minDate={moment()}
+            minDate={moment(new Date()).add(1, 'days')}
             selectedDateContainerStyle={styles.selectedDateContainerStyle}
             selectedDateStyle={styles.selectedDateStyle}
             clearBtnTitle={''}

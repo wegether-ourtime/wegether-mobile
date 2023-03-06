@@ -11,10 +11,10 @@ import RNDateTimePicker, {
   DateTimePickerEvent,
 } from '@react-native-community/datetimepicker';
 import {Touchable} from '../Button/Touchable';
+import {useEventStore} from '../../stores/eventStore';
 
 export const TimeInput: React.FC<any> = props => {
-  const [startTime, setStartDate] = useState<Date>(new Date());
-  const [endTime, setEndDate] = useState<Date>();
+  const form = useEventStore(state => state.form);
   const onPress = () => {
     SheetManager.show('TimeInputSheet');
   };
@@ -22,31 +22,47 @@ export const TimeInput: React.FC<any> = props => {
   return (
     <View>
       <TouchableOpacity style={styles.input} onPress={onPress}>
-        <Text style={{color: colors.grayPlaceholder}}>
-          {`${new Date(startTime).toLocaleTimeString('th-TH', {
-            hour: 'numeric',
-            minute: 'numeric',
-          })}`}
-          {endTime
-            ? `${
-                ' - ' +
-                `${new Date(endTime).toLocaleTimeString('th-TH', {
-                  hour: 'numeric',
-                  minute: 'numeric',
-                })}`
-              }`
-            : ''}
-        </Text>
+        {form?.startDate ? (
+          <Text>
+            {`${new Date(form?.startDate).toLocaleTimeString('th-TH', {
+              hour: 'numeric',
+              minute: 'numeric',
+            })}`}
+            {form?.endDate
+              ? `${
+                  ' - ' +
+                  `${new Date(form?.endDate).toLocaleTimeString('th-TH', {
+                    hour: 'numeric',
+                    minute: 'numeric',
+                  })}`
+                }`
+              : ''}
+          </Text>
+        ) : (
+          <Text style={{color: colors.grayPlaceholder}}>Time</Text>
+        )}
         {/* <Icon name="left" size={30} color="black" /> */}
       </TouchableOpacity>
     </View>
   );
 };
 
-export const TimeSheet = (props: SheetProps<{tel: string}>) => {
-  const onPressSave = () => {};
-  const onChange = (event: DateTimePickerEvent, value: any) => {
-    console.log(value);
+export const TimeSheet = (props: SheetProps) => {
+  const form = useEventStore(state => state.form);
+  const onPressSave = () => {
+    SheetManager.hide('TimeInputSheet');
+  };
+  const onChange = (field: 'startDate' | 'endDate', value: any) => {
+    const time = new Date(value);
+    const datetime = new Date(form?.[field] ?? new Date());
+    useEventStore.getState().setForm({
+      ...form,
+      [field]: new Date(
+        new Date(datetime.setHours(time.getHours())).setMinutes(
+          time.getMinutes(),
+        ),
+      ),
+    });
   };
 
   return (
@@ -64,22 +80,23 @@ export const TimeSheet = (props: SheetProps<{tel: string}>) => {
             <Text>Start with</Text>
             <RNDateTimePicker
               mode="time"
-              value={new Date()}
+              value={new Date(form?.startDate ?? new Date())}
               is24Hour={false}
               display="spinner"
               textColor={colors.primary}
-              onChange={(event, value) => onChange(event, value)}
+              onChange={(event, value) => onChange('startDate', value)}
             />
           </View>
           <View>
             <Text>End with</Text>
             <RNDateTimePicker
               mode="time"
-              value={new Date()}
+              value={new Date(form?.endDate ?? new Date())}
               is24Hour={false}
               display="spinner"
               textColor={colors.primary}
-              onChange={(event, value) => onChange(event, value)}
+              onChange={(event, value) => onChange('endDate', value)}
+              minimumDate={new Date(form?.startDate ?? new Date())}
             />
           </View>
           <Touchable

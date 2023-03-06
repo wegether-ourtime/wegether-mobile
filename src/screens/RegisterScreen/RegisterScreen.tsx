@@ -38,7 +38,7 @@ const RegisterScreen: React.FC<any> = ({navigation}) => {
       />
       <View style={styles.main}>
         <TextInput
-          value={form.fullname}
+          value={form.fullName}
           style={styles.input}
           editable={true}
           placeholder={'Full Name'}

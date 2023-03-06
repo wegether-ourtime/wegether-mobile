@@ -8,10 +8,12 @@ import Spinner from 'react-native-loading-spinner-overlay';
 import Toast from 'react-native-toast-message';
 import {colors, image, icons} from '../../common/assets';
 import fonts from '../../common/assets/fonts';
+import {FileResource} from '../../common/enums/fileResource';
 // import Tasklists from '../../components/TaskList/Tasklists';
 // import {TaskDatasource} from '../../datasource/TaskDatasource';
 import {stylesCentral} from '../../common/styles/StylesCentral';
 import {Event} from '../../components/Event/Event';
+import UserEvent from '../../models/UserEvent';
 // import * as ImagePicker from 'react-native-image-picker';
 // import {dataUpdateStatusEntity} from '../../entities/TaskScreenEntities';
 import * as RootNavigation from '../../navigations/RootNavigation';
@@ -43,17 +45,29 @@ const SuggestionScreen: React.FC<Prop> = (props: Prop) => {
           keyExtractor={item => item.eventId}
           data={events}
           extraData={events}
-          renderItem={({index, item}: any) => (
-            <Event
-              eventId={item.eventId}
-              eventName={item.eventName}
-              eventImage={item.eventImage}
-              eventDetail={item.eventDetail}
-              startDate={item.startDate}
-              endDate={item.endDate}
-              // location={item.location}
-            ></Event>
-          )}
+          renderItem={({index, item}: any) => {
+            const eventImg = item.files.find(
+              (f: any) => f.resource === FileResource.EVENT,
+            )?.path;
+            const isHost = item.userEvents.find(async (ue: UserEvent) => {
+              const userId = await AsyncStorage.getItem('userId');
+              return ue.userId == userId;
+            })?.isHost;
+
+            return (
+              <Event
+                eventId={item.eventId}
+                eventName={item.eventName}
+                eventImage={item.eventImage}
+                eventDetail={item.eventDetail}
+                startDate={item.startDate}
+                endDate={item.endDate}
+                eventImg={eventImg}
+                isHost={isHost}
+                // location={item.location}
+              ></Event>
+            );
+          }}
         />
         <View />
       </View>
