@@ -6,7 +6,7 @@ import ActionSheet, {
   SheetProps,
 } from 'react-native-actions-sheet';
 
-export const CancleEventSheet = (props: SheetProps<{}>) => {
+export const CancelEventSheet = (props: SheetProps<{}>) => {
   return (
     <ActionSheet
       containerStyle={{

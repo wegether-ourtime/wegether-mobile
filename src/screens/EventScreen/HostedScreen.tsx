@@ -9,27 +9,33 @@ import Toast from 'react-native-toast-message';
 import {colors, image, icons} from '../../common/assets';
 import fonts from '../../common/assets/fonts';
 import {EventType} from '../../common/enums/eventStatus';
+import {FileResource} from '../../common/enums/fileResource';
 import {stylesCentral} from '../../common/styles/StylesCentral';
 import {Event} from '../../components/Event/Event';
+import UserEvent from '../../models/UserEvent';
 import * as RootNavigation from '../../navigations/RootNavigation';
-import {useAuthStore} from '../../stores/authStore';
 import {useEventStore} from '../../stores/eventStore';
 
 interface Prop {}
 
 const HostedScreen: React.FC<Prop> = (props: Prop) => {
-  const user = useAuthStore(state => state.user);
   const events = useEventStore(state => state.events);
+  const loading = useEventStore(state => state.loading);
   const criteria = useEventStore(state => state.criteria);
-  const getEvents = () =>
-    useEventStore.getState().getEvents({
+
+  const getEvents = async () => {
+    console.log('work')
+    const userId = await AsyncStorage.getItem('userId');
+    const event = await useEventStore.getState().getEvents({
       eventType: EventType.HOSTED,
-      uesrId: user?.userId,
+      userId,
       ...criteria,
     });
+    console.log('h: ', event)
+  };
 
   useFocusEffect(
-    React.useCallback(() => {
+    useCallback(() => {
       getEvents();
     }, []),
   );
@@ -39,8 +45,6 @@ const HostedScreen: React.FC<Prop> = (props: Prop) => {
   }, []);
 
   // const [data, setData] = useState<any>([]);
-  const [loading, setLoading] = useState<boolean>(false);
-
   return (
     <>
       <View style={[{flex: 1, backgroundColor: colors.grayBg, padding: 8}]}>
@@ -48,12 +52,29 @@ const HostedScreen: React.FC<Prop> = (props: Prop) => {
           keyExtractor={item => item.eventId}
           data={events}
           extraData={events}
-          renderItem={({index, item}: any) => (
-            <Event
-              name={item.eventName}
-              image={item.eventImage}
-              description={item.description}></Event>
-          )}
+          renderItem={({index, item}: any) => {
+            const eventImg = item.files.find(
+              (f: any) => f.resource === FileResource.EVENT,
+            )?.path;
+            const isHost = item.userEvents.find(async (ue: UserEvent) => {
+              const userId = await AsyncStorage.getItem('userId');
+              return ue.userId == userId;
+            })?.isHost;
+
+            return (
+              <Event
+                eventId={item.eventId}
+                eventName={item.eventName}
+                eventImage={item.eventImage}
+                eventDetail={item.eventDetail}
+                startDate={item.startDate}
+                endDate={item.endDate}
+                eventImg={eventImg}
+                isHost={isHost}
+                // location={item.location}
+              ></Event>
+            );
+          }}
         />
         <View />
       </View>

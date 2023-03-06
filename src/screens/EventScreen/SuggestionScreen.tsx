@@ -8,6 +8,7 @@ import Spinner from 'react-native-loading-spinner-overlay';
 import Toast from 'react-native-toast-message';
 import {colors, image, icons} from '../../common/assets';
 import fonts from '../../common/assets/fonts';
+import { EventType } from '../../common/enums/eventStatus';
 import {FileResource} from '../../common/enums/fileResource';
 // import Tasklists from '../../components/TaskList/Tasklists';
 // import {TaskDatasource} from '../../datasource/TaskDatasource';
@@ -25,7 +26,15 @@ const SuggestionScreen: React.FC<Prop> = (props: Prop) => {
   const events = useEventStore(state => state.events);
   const loading = useEventStore(state => state.loading);
   const criteria = useEventStore(state => state.criteria);
-  const getEvents = () => useEventStore.getState().getEvents(criteria);
+  const getEvents = async () => {
+    const userId = await AsyncStorage.getItem('userId');
+    const event = await useEventStore.getState().getEvents({
+      eventType: EventType.SUGGESTION,
+      userId,
+      ...criteria,
+    });
+  };
+
 
   useFocusEffect(
     useCallback(() => {

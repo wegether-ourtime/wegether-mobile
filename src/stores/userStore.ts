@@ -7,8 +7,8 @@ interface UserState {
   users: User[];
   user: User | null;
   loading: boolean;
-  getUsers: (criteria: any) => void;
-  getUser: (userId: string) => void;
+  getUsers: (criteria: any) => any;
+  getUser: (userId: string) => any;
   //   createUser: (createFriend: string) => void;
   //   updateUser: (userId: string) => void;
   //   deleteUser: (userId: string) => void;

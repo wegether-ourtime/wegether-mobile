@@ -22,22 +22,28 @@ const renderTabBar = (props: any) => (
   />
 );
 
-const renderScene = SceneMap({
-  joined: JoinedScreen,
-  hosted: HostedScreen,
-});
-
 const MyEventNavigator: React.FC = () => {
   const layout = useWindowDimensions();
-
   const [index, setIndex] = useState(0);
   const [routes] = useState([
     {key: 'joined', title: 'กิจกรรมที่เคยเข้าร่วม'},
     {key: 'hosted', title: 'กิจกรรมที่เป็นผู้สร้าง'},
   ]);
 
+  const renderScene = ({route}: any) => {
+    switch (route.key) {
+      case 'joined':
+        return <JoinedScreen />;
+      case 'hosted':
+        return <HostedScreen />;
+      default:
+        return null;
+    }
+  };
+
   return (
     <TabView
+      key={index}
       navigationState={{index, routes}}
       renderTabBar={renderTabBar}
       renderScene={renderScene}

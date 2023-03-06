@@ -1,4 +1,4 @@
-import {useState} from 'react';
+import {useCallback, useEffect, useState} from 'react';
 import {StyleSheet, Text, TextInput, View, Image} from 'react-native';
 import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
 import {SafeAreaView} from 'react-native-safe-area-context';
@@ -21,13 +21,19 @@ import {useFileStore} from '../../stores/fileStore';
 import {FileResource} from '../../common/enums/fileResource';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Spinner from 'react-native-loading-spinner-overlay/lib';
+import {useFocusEffect} from '@react-navigation/native';
+import UserEvent from '../../models/UserEvent';
+import {SheetManager} from 'react-native-actions-sheet';
 
-const CreateEventScreen: React.FC<any> = ({navigation}) => {
+const CreateEventScreen: React.FC<any> = ({navigation, route}) => {
+  const [isEdit] = useState(route?.params?.isEdit);
+  const eventId = route?.params?.eventId;
   const form = useEventStore(state => state.form);
   const loading = useEventStore(state => state.loading);
   // const user = useAuthStore(state => state.user);
   const [toggleModalUpload, setToggleModalUpload] = useState<boolean>(false);
   const [eventImg, setEventImg] = useState<any>();
+  const [isHost, setIsHost] = useState(undefined);
   const validateField = form
     ? !Object.values(form).some(x => x === null || x === '')
     : null;
@@ -53,13 +59,54 @@ const CreateEventScreen: React.FC<any> = ({navigation}) => {
     }
   };
 
+  const getEvent = async () => {
+    if (isEdit) {
+      const event = await useEventStore.getState().getEvent(eventId);
+      useEventStore.getState().setForm({
+        ...event,
+      });
+
+      const eventImg = event?.files?.find(
+        (f: any) => f.resource == FileResource.EVENT,
+      );
+      if (eventImg) {
+        setEventImg(eventImg.path);
+      }
+
+      const isHost = event.userEvents.find(async (ue: UserEvent) => {
+        const userId = await AsyncStorage.getItem('userId');
+        return ue.userId == userId;
+      })?.isHost;
+      isHost && setIsHost(isHost);
+    }
+    // else {
+    //   useEventStore.getState().clearForm();
+    // }
+  };
+
   const onChangeText = (field: string, value: string) =>
     useEventStore.getState().setForm({...form, [field]: value});
+
+  useEffect(() => {
+    getEvent();
+  }, []);
+
+  useFocusEffect(
+    useCallback(() => {
+      getEvent();
+
+      return () => {
+        if (isEdit) {
+          useEventStore.getState().clearForm();
+        }
+      };
+    }, []),
+  );
 
   return (
     <SafeAreaView style={[stylesApp.container]}>
       <CustomHeader
-        title="Create Event"
+        title={isEdit ? form?.eventName : 'Create Event'}
         showBackBtn
         onPressBack={() => navigation.goBack()}
       />
@@ -82,7 +129,7 @@ const CreateEventScreen: React.FC<any> = ({navigation}) => {
             ]}>
             {eventImg ? (
               <Image
-                source={eventImg.assets[0]}
+                source={isEdit ? {uri: eventImg} : eventImg.assets[0]}
                 style={{
                   height: '100%',
                   width: '100%',
@@ -101,7 +148,9 @@ const CreateEventScreen: React.FC<any> = ({navigation}) => {
                     {
                       mediaType: 'photo',
                     },
-                    res => setEventImg(res),
+                    res => {
+                      if (!res.didCancel) setEventImg(res);
+                    },
                   );
                 }}>
                 <Image
@@ -133,14 +182,20 @@ const CreateEventScreen: React.FC<any> = ({navigation}) => {
               How many People?
             </Text>
             <View style={{paddingHorizontal: normalize(10)}}>
-              <Couter></Couter>
+              <Couter
+              // disabled={view}
+              ></Couter>
             </View>
           </View>
-
-          <CalendarInput></CalendarInput>
-          <TimeInput></TimeInput>
+          <CalendarInput
+          // disabled={view}
+          ></CalendarInput>
+          <TimeInput
+          // disabled={view}
+          ></TimeInput>
           <TouchableOpacity
             style={styles.input}
+            // disabled={view}
             onPress={() => {
               RootNavigation.navigate('Main', {
                 screen: 'LocationScreen',
@@ -164,7 +219,7 @@ const CreateEventScreen: React.FC<any> = ({navigation}) => {
                 textAlignVertical: 'top',
               },
             ]}
-            editable={true}
+            // editable={!view ?? true}
             placeholder={'รายละเอียดเพิ่มเติม'}
             multiline
             onChangeText={value => onChangeText('eventDetail', value)}

@@ -7,6 +7,7 @@ import {normalize} from '../../common/function/normalize';
 import {useEventStore} from '../../stores/eventStore';
 
 export const Couter: React.FC<any> = props => {
+  const {disabled} = props;
   const form = useEventStore(state => state.form);
   const onPressPlus = () => {
     if (typeof form?.maxParticipant !== 'number') {
@@ -53,18 +54,21 @@ export const Couter: React.FC<any> = props => {
   return (
     <View style={styles.main}>
       <View style={styles.container}>
-        <TouchableOpacity onPress={onPressMinus} disabled={disabledMinus()}>
+        <TouchableOpacity
+          onPress={onPressMinus}
+          disabled={disabledMinus() || disabled}>
           <Text style={{color: colors.primary}}>-</Text>
         </TouchableOpacity>
       </View>
       <View style={styles.container}>
         <TextInput
           keyboardType="number-pad"
+          editable={!disabled}
           value={form?.maxParticipant?.toString() ?? ''}
           onChangeText={value => onChange(value)}></TextInput>
       </View>
       <View style={styles.container}>
-        <TouchableOpacity onPress={onPressPlus}>
+        <TouchableOpacity onPress={onPressPlus} disabled={disabled}>
           <Text style={{color: colors.primary}}>+</Text>
         </TouchableOpacity>
       </View>

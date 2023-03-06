@@ -14,17 +14,18 @@ import {Touchable} from '../Button/Touchable';
 import {useEventStore} from '../../stores/eventStore';
 
 export const CalendarInput: React.FC<any> = props => {
+  const {disabled} = props;
   const form = useEventStore(state => state.form);
-  // const [startDate, setStartDate] = useState<Date>(new Date());
-  // const [endDate, setEndDate] = useState<Date>();
-
   const onPress = () => {
     SheetManager.show('CalendarInputSheet');
   };
 
   return (
     <View>
-      <TouchableOpacity style={styles.input} onPress={onPress}>
+      <TouchableOpacity
+        disabled={disabled}
+        style={styles.input}
+        onPress={onPress}>
         {form?.startDate ? (
           <Text>
             {`${new Date(form?.startDate).toLocaleDateString('th-TH', {
@@ -65,8 +66,6 @@ export const CalendarSheet = (
   const onChange = (field: 'startDate' | 'endDate', value: any) => {
     const date = new Date(value);
     const datetime = new Date(form?.[field] ?? new Date());
-    console.log(field);
-    console.log(form);
     useEventStore.getState().setForm({
       ...form,
       ['startDate']: new Date(

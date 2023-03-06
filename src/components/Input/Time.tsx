@@ -14,6 +14,7 @@ import {Touchable} from '../Button/Touchable';
 import {useEventStore} from '../../stores/eventStore';
 
 export const TimeInput: React.FC<any> = props => {
+  const {disabled} = props;
   const form = useEventStore(state => state.form);
   const onPress = () => {
     SheetManager.show('TimeInputSheet');
@@ -21,7 +22,10 @@ export const TimeInput: React.FC<any> = props => {
 
   return (
     <View>
-      <TouchableOpacity style={styles.input} onPress={onPress}>
+      <TouchableOpacity
+        disabled={disabled}
+        style={styles.input}
+        onPress={onPress}>
         {form?.startDate ? (
           <Text>
             {`${new Date(form?.startDate).toLocaleTimeString('th-TH', {

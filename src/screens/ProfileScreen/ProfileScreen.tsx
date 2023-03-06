@@ -1,7 +1,8 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useFocusEffect} from '@react-navigation/native';
 import {Avatar} from '@rneui/base';
-import {useEffect, useState} from 'react';
-import {View, Image, StyleSheet, Text, Alert} from 'react-native';
+import {useCallback, useEffect, useState} from 'react';
+import {View, Image, StyleSheet, Text, SafeAreaView} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import Spinner from 'react-native-loading-spinner-overlay/lib';
 import {font} from '../../common/assets';
@@ -10,6 +11,7 @@ import icons from '../../common/assets/icons';
 import images from '../../common/assets/images';
 import {FileResource} from '../../common/enums/fileResource';
 import {normalize} from '../../common/function/normalize';
+import {stylesApp} from '../../common/styles/AppStyle';
 import {stylesCentral} from '../../common/styles/StylesCentral';
 import {ProfileOption} from '../../components/Option/ProfileOption';
 import MyEventNavigator from '../../navigations/topTabs/MyEventNavigator';
@@ -24,7 +26,7 @@ const ProfileScreen: React.FC<any> = ({navigation}) => {
   const getUser = async () => {
     // useUserStore.getState().setLoading(true)
     const userId = await AsyncStorage.getItem('userId');
-    useUserStore.getState().getUser(userId ?? '');
+    await useUserStore.getState().getUser(userId ?? '');
     setCoverImg(
       user?.files?.find((f: any) => f.resource == FileResource.USER_COVER)
         ?.path,
@@ -40,6 +42,12 @@ const ProfileScreen: React.FC<any> = ({navigation}) => {
   useEffect(() => {
     getUser();
   }, [!user]);
+
+  useFocusEffect(
+    useCallback(() => {
+      getUser();
+    }, [!user]),
+  );
 
   return (
     <View style={[stylesCentral.container]}>
@@ -58,8 +66,10 @@ const ProfileScreen: React.FC<any> = ({navigation}) => {
           <Text style={styles.name}>{user?.fullName}</Text>
         </View>
       </View>
-      <ProfileOption style={styles.option}></ProfileOption>
-      <MyEventNavigator></MyEventNavigator>
+      <View style={{flex: 10}}>
+        <MyEventNavigator />
+      </View>
+      <ProfileOption style={[styles.option]}></ProfileOption>
       <Spinner
         visible={loading}
         textContent={'Loading...'}
@@ -72,10 +82,9 @@ export default ProfileScreen;
 
 const styles = StyleSheet.create({
   userDetail: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-between',
-    marginBottom: normalize(130),
+    height: '40%',
+    // flexDirection: 'row',
+    // flexWrap: 'wrap',
   },
   cover: {
     height: normalize(200),
@@ -87,27 +96,23 @@ const styles = StyleSheet.create({
   profileContainer: {
     padding: normalize(5),
     position: 'absolute',
-    left: normalize(10),
-    bottom: normalize(-70),
+    left: normalize(16),
+    bottom: normalize(24),
     backgroundColor: colors.white,
   },
-  user: {
-    width: '60%',
-    height: '100%',
-    position: 'absolute',
-    left: normalize(140),
-    top: normalize(220),
-  },
+  user: {},
   name: {
-    marginRight: normalize(40),
+    position: 'absolute',
+    left: normalize(136),
+    bottom: normalize(-40),
     fontFamily: font.medium,
     fontSize: normalize(18),
   },
   option: {
+    position: 'absolute',
+    right: normalize(8),
+    top: normalize(222),
     zIndex: 1,
     elevation: 1,
-    width: '100%',
-    height: '100%',
-    // backgroundColor: 'red'
   },
 });

@@ -22,11 +22,6 @@ const renderTabBar = (props: any) => (
   />
 );
 
-const renderScene = SceneMap({
-  dm: DirectMessageScreen,
-  em: EventMessageScreen,
-});
-
 const ChatListNavigator: React.FC = () => {
   const layout = useWindowDimensions();
   const [index, setIndex] = useState(0);
@@ -35,8 +30,20 @@ const ChatListNavigator: React.FC = () => {
     {key: 'em', title: 'Event Message'},
   ]);
 
+  const renderScene = ({route}: any) => {
+    switch (route.key) {
+      case 'dm':
+        return <DirectMessageScreen />;
+      case 'em':
+        return <EventMessageScreen />;
+      default:
+        return null;
+    }
+  };
+
   return (
     <TabView
+      key={index}
       navigationState={{index, routes}}
       renderTabBar={renderTabBar}
       renderScene={renderScene}

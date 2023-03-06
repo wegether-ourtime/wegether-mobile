@@ -9,12 +9,13 @@ interface EventState {
   form: EventForm | null;
   criteria: any | null;
   loading: boolean;
-  getEvents: (criteria: any) => void;
-  getEvent: (eventId: string) => void;
+  getEvents: (criteria: any) => any;
+  getEvent: (eventId: string) => any;
   createEvent: (payload: any) => any;
   updateEvent: (eventId: string, payload: any) => void;
   deleteEvent: (eventId: string) => void;
-  setForm: (form: any) => void;
+  setForm: (form: any) => any;
+  clearForm: () => void;
   setCriteria: (criteria: any) => void;
 }
 
@@ -95,7 +96,10 @@ export const useEventStore = create<EventState>(set => ({
     }
   },
   setEvent: (event: any) => set({event}),
-  setForm: (form: any) => set({form}),
+  setForm: (form: any) => {
+    console.log('f', form)
+    set({form})
+  },
   clearForm: () => set({form: initialEventForm}),
   setCriteria: (criteria: any) => {
     set({criteria});

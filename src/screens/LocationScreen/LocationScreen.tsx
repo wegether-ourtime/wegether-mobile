@@ -12,6 +12,7 @@ import {useLocationStore} from '../../stores/locationStore';
 const LocationScreen: React.FC<any> = ({navigation}) => {
   const locations = useLocationStore(state => state.locations);
   const criteria = useLocationStore(state => state.criteria);
+  const form = useEventStore(state => state.form);
   const setCriteria = (criteria: any) =>
     useLocationStore.getState().setCriteria(criteria);
 
@@ -22,10 +23,10 @@ const LocationScreen: React.FC<any> = ({navigation}) => {
     useLocationStore.getState().getLocation(criteria);
   };
 
-  const onSelect = (location: any) => {
+  const onSelect = async (location: any) => {
     const form = useEventStore.getState().form;
-    useEventStore.getState().setForm({...form, location});
-    navigation.goBack();
+    await useEventStore.getState().setForm({...form, location});
+    await navigation.goBack();
   };
 
   return (

@@ -7,11 +7,11 @@ interface UserFriendState {
   userFriends: UserFriend[];
   userFriend: UserFriend | null;
   loading: boolean;
-  getUserFriends: (criteria: any) => void;
-  getUserFriend: (userFriendId: string) => void;
-  createUserFriend: (createFriend: string) => void;
-  updateUserFriend: (userFriendId: string) => void;
-  deleteUserFriend: (userFriendId: string) => void;
+  getUserFriends: (criteria: any) => any;
+  getUserFriend: (userFriendId: string) => any;
+  createUserFriend: (createFriend: string) => any;
+  updateUserFriend: (userFriendId: string) => any;
+  deleteUserFriend: (userFriendId: string) => any;
 }
 
 export const useUserFriendStore = create<UserFriendState>(set => ({

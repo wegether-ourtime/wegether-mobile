@@ -25,7 +25,7 @@ import {
   responsiveWidth,
 } from '../../common/function/responsive';
 import ScanScreen from '../../screens/ScanScreen/ScanScreen';
-import CreateEventScreen from '../../screens/CreateEventScreen/CreateEventScreen';
+import CreateEventScreen from '../../screens/EventFormScreen/CreateEventScreen';
 import ChatListScreen from '../../screens/ChatListScreen/ChatListScreen';
 
 const Tab = createBottomTabNavigator();
