@@ -65,7 +65,7 @@ const IncomingScreen: React.FC<Prop> = (props: Prop) => {
                 endDate={item.endDate}
                 eventImg={eventImg}
                 isHost={isHost}
-                // location={item.location}
+                location={item.location}
               ></Event>
             );
           }}

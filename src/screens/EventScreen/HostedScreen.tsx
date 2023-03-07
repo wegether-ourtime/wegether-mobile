@@ -24,14 +24,12 @@ const HostedScreen: React.FC<Prop> = (props: Prop) => {
   const criteria = useEventStore(state => state.criteria);
 
   const getEvents = async () => {
-    console.log('work')
     const userId = await AsyncStorage.getItem('userId');
     const event = await useEventStore.getState().getEvents({
       eventType: EventType.HOSTED,
       userId,
       ...criteria,
     });
-    console.log('h: ', event)
   };
 
   useFocusEffect(
@@ -71,8 +69,7 @@ const HostedScreen: React.FC<Prop> = (props: Prop) => {
                 endDate={item.endDate}
                 eventImg={eventImg}
                 isHost={isHost}
-                // location={item.location}
-              ></Event>
+                location={item.location}></Event>
             );
           }}
         />

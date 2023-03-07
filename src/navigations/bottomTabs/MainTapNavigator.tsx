@@ -25,7 +25,7 @@ import {
   responsiveWidth,
 } from '../../common/function/responsive';
 import ScanScreen from '../../screens/ScanScreen/ScanScreen';
-import CreateEventScreen from '../../screens/EventFormScreen/CreateEventScreen';
+import EventFormScreen from '../../screens/EventFormScreen/EventFormScreen';
 import ChatListScreen from '../../screens/ChatListScreen/ChatListScreen';
 
 const Tab = createBottomTabNavigator();
@@ -54,7 +54,7 @@ const MainTapNavigator: React.FC<any> = ({navigation}) => {
     {
       name: 'createEvent',
       title: 'หน้าเพิ่มกิจกรรม',
-      component: CreateEventScreen,
+      component: EventFormScreen,
       activeIcon: icons.createEventActive,
       inactiveIcon: icons.createEventInactive,
     },

@@ -1,12 +1,38 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useEffect} from 'react';
+import {FlatList, Text, View} from 'react-native';
+import {TouchableOpacity} from 'react-native-gesture-handler';
+import {normalize} from '../../common/function/normalize';
 import {useAuthStore} from '../../stores/authStore';
 import {useChatStore} from '../../stores/chatStore';
 
 const EventMessageScreen: React.FC<any> = ({navigation}) => {
-  const user = useAuthStore(state => state.user);
-  // get all chat list(history) by user id
-  // const getChatList = () => useChatStore.getState().get(eventId);
-  // const chat = useChatStore(state => state.event);
+  const eventChats = useChatStore(state => state.eventChats);
+  const getUserFriendChats = async () => {
+    const userId = await AsyncStorage.getItem('userId');
+    await useChatStore.getState().getEventChats(userId ?? '');
+  };
 
-  return null;
+  useEffect(() => {
+    getUserFriendChats();
+  }, []);
+
+  return (
+    <View>
+      <FlatList
+        data={eventChats}
+        keyExtractor={item => item.name}
+        renderItem={({item}) => (
+          <TouchableOpacity
+          // style={styles.option}
+          // onPress={item.onSelect}
+          >
+            {/* <Image source={item.icon} style={{marginTop: normalize(2)}}></Image> */}
+            <Text style={{marginLeft: normalize(16)}}>{item.eventName}</Text>
+          </TouchableOpacity>
+        )}
+      />
+    </View>
+  );
 };
 export default EventMessageScreen;

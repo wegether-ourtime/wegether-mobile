@@ -2,7 +2,15 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useFocusEffect} from '@react-navigation/native';
 import {Switch} from '@rneui/themed';
 import {useCallback, useEffect, useState} from 'react';
-import {Button, Image, ScrollView, StyleSheet, Text, View} from 'react-native';
+import {
+  Button,
+  Image,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from 'react-native';
 import {SheetManager} from 'react-native-actions-sheet';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {SafeAreaView, useSafeAreaInsets} from 'react-native-safe-area-context';
@@ -13,14 +21,14 @@ import {normalize} from '../../common/function/normalize';
 import {stylesApp} from '../../common/styles/AppStyle';
 import {stylesCentral} from '../../common/styles/StylesCentral';
 import {Touchable} from '../../components/Button/Touchable';
-import {Filter} from '../../components/Input/Filter';
 import CustomHeader from '../../components/Text/CustomHeader';
 import UserEvent from '../../models/UserEvent';
-import EventTapNavigator from '../../navigations/topTabs/EventNavigator';
 import {useAuthStore} from '../../stores/authStore';
 import {useEventStore} from '../../stores/eventStore';
 import {useUserEventStore} from '../../stores/userEventStore';
 import * as RootNavigation from '../../navigations/RootNavigation';
+import {CalendarInput} from '../../components/Input/Calendar';
+import TimeInput from '../../components/Input/Time';
 
 const EventDetailScreen: React.FC<any> = ({navigation, route}) => {
   const user = useAuthStore(state => state.user);
@@ -108,6 +116,62 @@ const EventDetailScreen: React.FC<any> = ({navigation, route}) => {
               style={{height: '100%', width: '100%'}}
             />
           </View>
+          <View>
+            <TextInput
+              value={event?.eventName}
+              style={styles.input}
+              editable={false}
+              placeholder={'Event Name'}
+            />
+            {/* <View
+              style={{
+                marginLeft: normalize(30),
+                marginVertical: normalize(10),
+                flexDirection: 'row',
+                alignItems: 'center',
+              }}>
+              <Text style={{paddingHorizontal: normalize(10)}}>
+                How many People?
+              </Text>
+              <View style={{paddingHorizontal: normalize(10)}}>
+                <Couter
+                // disabled={view}
+                ></Couter>
+              </View>
+            </View> */}
+            <CalendarInput disabled={true}></CalendarInput>
+            <TimeInput disabled={true}></TimeInput>
+            <TouchableOpacity
+              style={styles.input}
+              disabled={true}
+              onPress={() => {
+                RootNavigation.navigate('Main', {
+                  screen: 'LocationScreen',
+                });
+              }}>
+              {event?.location ? (
+                <Text style={{color: colors.fontBlack}}>
+                  {event.location.name}
+                </Text>
+              ) : (
+                <Text style={{color: colors.grayPlaceholder}}>Location</Text>
+              )}
+            </TouchableOpacity>
+            <TextInput
+              value={event?.eventDetail}
+              style={[
+                styles.input,
+                {
+                  minHeight: normalize(100),
+                  paddingTop: normalize(15),
+                  textAlignVertical: 'top',
+                },
+              ]}
+              editable={false}
+              placeholder={'รายละเอียดเพิ่มเติม'}
+              multiline
+            />
+          </View>
           {isHost ? (
             <View
               style={{
@@ -143,7 +207,7 @@ const EventDetailScreen: React.FC<any> = ({navigation, route}) => {
                   style={[styles.button]}
                   onPress={() => {
                     RootNavigation.navigate('Main', {
-                      screen: 'CreateEventScreen',
+                      screen: 'EventFormScreen',
                       params: {isEdit: true, eventId},
                     });
                   }}></Touchable>

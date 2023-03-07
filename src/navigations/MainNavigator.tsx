@@ -8,7 +8,7 @@ import MainTapNavigator from './bottomTabs/MainTapNavigator';
 import EventScreen from '../screens/EventScreen/EventScreen';
 import ProfileScreen from '../screens/ProfileScreen/ProfileScreen';
 import ScanScreen from '../screens/ScanScreen/ScanScreen';
-import CreateEventScreen from '../screens/EventFormScreen/CreateEventScreen';
+import EventFormScreen from '../screens/EventFormScreen/EventFormScreen';
 import ChatScreen from '../screens/ChatScreen/ChatScreen';
 import EventDetailScreen from '../screens/EventDetailScreen/EventDetailScreen';
 import ChatListScreen from '../screens/ChatListScreen/ChatListScreen';
@@ -26,7 +26,7 @@ export type StackParamList = {
   ProfileScreen: any;
   FriendProfileScreen: any;
   ScanScreen: any;
-  CreateEventScreen: any;
+  EventFormScreen: any;
   ChatListScreen: any;
   ChatScreen: any;
   LocationScreen: any;
@@ -48,7 +48,7 @@ const MainNavigator: React.FC = () => {
       <Stack.Screen name="EventScreen" component={EventScreen} />
       <Stack.Screen name="EventDetailScreen" component={EventDetailScreen} />
       <Stack.Screen name="ScanScreen" component={ScanScreen} />
-      <Stack.Screen name="CreateEventScreen" component={CreateEventScreen} />
+      <Stack.Screen name="EventFormScreen" component={EventFormScreen} />
       <Stack.Screen name="ChatListScreen" component={ChatListScreen} />
       <Stack.Screen name="ChatScreen" component={ChatScreen} />
       <Stack.Screen name="ProfileScreen" component={ProfileScreen} />

@@ -22,6 +22,7 @@ export const Event: React.FC<any> = props => {
     startDate,
     endDate,
     eventImg,
+    location,
   } = props;
   const date = `${new Date(startDate).toLocaleDateString('th-TH', {
     year: 'numeric',
@@ -95,6 +96,7 @@ export const Event: React.FC<any> = props => {
           <Text style={[styles.eventDatetime]}>{date}</Text>
           <Text style={[styles.eventDatetime]}>{time}</Text>
           <Text style={[styles.eventDescription]}>{eventDetail}</Text>
+          <Text style={[styles.eventDescription]}>{location?.name}</Text>
         </View>
       </View>
     </TouchableOpacity>

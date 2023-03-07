@@ -9,6 +9,7 @@ export default interface Event {
   eventCategories: any;
   userEvents: UserEvent[];
   files: any[];
+  location: any;
 }
 
 export interface EventForm {
@@ -20,6 +21,7 @@ export interface EventForm {
   eventCategories: any | null;
   location: any | null;
   maxParticipant: number | string;
+  userEvents: UserEvent[] | [];
 }
 
 export const initialEventForm = {
@@ -30,4 +32,5 @@ export const initialEventForm = {
   eventCategories: null,
   location: null,
   maxParticipant: 2,
+  userEvents: [],
 } as EventForm;

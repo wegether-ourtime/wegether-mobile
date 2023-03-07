@@ -12,7 +12,7 @@ interface EventState {
   getEvents: (criteria: any) => any;
   getEvent: (eventId: string) => any;
   createEvent: (payload: any) => any;
-  updateEvent: (eventId: string, payload: any) => void;
+  updateEvent: (eventId: string, payload: any) => any;
   deleteEvent: (eventId: string) => void;
   setForm: (form: any) => any;
   clearForm: () => void;
@@ -72,6 +72,7 @@ export const useEventStore = create<EventState>(set => ({
   updateEvent: async (eventId: string, payload: any) => {
     try {
       set({loading: true});
+      console.log('payload: ', payload)
       const {data} = await axios.post(`${BASE_URL}/event/${eventId}`, {
         ...payload,
       });
@@ -97,8 +98,7 @@ export const useEventStore = create<EventState>(set => ({
   },
   setEvent: (event: any) => set({event}),
   setForm: (form: any) => {
-    console.log('f', form)
-    set({form})
+    set({form});
   },
   clearForm: () => set({form: initialEventForm}),
   setCriteria: (criteria: any) => {

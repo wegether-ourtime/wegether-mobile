@@ -24,6 +24,7 @@ import Spinner from 'react-native-loading-spinner-overlay/lib';
 import {useFocusEffect} from '@react-navigation/native';
 import UserEvent from '../../models/UserEvent';
 import {SheetManager} from 'react-native-actions-sheet';
+import Event from '../../models/Event';
 
 const CreateEventScreen: React.FC<any> = ({navigation, route}) => {
   const [isEdit] = useState(route?.params?.isEdit);
@@ -40,16 +41,26 @@ const CreateEventScreen: React.FC<any> = ({navigation, route}) => {
 
   const onSubmit = async () => {
     const userId = await AsyncStorage.getItem('userId');
-    const event = await useEventStore.getState().createEvent({
-      ...form,
-      userEvents: [{userId, isHost: true}],
-    });
+    let event: Event;
+    let file: any;
+    if (form?.eventId) {
+      event = await useEventStore.getState().updateEvent(form?.eventId, {
+        ...form,
+      });
+    } else {
+      event = await useEventStore.getState().createEvent({
+        ...form,
+        userEvents: [{userId, isHost: true}],
+      });
+    }
 
-    const file = await useFileStore
-      .getState()
-      .uploadFile(eventImg, FileResource.EVENT, event.eventId);
+    if (eventImg?.assets) {
+      file = await useFileStore
+        .getState()
+        .uploadFile(eventImg, FileResource.EVENT, event.eventId);
+    }
 
-    if (event && file) {
+    if (event && eventImg?.assets && file) {
       RootNavigation.navigate('Main', {
         screen: 'EventDetailScreen',
         params: {eventId: event.eventId},
@@ -66,7 +77,7 @@ const CreateEventScreen: React.FC<any> = ({navigation, route}) => {
         ...event,
       });
 
-      const eventImg = event?.files?.find(
+      const eventImg = await event?.files?.find(
         (f: any) => f.resource == FileResource.EVENT,
       );
       if (eventImg) {
@@ -89,19 +100,17 @@ const CreateEventScreen: React.FC<any> = ({navigation, route}) => {
 
   useEffect(() => {
     getEvent();
+  }, [isEdit]);
+
+  useEffect(() => {
+    useEventStore.getState().clearForm();
   }, []);
 
-  useFocusEffect(
-    useCallback(() => {
-      getEvent();
-
-      return () => {
-        if (isEdit) {
-          useEventStore.getState().clearForm();
-        }
-      };
-    }, []),
-  );
+  // useFocusEffect(
+  //   useCallback(() => {
+  //     getEvent();
+  //   }, []),
+  // );
 
   return (
     <SafeAreaView style={[stylesApp.container]}>
@@ -129,7 +138,7 @@ const CreateEventScreen: React.FC<any> = ({navigation, route}) => {
             ]}>
             {eventImg ? (
               <Image
-                source={isEdit ? {uri: eventImg} : eventImg.assets[0]}
+                source={eventImg?.assets ? eventImg.assets[0] : {uri: eventImg}}
                 style={{
                   height: '100%',
                   width: '100%',
@@ -149,6 +158,7 @@ const CreateEventScreen: React.FC<any> = ({navigation, route}) => {
                       mediaType: 'photo',
                     },
                     res => {
+                      console.log(res);
                       if (!res.didCancel) setEventImg(res);
                     },
                   );
