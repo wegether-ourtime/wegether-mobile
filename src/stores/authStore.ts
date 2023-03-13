@@ -2,19 +2,23 @@ import {create} from 'zustand';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {BASE_URL} from '../config';
-import User from '../models/User';
+import User, {initialUserForm, UserForm} from '../models/User';
 import {Login, Register} from '../models/Auth';
 
 interface UserState {
   user: User | null;
+  registerForm: UserForm | null;
   loading: boolean;
-  login: (dto: Login) => any;
+  login: (payload: Login) => any;
   logout: () => void;
-  register: (dto: Register) => void;
+  register: (payload: any) => any;
+  setRegisterForm: (form: any) => any;
+  clearRegisterForm: () => void;
 }
 
 export const useAuthStore = create<UserState>(set => ({
   user: null,
+  registerForm: null,
   loading: false,
   login: async ({email, password}) => {
     try {
@@ -47,17 +51,23 @@ export const useAuthStore = create<UserState>(set => ({
     await AsyncStorage.removeItem('userId');
     set({user: undefined});
   },
-  register: async dto => {
+  register: async (payload: UserForm) => {
     try {
       set({loading: true});
-      const {data} = await axios.post(`${BASE_URL}/auth/register`, dto);
+      const {data} = await axios.post(`${BASE_URL}/auth/register`, payload);
 
       return data;
     } catch (e) {
       throw e;
     } finally {
-      set({loading: false});
+      set({registerForm: initialUserForm, loading: false});
     }
+  },
+  setRegisterForm: (registerForm: any) => {
+    set({registerForm});
+  },
+  clearRegisterForm: () => {
+    set({registerForm: initialUserForm});
   },
   // setUser: (user: any) => set({user}),
   // setLoading: loading => set({loading}),

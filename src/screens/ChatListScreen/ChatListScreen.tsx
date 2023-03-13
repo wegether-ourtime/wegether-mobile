@@ -1,24 +1,26 @@
 import {StyleSheet, View} from 'react-native';
+import Spinner from 'react-native-loading-spinner-overlay/lib';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {colors, font} from '../../common/assets';
 import {normalize} from '../../common/function/normalize';
 import {stylesCentral} from '../../common/styles/StylesCentral';
 import ChatListNavigator from '../../navigations/topTabs/ChatListNavigator';
-import {useAuthStore} from '../../stores/authStore';
 import {useChatStore} from '../../stores/chatStore';
 
 const ChatListScreen: React.FC<any> = ({navigation}) => {
-  const user = useAuthStore(state => state.user);
+  const loading = useChatStore(state => state.loading);
   const insets = useSafeAreaInsets();
-  // get all chat list(history) by user id
-  // const getChatList = () => useChatStore.getState().get(eventId);
-  // const chat = useChatStore(state => state.event);
 
   return (
     <View style={[stylesCentral.container, {paddingTop: insets.top}]}>
       <View style={{flex: 10}}>
         <ChatListNavigator />
       </View>
+      <Spinner
+        visible={loading}
+        textContent={'Loading...'}
+        textStyle={{color: '#FFF'}}
+      />
     </View>
   );
 };

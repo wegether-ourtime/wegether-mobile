@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useEffect} from 'react';
-import {FlatList, View} from 'react-native';
+import {FlatList, StyleSheet, View} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {useAuthStore} from '../../stores/authStore';
 import {useChatStore} from '../../stores/chatStore';
@@ -23,8 +23,8 @@ const DirectMessageScreen: React.FC<any> = ({navigation}) => {
         keyExtractor={item => item.name}
         renderItem={({item}) => (
           <TouchableOpacity
-          // style={styles.option}
-          // onPress={item.onSelect}
+            style={styles.container}
+            // onPress={item.onSelect}
           >
             {/* <Image source={item.icon} style={{marginTop: normalize(2)}}></Image>
             <Text style={{marginLeft: normalize(16)}}>{item.name}</Text> */}
@@ -35,3 +35,9 @@ const DirectMessageScreen: React.FC<any> = ({navigation}) => {
   );
 };
 export default DirectMessageScreen;
+
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: 'red',
+  },
+});

@@ -21,9 +21,14 @@ import {useUserCategoryStore} from '../../stores/userCategoryStore';
 import CustomHeader from '../../components/Text/CustomHeader';
 
 const InterestScreen: React.FC<any> = ({navigation}) => {
-  const [data, setData] = useState();
+  const [data, setData] = useState({});
   // const createUserCategories = (payload: any) =>
   //   useUserCategoryStore.getState().createUserCategories(payload);
+
+  const onSelect = (categoryId: string) => {
+    console.log(categoryId);
+    // setUserCategoriesFOrm
+  };
 
   useEffect(() => {}, []);
 
@@ -98,7 +103,17 @@ const InterestScreen: React.FC<any> = ({navigation}) => {
         </View>
         <View style={styles.categories}>
           {categories.map(c => {
-            return <Category name={c.name} icon={c.icon}></Category>;
+            return (
+              <Category
+                categoryId={c.id}
+                name={c.name}
+                icon={c.icon}
+                selectedTextColor={colors.white}
+                selectedBackgroundColor={colors.primary}
+                onSelect={(categoryId: string) =>
+                  onSelect(categoryId)
+                }></Category>
+            );
           })}
         </View>
 

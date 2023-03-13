@@ -1,31 +1,61 @@
 import {Icon, normalize} from '@rneui/themed';
-import React from 'react';
+import React, {useState} from 'react';
 import {Image, StyleSheet, Text, View} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {colors, font} from '../../common/assets';
 
 interface Props {
+  onSelect: (categoryId: string) => void;
+  disabled?: boolean;
+  categoryId?: string;
   name?: string;
   icon?: any;
   textColor?: string;
   backgroundColor?: string;
+  selectedTextColor?: string;
+  selectedBackgroundColor?: string;
 }
 
 export const Category: React.FC<Props> = props => {
-  const {name, icon, backgroundColor, textColor} = props;
+  const {
+    onSelect,
+    disabled,
+    categoryId,
+    name,
+    icon,
+    backgroundColor,
+    textColor,
+    selectedTextColor,
+    selectedBackgroundColor,
+  } = props;
+  const [selected, setSelected] = useState(false);
+
   return (
-    <TouchableOpacity>
+    <TouchableOpacity
+      disabled={disabled}
+      onPress={() => {
+        onSelect(categoryId ?? '');
+        setSelected(!selected);
+      }}>
       <View
         style={[
           styles.main,
-          {backgroundColor: backgroundColor ?? colors.white},
+          {
+            backgroundColor: selected
+              ? selectedBackgroundColor
+              : backgroundColor ?? colors.white,
+          },
         ]}>
         {icon && (
           <View style={styles.icon}>
             <Image source={icon} style={styles.icon} />
           </View>
         )}
-        <Text style={[styles.text, {color: textColor ?? colors.primary}]}>
+        <Text
+          style={[
+            styles.text,
+            {color: selected ? selectedTextColor : textColor ?? colors.primary},
+          ]}>
           {name}
         </Text>
       </View>

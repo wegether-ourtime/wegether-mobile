@@ -10,24 +10,26 @@ import CustomHeader from '../../components/Text/CustomHeader';
 import {useAuthStore} from '../../stores/authStore';
 
 const RegisterScreen: React.FC<any> = ({navigation}) => {
-  const [form, setForm] = useState<any>({
-    email: null,
-    password: null,
-    confirmPassword: null,
-    fullName: null,
-    idNo: null,
-    telNo: null,
-  });
+  const form = useAuthStore(state => state.registerForm);
+  // const [form, setForm] = useState<any>({
+  //   email: null,
+  //   password: null,
+  //   confirmPassword: null,
+  //   fullName: null,
+  //   idNo: null,
+  //   telNo: null,
+  // });
 
-  const register = () => {
+  const register = async () => {
     // if (form.password !== form.confirmPassword) {
     //   console.log('wrong');
     // }
-    useAuthStore.getState().register({...form});
+    await useAuthStore.getState().register(form);
+    navigation.navigate('InterestScreen');
   };
 
   const onChangeText = (field: string, value: string) =>
-    setForm({...form, [field]: value});
+    useAuthStore.getState().setRegisterForm({...form, [field]: value});
 
   return (
     <SafeAreaView style={[stylesApp.container]}>
@@ -38,7 +40,7 @@ const RegisterScreen: React.FC<any> = ({navigation}) => {
       />
       <View style={styles.main}>
         <TextInput
-          value={form.fullName}
+          value={form?.fullName}
           style={styles.input}
           editable={true}
           placeholder={'Full Name'}
@@ -49,7 +51,7 @@ const RegisterScreen: React.FC<any> = ({navigation}) => {
           onChangeText={value => onChangeText('fullName', value)}
         />
         <TextInput
-          value={form.telNo}
+          value={form?.telNo}
           style={styles.input}
           editable={true}
           placeholder={'Telephone Number'}
@@ -57,7 +59,7 @@ const RegisterScreen: React.FC<any> = ({navigation}) => {
           onChangeText={value => onChangeText('telNo', value)}
         />
         <TextInput
-          value={form.idNo}
+          value={form?.idNo}
           style={styles.input}
           editable={true}
           placeholder={'ID Card Number'}
@@ -65,7 +67,7 @@ const RegisterScreen: React.FC<any> = ({navigation}) => {
           onChangeText={value => onChangeText('idNo', value)}
         />
         <TextInput
-          value={form.email}
+          value={form?.email}
           style={styles.input}
           editable={true}
           placeholder={'Email'}
@@ -73,7 +75,7 @@ const RegisterScreen: React.FC<any> = ({navigation}) => {
           onChangeText={value => onChangeText('email', value)}
         />
         <TextInput
-          value={form.password}
+          value={form?.password}
           style={styles.input}
           editable={true}
           secureTextEntry={true}
@@ -83,7 +85,7 @@ const RegisterScreen: React.FC<any> = ({navigation}) => {
           onChangeText={value => onChangeText('password', value)}
         />
         <TextInput
-          value={form.confirmPassword}
+          value={form?.confirmPassword}
           style={styles.input}
           editable={true}
           secureTextEntry={true}
@@ -99,7 +101,6 @@ const RegisterScreen: React.FC<any> = ({navigation}) => {
           style={[styles.button, {marginTop: normalize(30)}]}
           onPress={() => {
             register();
-            // navigation.navigate('InterestScreen');
           }}></Touchable>
       </View>
     </SafeAreaView>
