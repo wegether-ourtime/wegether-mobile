@@ -5,7 +5,6 @@ import {navigationRef} from './src/navigations/RootNavigation';
 // import Toast from 'react-native-toast-message';
 import {SheetProvider} from 'react-native-actions-sheet';
 import './src/sheets';
-// import { toastConfig } from './src/config/toast-config';
 import {BackHandler} from 'react-native';
 // import buddhaEra from 'dayjs/plugin/buddhistEra';
 // import dayjs from 'dayjs';

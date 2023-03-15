@@ -14,6 +14,7 @@ import EventDetailScreen from '../screens/EventDetailScreen/EventDetailScreen';
 import ChatListScreen from '../screens/ChatListScreen/ChatListScreen';
 import LocationScreen from '../screens/LocationScreen/LocationScreen';
 import FriendProfileScreen from '../screens/ProfileScreen/FriendProfileScreen';
+import EditProfileScreen from '../screens/EditProfileScreen/EditProfileScreen';
 
 export type StackParamList = {
   // DeleteProfileScreen: {
@@ -24,6 +25,7 @@ export type StackParamList = {
   EventDetailScreen: any;
   MainScreen: any;
   ProfileScreen: any;
+  EditProfileScreen: any;
   FriendProfileScreen: any;
   ScanScreen: any;
   EventFormScreen: any;
@@ -52,6 +54,7 @@ const MainNavigator: React.FC = () => {
       <Stack.Screen name="ChatListScreen" component={ChatListScreen} />
       <Stack.Screen name="ChatScreen" component={ChatScreen} />
       <Stack.Screen name="ProfileScreen" component={ProfileScreen} />
+      <Stack.Screen name="EditProfileScreen" component={EditProfileScreen} />
       <Stack.Screen
         name="FriendProfileScreen"
         component={FriendProfileScreen}

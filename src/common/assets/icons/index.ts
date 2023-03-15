@@ -20,4 +20,5 @@ export default {
   option: require('./option.png'),
   editProfile: require('./edit-profile.png'),
   logout: require('./logout.png'),
+  changeImage: require('./change-image.png'),
 };

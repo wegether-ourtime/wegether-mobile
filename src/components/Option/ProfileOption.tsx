@@ -32,6 +32,11 @@ export const ProfileOption: React.FC<any> = props => {
       id: 1,
       name: 'Edit Profile',
       icon: icons.editProfile,
+      onSelect: () => {
+        RootNavigation.navigate('Main', {
+          screen: 'EditProfileScreen',
+        });
+      },
     },
     {
       id: 2,

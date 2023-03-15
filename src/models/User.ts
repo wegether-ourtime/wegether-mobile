@@ -8,22 +8,21 @@ export default interface User {
   createdAt: Date;
   updatedAt: Date;
   files: any;
+  gender: string;
+  bio: string;
+  livingPlace: any;
 }
 
-export interface UserForm {
-  email: string;
-  password: string;
-  idNo: string;
-  telNo: string;
+export interface UserProfileForm {
   fullName: string;
-  confirmPassword: string;
+  gender: string;
+  bio: string;
+  livingPlace: any;
 }
 
-export const initialUserForm = {
-  email: '',
-  password: '',
-  idNo: '',
-  telNo: '',
+export const initialUserProfileForm = {
   fullName: '',
-  confirmPassword: '',
-} as UserForm;
+  gender: '',
+  bio: '',
+  livingPlace: null,
+} as UserProfileForm;

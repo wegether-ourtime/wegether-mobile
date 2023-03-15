@@ -8,12 +8,19 @@ import ActionSheet, {
   SheetProps,
 } from 'react-native-actions-sheet';
 import {Category} from '../Category/Category';
+import {Toast} from 'react-native-toast-message/lib/src/Toast';
+import {useEventStore} from '../../stores/eventStore';
+import {Touchable} from '../Button/Touchable';
 
 export const FilterEventSheet = (props: SheetProps<{tel: string}>) => {
+  const criteria = useEventStore(state => state.criteria);
+  const setCriteria = (criteria: any) =>
+    useEventStore.getState().setCriteria(criteria);
+
   const categories = [
-    {
-      name: 'All',
-    },
+    // {
+    //   name: 'All',
+    // },
     {
       id: 'ae265f73-d52c-4bac-9924-6e54d5395b01',
       name: 'Movies & Cinema',
@@ -71,6 +78,39 @@ export const FilterEventSheet = (props: SheetProps<{tel: string}>) => {
     },
   ];
 
+  const onSelect = (categoryId: string) => {
+    console.log(criteria)
+    if (!criteria?.categoriesId) {
+      useEventStore.getState().setCriteria({
+        ...criteria,
+        categoriesId: [categoryId],
+      });
+    } else if (
+      !criteria.categoriesId.find((cId: string) => cId == categoryId)
+    ) {
+      useEventStore.getState().setCriteria({
+        ...criteria,
+        categoriesId: [...criteria.categoriesId, categoryId],
+      });
+    } else {
+      useEventStore.getState().setCriteria({
+        ...criteria,
+        categoriesId: criteria.categoriesId.filter(
+          (cId: string) => cId != categoryId,
+        ),
+      });
+    }
+  };
+
+  const onSubmit = async () => {
+    try {
+      useEventStore.getState().getEvents(criteria);
+      SheetManager.hide('FilterEventSheet');
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   return (
     <ActionSheet
       containerStyle={{
@@ -85,13 +125,25 @@ export const FilterEventSheet = (props: SheetProps<{tel: string}>) => {
           {categories.map(c => {
             return (
               <Category
+                categoryId={c.id}
                 name={c.name}
                 icon={c.icon}
-                textColor={colors.primary}
-                backgroundColor={colors.secondary}></Category>
+                selectedTextColor={colors.white}
+                selectedBackgroundColor={colors.primary}
+                onSelect={(categoryId: string) =>
+                  onSelect(categoryId)
+                }></Category>
             );
           })}
         </View>
+        <Touchable
+          label={'Save'}
+          // disable={validateField}
+          // color={!validateField ? colors.disable : colors.primary}
+          color={colors.primary}
+          fontColor={colors.white}
+          style={[styles.button, {marginTop: normalize(30)}]}
+          onPress={() => onSubmit()}></Touchable>
       </View>
     </ActionSheet>
   );
@@ -111,5 +163,10 @@ const styles = StyleSheet.create({
     margin: normalize(10),
     flexWrap: 'wrap',
     flexDirection: 'row',
+  },
+  button: {
+    margin: normalize(20),
+    marginBottom: normalize(0),
+    padding: normalize(10),
   },
 });

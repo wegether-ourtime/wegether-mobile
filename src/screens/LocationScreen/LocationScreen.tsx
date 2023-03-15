@@ -1,4 +1,4 @@
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import {StyleSheet, Text, TextInput, View, Image, FlatList} from 'react-native';
 import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
 import {SafeAreaView} from 'react-native-safe-area-context';
@@ -28,6 +28,10 @@ const LocationScreen: React.FC<any> = ({navigation}) => {
     await useEventStore.getState().setForm({...form, location});
     await navigation.goBack();
   };
+
+  useEffect(() => {
+    setCriteria({});
+  }, []);
 
   return (
     <SafeAreaView style={[stylesApp.container]}>

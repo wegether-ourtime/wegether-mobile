@@ -9,6 +9,22 @@ export interface Register {
   idNo: string;
   telNo: string;
   fullName: string;
-  createdAt: Date;
-  updatedAt: Date;
 }
+
+export interface RegisterForm {
+  email: string;
+  password: string;
+  idNo: string;
+  telNo: string;
+  fullName: string;
+  confirmPassword: string;
+}
+
+export const initialRegisterForm = {
+  email: '',
+  password: '',
+  idNo: '',
+  telNo: '',
+  fullName: '',
+  confirmPassword: '',
+} as RegisterForm;

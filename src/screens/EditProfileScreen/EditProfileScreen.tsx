@@ -1,41 +1,48 @@
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import {StyleSheet, Text, TextInput, View, Image} from 'react-native';
 import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {colors, icons} from '../../common/assets';
-import images from '../../common/assets/images';
 import {height, normalize} from '../../common/function/normalize';
 import {stylesApp} from '../../common/styles/AppStyle';
-import {stylesCentral} from '../../common/styles/StylesCentral';
-import {Touchable} from '../../components/Button/Touchable';
-import {CalendarInput} from '../../components/Input/Calendar';
-import TextInputArea from '../../components/Input/TextArea';
-import TimeInput from '../../components/Input/Time';
 import CustomHeader from '../../components/Text/CustomHeader';
 import {useAuthStore} from '../../stores/authStore';
-import {useEventStore} from '../../stores/eventStore';
 import * as RootNavigation from '../../navigations/RootNavigation';
 import {launchImageLibrary} from 'react-native-image-picker';
+import {useUserStore} from '../../stores/userStore';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {Touchable} from '../../components/Button/Touchable';
 
 const EditProfileScreen: React.FC<any> = ({navigation}) => {
-  //   const form = useEventStore(state => state.form);
-  //   const user = useAuthStore(state => state.user);
-  //   // const [time, setTime] = useState<Date | undefined>(undefined);
-  //   const [toggleModalUpload, setToggleModalUpload] = useState<boolean>(false);
-  //   const [eventImg, setEventImg] = useState<any>();
-  //   const validateField = form
-  //     ? !Object.values(form).some(x => x === null || x === '')
-  //     : null;
+  const form = useUserStore(state => state.userProfileForm);
+  const user = useAuthStore(state => state.user);
 
-  //   const onSubmit = () => {
-  //     useEventStore.getState().createEvent({
-  //       ...form,
-  //       userEvents: [{userId: user?.userId, isHost: true}],
-  //     });
-  //   };
+  const onSubmit = async () => {
+    const userId = await AsyncStorage.getItem('userId');
+    const user = useUserStore.getState().updateUser(userId ?? '', {
+      ...form,
+    });
 
-  //   const onChangeText = (field: string, value: string) =>
-  //     useEventStore.getState().setForm({...form, [field]: value});
+    if (user) {
+      navigation.goBack();
+    }
+  };
+
+  const getUser = async () => {
+    const userId = await AsyncStorage.getItem('userId');
+    const user = await useUserStore.getState().getUser(userId ?? '');
+    console.log(user?.bio)
+    useUserStore.getState().setUserProfileForm({
+      ...user,
+    });
+  };
+
+  const onChangeText = (field: string, value: string) =>
+    useUserStore.getState().setUserProfileForm({...form, [field]: value});
+
+  useEffect(() => {
+    getUser();
+  }, []);
 
   return (
     <SafeAreaView style={[stylesApp.container]}>
@@ -51,79 +58,16 @@ const EditProfileScreen: React.FC<any> = ({navigation}) => {
           contentContainerStyle={{
             paddingBottom: normalize(130),
           }}>
-          {/* <View
-            style={[
-              styles.input,
-              {
-                padding: normalize(0),
-                height: normalize(200),
-                alignItems: 'center',
-                justifyContent: 'center',
-              },
-            ]}>
-            {eventImg ? (
-              <Image
-                source={eventImg}
-                style={{
-                  height: '100%',
-                  width: '100%',
-                }}
-              />
-            ) : (
-              <TouchableOpacity
-                containerStyle={{
-                  height: '100%',
-                  width: '100%',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}
-                onPress={async () => {
-                  const img = await launchImageLibrary(
-                    {
-                      mediaType: 'photo',
-                    },
-                    res => {
-                      setEventImg(res.assets?.[0]);
-                    },
-                  );
-                }}>
-                <Image
-                  source={icons.addButton}
-                  style={{
-                    height: normalize(25),
-                    width: normalize(25),
-                  }}
-                />
-              </TouchableOpacity>
-            )}
-          </View>
           <TextInput
-            value={form?.eventName}
+            value={form?.fullName}
             style={styles.input}
             editable={true}
-            placeholder={'Event Name'}
+            placeholder={'Full Name'}
             // placeholderTextColor={colors.disable}
-            onChangeText={value => onChangeText('eventName', value)}
+            onChangeText={value => onChangeText('fullName', value)}
           />
-          <CalendarInput></CalendarInput>
-          <TimeInput></TimeInput>
-          <TouchableOpacity
-            style={styles.input}
-            onPress={() => {
-              RootNavigation.navigate('Main', {
-                screen: 'LocationScreen',
-              });
-            }}>
-            {form?.location ? (
-              <Text style={{color: colors.fontBlack}}>
-                {form.location.name}
-              </Text>
-            ) : (
-              <Text style={{color: colors.grayPlaceholder}}>Location</Text>
-            )}
-          </TouchableOpacity>
           <TextInput
-            value={form?.eventDetail}
+            value={form?.bio}
             style={[
               styles.input,
               {
@@ -132,18 +76,20 @@ const EditProfileScreen: React.FC<any> = ({navigation}) => {
                 textAlignVertical: 'top',
               },
             ]}
-            editable={true}
-            placeholder={'รายละเอียดเพิ่มเติม'}
+            // editable={!view ?? true}
+            placeholder={'Bio'}
             multiline
-            onChangeText={value => onChangeText('eventDetail', value)}
+            onChangeText={value => onChangeText('bio', value)}
           />
           <Touchable
-            label={'Post'}
-            disable={validateField}
-            color={!validateField ? colors.disable : colors.primary}
+            label={'Save'}
+            // disable={!validateField}
+            // color={!validateField ? colors.disable : colors.primary}
+            disable={false}
+            color={colors.primary}
             fontColor={colors.white}
             style={[styles.button, {marginTop: normalize(30)}]}
-            onPress={() => onSubmit()}></Touchable> */}
+            onPress={() => onSubmit()}></Touchable>
         </ScrollView>
       </View>
     </SafeAreaView>

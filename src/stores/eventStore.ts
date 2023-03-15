@@ -16,7 +16,7 @@ interface EventState {
   deleteEvent: (eventId: string) => void;
   setForm: (form: any) => any;
   clearForm: () => void;
-  setCriteria: (criteria: any) => void;
+  setCriteria: (criteria: any) => any;
 }
 
 export const useEventStore = create<EventState>(set => ({

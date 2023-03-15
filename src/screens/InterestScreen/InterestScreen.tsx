@@ -19,6 +19,7 @@ import {normalize} from '../../common/function/normalize';
 import * as RootNavigation from '../../navigations/RootNavigation';
 import {useUserCategoryStore} from '../../stores/userCategoryStore';
 import CustomHeader from '../../components/Text/CustomHeader';
+import {Toast} from 'react-native-toast-message/lib/src/Toast';
 
 const InterestScreen: React.FC<any> = ({navigation}) => {
   const [data, setData] = useState({});
@@ -27,7 +28,9 @@ const InterestScreen: React.FC<any> = ({navigation}) => {
 
   const onSelect = (categoryId: string) => {
     console.log(categoryId);
-    // setUserCategoriesFOrm
+    Toast.show({
+      type: 'success'
+    });
   };
 
   useEffect(() => {}, []);

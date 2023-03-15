@@ -30,45 +30,61 @@ const text2Style = {
 };
 
 export const toastConfig = {
-  receiveTaskSuccess: ({onPress, text1, text2, props}: any) => (
+  success: ({onPress, text1, text2, props}: any) => (
     <TouchableOpacity onPress={onPress}>
       <View style={styles.modalBgSuccess}>
         <View
           style={{
-            flexDirection: 'row',
+            paddingLeft: normalize(12),
           }}>
-          {/* <Image
-            source={icons.closecircle}
-            style={{
-              width: normalize(30),
-              height: normalize(30),
-            }}
-          /> */}
-          <View
-            style={{
-              paddingLeft: normalize(12),
-            }}>
-            <Text style={styles.info}>{text1}</Text>
-            <Text style={styles.info}>{text2}</Text>
-            <Text style={styles.info}>ถูกรับแล้ว</Text>
-            <Text style={styles.infolight}>
-              อย่าลืมติดต่อหาเกษตรกรก่อนเริ่มงาน
-            </Text>
-          </View>
+          <Text style={styles.info}>{text1}</Text>
+          <Text style={styles.infolight}>{text2}</Text>
         </View>
         <View style={styles.closePosition}>
           <TouchableOpacity
             onPress={() => {
               Toast.hide();
-            }}>
-            {/* <Image
-              source={icons.closewhite}
-              style={{
-                width: normalize(12),
-                height: normalize(12),
-              }}
-            /> */}
-          </TouchableOpacity>
+            }}></TouchableOpacity>
+          <View />
+        </View>
+      </View>
+    </TouchableOpacity>
+  ),
+  warning: ({onPress, text1, text2, props}: any) => (
+    <TouchableOpacity onPress={onPress}>
+      <View
+        style={{
+          paddingLeft: normalize(12),
+        }}>
+        <Text style={styles.info}>{text1}</Text>
+        <Text style={styles.infolight}>{text2}</Text>
+      </View>
+      <View style={styles.modalBgWarning}>
+        <View style={styles.closePosition}>
+          <TouchableOpacity
+            onPress={() => {
+              Toast.hide();
+            }}></TouchableOpacity>
+          <View />
+        </View>
+      </View>
+    </TouchableOpacity>
+  ),
+  fail: ({onPress, text1, text2, props}: any) => (
+    <TouchableOpacity onPress={onPress}>
+      <View style={styles.modalBgFailed}>
+        <View
+          style={{
+            paddingLeft: normalize(12),
+          }}>
+          <Text style={styles.info}>{text1}</Text>
+          <Text style={styles.infolight}>{text2}</Text>
+        </View>
+        <View style={styles.closePosition}>
+          <TouchableOpacity
+            onPress={() => {
+              Toast.hide();
+            }}></TouchableOpacity>
           <View />
         </View>
       </View>
@@ -100,17 +116,6 @@ const styles = StyleSheet.create({
     position: 'relative',
   },
   modalBgFailed: {
-    width: responsiveWidth(345),
-    borderRadius: responsiveWidth(16),
-    backgroundColor: '#EB5757',
-    paddingVertical: responsiveHeigth(15),
-    paddingHorizontal: normalize(20),
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    position: 'relative',
-  },
-  modalBgdroneFailed: {
     width: responsiveWidth(345),
     borderRadius: responsiveWidth(16),
     backgroundColor: '#EB5757',

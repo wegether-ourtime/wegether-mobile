@@ -1,37 +1,55 @@
 import {create} from 'zustand';
 import axios from 'axios';
 import {BASE_URL} from '../config';
-import User from '../models/User';
+import User, {initialUserProfileForm, UserProfileForm} from '../models/User';
 
 interface UserState {
   users: User[];
   user: User | null;
+  userProfileForm: UserProfileForm | null;
   loading: boolean;
   getUsers: (criteria: any) => any;
   getUser: (userId: string) => any;
   //   createUser: (createFriend: string) => void;
-  //   updateUser: (userId: string) => void;
+  updateUser: (userId: string, payload: any) => any;
   //   deleteUser: (userId: string) => void;
+  setUserProfileForm: (form: any) => void;
+  clearUserProfileForm: () => void;
   // setLoading: (loading: boolean) => void;
 }
 
 export const useUserStore = create<UserState>(set => ({
   users: [],
   user: null,
+  userProfileForm: initialUserProfileForm,
   loading: false,
   getUsers: async (criteria: any) => {
-    set({loading: true});
-    const {data} = await axios.get(`${BASE_URL}/user`, {...criteria});
-    const users = data;
+    try {
+      set({loading: true});
+      const {data} = await axios.get(`${BASE_URL}/user`, {...criteria});
+      const users = data;
 
-    set({users, loading: false});
+      set({users});
+      return users;
+    } catch (err) {
+      console.log(err);
+    } finally {
+      set({loading: false});
+    }
   },
   getUser: async (userId: string) => {
-    set({loading: true});
-    const {data} = await axios.get(`${BASE_URL}/user/${userId}`);
-    const user = data;
+    try {
+      set({loading: true});
+      const {data} = await axios.get(`${BASE_URL}/user/${userId}`);
+      const user = data;
 
-    set({user, loading: false});
+      set({user});
+      return user;
+    } catch (err) {
+      console.log(err);
+    } finally {
+      set({loading: false});
+    }
   },
   //   createUser: async (createFriend: any) => {
   //     const {data} = await axios.post(`${BASE_URL}/user`, {
@@ -41,16 +59,31 @@ export const useUserStore = create<UserState>(set => ({
 
   //     set({user});
   //   },
-  //   updateUser: async (userId: string) => {
-  //     const {data} = await axios.post(`${BASE_URL}/user`, {});
-  //     const user = data;
+  updateUser: async (userId: string, payload: any) => {
+    try {
+      set({loading: true});
+      const {data} = await axios.patch(`${BASE_URL}/user/${userId}`, payload);
+      const user = data;
+      console.log('p: ', payload);
+      console.log('u: ', user);
 
-  //     set({user});
-  //   },
+      set({user});
+      return user;
+    } catch (err) {
+      console.log(err);
+    } finally {
+      set({loading: false});
+    }
+  },
   //   deleteUser: async (userId: string) => {
   //     await axios.delete(`${BASE_URL}/user/${userId}`);
   //     set({});
   //   },
-  setFriend: (user: any) => set({user}),
+  setUserProfileForm: (form: any) => {
+    set({userProfileForm: form});
+  },
+  clearUserProfileForm: () => {
+    set({userProfileForm: initialUserProfileForm});
+  },
   // setLoading: (loading: boolean) => set({loading}),
 }));
