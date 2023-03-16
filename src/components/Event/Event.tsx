@@ -13,7 +13,7 @@ import {useUserEventStore} from '../../stores/userEventStore';
 import {Touchable} from '../Button/Touchable';
 
 export const Event: React.FC<any> = props => {
-  const user = useAuthStore(state => state.user);
+  // const user = useAuthStore(state => state.user);
   const {
     eventId,
     eventName,
@@ -23,6 +23,7 @@ export const Event: React.FC<any> = props => {
     endDate,
     eventImg,
     location,
+    userId,
   } = props;
   const date = `${new Date(startDate).toLocaleDateString('th-TH', {
     year: 'numeric',
@@ -45,7 +46,7 @@ export const Event: React.FC<any> = props => {
   const onPressJoin = () => {
     useUserEventStore.getState().createUserEvent({
       eventId,
-      userId: user?.userId,
+      userId,
     });
   };
 

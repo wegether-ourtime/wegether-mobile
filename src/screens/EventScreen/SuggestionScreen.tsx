@@ -8,7 +8,7 @@ import Spinner from 'react-native-loading-spinner-overlay';
 import Toast from 'react-native-toast-message';
 import {colors, image, icons} from '../../common/assets';
 import fonts from '../../common/assets/fonts';
-import { EventType } from '../../common/enums/eventStatus';
+import {EventType} from '../../common/enums/eventStatus';
 import {FileResource} from '../../common/enums/fileResource';
 // import Tasklists from '../../components/TaskList/Tasklists';
 // import {TaskDatasource} from '../../datasource/TaskDatasource';
@@ -26,8 +26,9 @@ const SuggestionScreen: React.FC<Prop> = (props: Prop) => {
   const events = useEventStore(state => state.events);
   const loading = useEventStore(state => state.loading);
   const criteria = useEventStore(state => state.criteria);
+  const [userId, setUserId] = useState<any>();
+  const getUserId = async () => setUserId(await AsyncStorage.getItem('userId'));
   const getEvents = async () => {
-    const userId = await AsyncStorage.getItem('userId');
     const event = await useEventStore.getState().getEvents({
       eventType: EventType.SUGGESTION,
       userId,
@@ -35,18 +36,18 @@ const SuggestionScreen: React.FC<Prop> = (props: Prop) => {
     });
   };
 
-
   useFocusEffect(
     useCallback(() => {
+      getUserId();
       getEvents();
-    }, []),
+    }, [!userId]),
   );
 
   useEffect(() => {
+    getUserId();
     getEvents();
-  }, []);
+  }, [!userId]);
 
-  // const [data, setData] = useState<any>([]);
   return (
     <>
       <View style={[{flex: 1, backgroundColor: colors.grayBg, padding: 8}]}>
@@ -58,10 +59,10 @@ const SuggestionScreen: React.FC<Prop> = (props: Prop) => {
             const eventImg = item.files.find(
               (f: any) => f.resource === FileResource.EVENT,
             )?.path;
-            const isHost = item.userEvents.find(async (ue: UserEvent) => {
-              const userId = await AsyncStorage.getItem('userId');
-              return ue.userId == userId;
-            })?.isHost;
+
+            const isHost = item.userEvents.find(
+              (ue: UserEvent) => ue.userId == userId,
+            )?.isHost;
 
             return (
               <Event
@@ -74,7 +75,7 @@ const SuggestionScreen: React.FC<Prop> = (props: Prop) => {
                 eventImg={eventImg}
                 isHost={isHost}
                 location={item.location}
-              ></Event>
+                userId={userId}></Event>
             );
           }}
         />

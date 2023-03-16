@@ -25,7 +25,9 @@ export const ProfileOption: React.FC<any> = props => {
   const {style} = props;
   const logout = async () => {
     useAuthStore.getState().logout();
-    RootNavigation.navigate('Auth', {});
+    RootNavigation.navigate('Auth', {
+      screen: 'HomeScreen',
+    });
   };
   const data = [
     {

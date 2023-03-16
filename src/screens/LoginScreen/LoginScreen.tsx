@@ -67,6 +67,7 @@ const LoginScreen: React.FC<any> = ({navigation}) => {
             style={styles.input}
             editable={true}
             placeholder={'Email'}
+            autoCapitalize='none'
             // placeholderTextColor={colors.disable}
             onChangeText={value => onChangeText('email', value)}
           />

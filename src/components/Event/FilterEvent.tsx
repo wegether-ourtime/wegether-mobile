@@ -12,7 +12,7 @@ import {Toast} from 'react-native-toast-message/lib/src/Toast';
 import {useEventStore} from '../../stores/eventStore';
 import {Touchable} from '../Button/Touchable';
 
-export const FilterEventSheet = (props: SheetProps<{tel: string}>) => {
+export const FilterEventSheet = (props: SheetProps) => {
   const criteria = useEventStore(state => state.criteria);
   const setCriteria = (criteria: any) =>
     useEventStore.getState().setCriteria(criteria);
@@ -79,7 +79,7 @@ export const FilterEventSheet = (props: SheetProps<{tel: string}>) => {
   ];
 
   const onSelect = (categoryId: string) => {
-    console.log(criteria)
+    console.log(criteria);
     if (!criteria?.categoriesId) {
       useEventStore.getState().setCriteria({
         ...criteria,
@@ -125,6 +125,7 @@ export const FilterEventSheet = (props: SheetProps<{tel: string}>) => {
           {categories.map(c => {
             return (
               <Category
+                key={c.id}
                 categoryId={c.id}
                 name={c.name}
                 icon={c.icon}

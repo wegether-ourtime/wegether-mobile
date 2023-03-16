@@ -28,7 +28,7 @@ const EventMessageScreen: React.FC<any> = ({navigation}) => {
     <View style={styles.container}>
       <FlatList
         data={eventChats}
-        keyExtractor={item => item.name}
+        keyExtractor={item => item.eventId}
         renderItem={({item}) => {
           const eventImg = item?.files?.find(
             (f: any) => f.resource === FileResource.EVENT,

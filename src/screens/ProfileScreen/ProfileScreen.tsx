@@ -8,6 +8,7 @@ import {launchImageLibrary} from 'react-native-image-picker';
 import Spinner from 'react-native-loading-spinner-overlay/lib';
 import {font} from '../../common/assets';
 import colors from '../../common/assets/colors/colors';
+import fonts from '../../common/assets/fonts';
 import icons from '../../common/assets/icons';
 import images from '../../common/assets/images';
 import {FileResource} from '../../common/enums/fileResource';
@@ -27,14 +28,15 @@ const ProfileScreen: React.FC<any> = ({navigation}) => {
   const getUser = async () => {
     // useUserStore.getState().setLoading(true)
     const userId = await AsyncStorage.getItem('userId');
-    await useUserStore.getState().getUser(userId ?? '');
+    const user = await useUserStore.getState().getUser(userId ?? '');
     setCoverImg(
-      user?.files?.find((f: any) => f.resource == FileResource.USER_COVER)
+      await user?.files?.find((f: any) => f.resource == FileResource.USER_COVER)
         ?.path,
     );
     setProfileImg(
-      user?.files?.find((f: any) => f.resource == FileResource.USER_PROFILE)
-        ?.path,
+      await user?.files?.find(
+        (f: any) => f.resource == FileResource.USER_PROFILE,
+      )?.path,
     );
     // useUserStore.getState().setLoading(false)
   };
@@ -42,26 +44,27 @@ const ProfileScreen: React.FC<any> = ({navigation}) => {
 
   useEffect(() => {
     getUser();
-  }, [!user]);
+  }, []);
 
   useFocusEffect(
     useCallback(() => {
       getUser();
-    }, [!user]),
+    }, []),
   );
 
-  const onPressChangeProfileImg = () => {};
-
-  const onPressChangeCoverImg = () => {};
-
-  const onPressChangeImg = async () => {
+  const onPressChangeImg = async (imgType: 'profile' | 'cover') => {
+    console.log('click');
     const img = await launchImageLibrary(
       {
         mediaType: 'photo',
       },
       res => {
-        // console.log(res);
-        // if (!res.didCancel) setEventImg(res);
+        if (!res.didCancel)
+          if (imgType === 'profile') {
+            console.log(res);
+            // if (!res.didCancel) setEventImg(res);
+          } else {
+          }
       },
     );
   };
@@ -72,13 +75,11 @@ const ProfileScreen: React.FC<any> = ({navigation}) => {
         <Image
           style={styles.cover}
           source={coverImg ? {uri: coverImg} : images.cover}></Image>
-        {coverImg && (
-          <TouchableOpacity>
-            <Image
-              style={styles.changeCoverImg}
-              source={icons.changeImage}></Image>
-          </TouchableOpacity>
-        )}
+        <TouchableOpacity
+          containerStyle={styles.changeCoverImg}
+          onPress={() => onPressChangeImg('cover')}>
+          <Image source={icons.changeImage}></Image>
+        </TouchableOpacity>
         <Avatar
           avatarStyle={styles.profile}
           containerStyle={styles.profileContainer}
@@ -86,18 +87,20 @@ const ProfileScreen: React.FC<any> = ({navigation}) => {
           rounded
           source={profileImg ? {uri: profileImg} : icons.profileActive}
         />
-        {profileImg && (
-          <TouchableOpacity>
-            <Image
-              style={styles.changeProfileImg}
-              source={icons.changeImage}></Image>
-          </TouchableOpacity>
-        )}
+        <TouchableOpacity
+          containerStyle={styles.changeProfileImg}
+          onPress={() => onPressChangeImg('profile')}>
+          <Image source={icons.changeImage}></Image>
+        </TouchableOpacity>
         <View style={styles.user}>
           <Text style={[styles.name, {paddingVertical: normalize(1)}]}>
             {user?.fullName}
           </Text>
           <Text style={[{paddingVertical: normalize(2)}]}>{user?.bio}</Text>
+        </View>
+        <View style={styles.bio}>
+          <Text style={styles.bioText}>{user?.gender}</Text>
+          <Text style={styles.bioText}> {user?.bio}</Text>
         </View>
       </View>
       <View style={{flex: 10}}>
@@ -116,9 +119,7 @@ export default ProfileScreen;
 
 const styles = StyleSheet.create({
   userDetail: {
-    height: '40%',
-    // flexDirection: 'row',
-    // flexWrap: 'wrap',
+    height: '45%',
   },
   cover: {
     height: normalize(200),
@@ -131,15 +132,16 @@ const styles = StyleSheet.create({
     padding: normalize(5),
     position: 'absolute',
     left: normalize(16),
-    bottom: normalize(24),
+    bottom: normalize(56),
     backgroundColor: colors.white,
   },
   user: {
     position: 'absolute',
-    height: normalize(72),
+    height: normalize(48),
     width: normalize(192),
-    left: normalize(128),
-    bottom: normalize(0),
+    left: normalize(136),
+    bottom: normalize(60),
+    // backgroundColor: 'red',
   },
   name: {
     fontFamily: font.medium,
@@ -150,18 +152,33 @@ const styles = StyleSheet.create({
     position: 'absolute',
     right: normalize(8),
     top: normalize(216),
-    zIndex: 1,
-    elevation: 1,
   },
   changeCoverImg: {
     position: 'absolute',
-    padding: normalize(5),
-    left: normalize(16),
-    bottom: normalize(24),
+    right: normalize(8),
+    bottom: normalize(128),
+    zIndex: 1,
   },
   changeProfileImg: {
     position: 'absolute',
     left: normalize(88),
-    top: normalize(24),
+    bottom: normalize(64),
+    zIndex: 1,
+  },
+  bio: {
+    position: 'absolute',
+    width: '100%',
+    paddingVertical: normalize(0),
+    paddingHorizontal: normalize(24),
+    height: normalize(50),
+    left: normalize(0),
+    bottom: normalize(0),
+    // backgroundColor: 'blue',
+  },
+  bioText: {
+    color: '#969696',
+    fontFamily: fonts.bold,
+    fontSize: normalize(14),
+    paddingVertical: normalize(1),
   },
 });

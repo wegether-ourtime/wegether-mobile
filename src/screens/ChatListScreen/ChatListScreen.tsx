@@ -4,6 +4,7 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {colors, font} from '../../common/assets';
 import {normalize} from '../../common/function/normalize';
 import {stylesCentral} from '../../common/styles/StylesCentral';
+import CustomHeader from '../../components/Text/CustomHeader';
 import ChatListNavigator from '../../navigations/topTabs/ChatListNavigator';
 import {useChatStore} from '../../stores/chatStore';
 
@@ -13,6 +14,11 @@ const ChatListScreen: React.FC<any> = ({navigation}) => {
 
   return (
     <View style={[stylesCentral.container, {paddingTop: insets.top}]}>
+      <CustomHeader
+        title={'Message'}
+        showBackBtn
+        onPressBack={() => navigation.goBack()}
+      />
       <View style={{flex: 10}}>
         <ChatListNavigator />
       </View>

@@ -17,7 +17,7 @@ const DirectMessageScreen: React.FC<any> = ({navigation}) => {
   }, []);
 
   return (
-    <View>
+    <View style={styles.main}>
       <FlatList
         data={userFriendChats}
         keyExtractor={item => item.name}
@@ -37,6 +37,9 @@ const DirectMessageScreen: React.FC<any> = ({navigation}) => {
 export default DirectMessageScreen;
 
 const styles = StyleSheet.create({
+  main: {
+    backgroundColor: '#D6DDFF',
+  },
   container: {
     backgroundColor: 'red',
   },

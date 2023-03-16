@@ -127,7 +127,7 @@ const ChatScreen: React.FC<any> = ({navigation, route}) => {
         alignTop={false}
         wrapInSafeArea={false}
         listViewProps={{
-          contentContainerStyle: {flexGrow: 1, justifyContent: 'flex-end'},
+          contentContainerStyle: styles.chatContainer,
         }}
         // quickReplyTextStyle={{backgroundColor: 'bue'}}
         // bottomOffset={Platform.OS === 'ios' ? 10 : 0}
@@ -159,12 +159,12 @@ const styles = StyleSheet.create({
     // height: '100%',
     backgroundColor: '#D6DDFF',
   },
-  chatContainer: {
-    height: normalize(72),
-    marginVertical: normalize(2),
-    flexDirection: 'row',
-    justifyContent: 'flex-start',
-  },
+  // chatContainer: {
+  //   height: normalize(72),
+  //   marginVertical: normalize(2),
+  //   flexDirection: 'row',
+  //   justifyContent: 'flex-start',
+  // },
   img: {
     borderRadius: normalize(2),
     borderColor: colors.white,
@@ -173,5 +173,10 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     // padding: normalize(5),
     margin: normalize(16),
+  },
+  chatContainer: {
+    flexGrow: 1,
+    justifyContent: 'flex-end',
+    backgroundColor: '#D6DDFF',
   },
 });
