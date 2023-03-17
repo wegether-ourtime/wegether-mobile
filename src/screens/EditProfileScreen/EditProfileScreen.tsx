@@ -31,7 +31,6 @@ const EditProfileScreen: React.FC<any> = ({navigation}) => {
   const getUser = async () => {
     const userId = await AsyncStorage.getItem('userId');
     const user = await useUserStore.getState().getUser(userId ?? '');
-    console.log(user?.bio)
     useUserStore.getState().setUserProfileForm({
       ...user,
     });

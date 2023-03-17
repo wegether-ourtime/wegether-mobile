@@ -22,7 +22,8 @@ const HostedScreen: React.FC<Prop> = (props: Prop) => {
   const events = useEventStore(state => state.events);
   const loading = useEventStore(state => state.loading);
   const criteria = useEventStore(state => state.criteria);
-
+  const [userId, setUserId] = useState<any>();
+  const getUserId = async () => setUserId(await AsyncStorage.getItem('userId'));
   const getEvents = async () => {
     const userId = await AsyncStorage.getItem('userId');
     const event = await useEventStore.getState().getEvents({
@@ -34,13 +35,15 @@ const HostedScreen: React.FC<Prop> = (props: Prop) => {
 
   useFocusEffect(
     useCallback(() => {
+      getUserId();
       getEvents();
-    }, []),
+    }, [!userId]),
   );
 
   useEffect(() => {
+    getUserId();
     getEvents();
-  }, []);
+  }, [!userId]);
 
   // const [data, setData] = useState<any>([]);
   return (
@@ -54,10 +57,10 @@ const HostedScreen: React.FC<Prop> = (props: Prop) => {
             const eventImg = item.files.find(
               (f: any) => f.resource === FileResource.EVENT,
             )?.path;
-            const isHost = item.userEvents.find(async (ue: UserEvent) => {
-              const userId = await AsyncStorage.getItem('userId');
-              return ue.userId == userId;
-            })?.isHost;
+            // const isHost = item.userEvents.find(async (ue: UserEvent) => {
+            //   const userId = await AsyncStorage.getItem('userId');
+            //   return ue.userId == userId;
+            // })?.isHost;
 
             return (
               <Event
@@ -68,8 +71,11 @@ const HostedScreen: React.FC<Prop> = (props: Prop) => {
                 startDate={item.startDate}
                 endDate={item.endDate}
                 eventImg={eventImg}
-                isHost={isHost}
-                location={item.location}></Event>
+                isHost={true}
+                joined={true}
+                location={item.location}
+                userEvents={item.userEvents}
+                userId={userId}></Event>
             );
           }}
         />

@@ -1,11 +1,12 @@
 // import {Button} from '@rneui/themed';
 import {Avatar} from '@rneui/base';
 import React from 'react';
-import {Image, StyleSheet, Text, View, ViewStyle} from 'react-native';
+import {FlatList, Image, StyleSheet, Text, View, ViewStyle} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {colors, font, icons, image} from '../../common/assets';
 import fonts from '../../common/assets/fonts';
 import images from '../../common/assets/images';
+import {FileResource} from '../../common/enums/fileResource';
 import {normalize} from '../../common/function/normalize';
 import * as RootNavigation from '../../navigations/RootNavigation';
 import {useAuthStore} from '../../stores/authStore';
@@ -24,7 +25,10 @@ export const Event: React.FC<any> = props => {
     eventImg,
     location,
     userId,
+    joined,
+    userEvents,
   } = props;
+  let a = 1;
   const date = `${new Date(startDate).toLocaleDateString('th-TH', {
     year: 'numeric',
     month: 'numeric',
@@ -65,7 +69,11 @@ export const Event: React.FC<any> = props => {
         />
         <View style={styles.eventDetail}>
           <View style={styles.eventHost}>
-            <View style={{width: '60%'}}>
+            <View
+              style={{
+                width: '60%',
+                flexDirection: 'row',
+              }}>
               <Avatar
                 avatarStyle={styles.profile}
                 containerStyle={styles.profileContainer}
@@ -75,7 +83,7 @@ export const Event: React.FC<any> = props => {
               />
             </View>
             <View style={{width: '40%', alignItems: 'flex-end'}}>
-              {!isHost && (
+              {!isHost && !joined && (
                 <TouchableOpacity
                   style={{marginTop: normalize(5)}}
                   onPress={onPressJoin}>

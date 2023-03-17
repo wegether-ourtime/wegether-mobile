@@ -158,7 +158,6 @@ const CreateEventScreen: React.FC<any> = ({navigation, route}) => {
                       mediaType: 'photo',
                     },
                     res => {
-                      console.log(res);
                       if (!res.didCancel) setEventImg(res);
                     },
                   );

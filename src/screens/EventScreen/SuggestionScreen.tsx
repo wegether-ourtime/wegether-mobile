@@ -74,7 +74,9 @@ const SuggestionScreen: React.FC<Prop> = (props: Prop) => {
                 endDate={item.endDate}
                 eventImg={eventImg}
                 isHost={isHost}
+                joined={false}
                 location={item.location}
+                userEvents={item.userEvents}
                 userId={userId}></Event>
             );
           }}

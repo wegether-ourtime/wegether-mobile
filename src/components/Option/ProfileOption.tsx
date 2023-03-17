@@ -32,6 +32,16 @@ export const ProfileOption: React.FC<any> = props => {
   const data = [
     {
       id: 1,
+      name: 'Edit Interests',
+      icon: icons.movie,
+      onSelect: () => {
+        RootNavigation.navigate('Auth', {
+          screen: 'InterestScreen',
+        });
+      },
+    },
+    {
+      id: 2,
       name: 'Edit Profile',
       icon: icons.editProfile,
       onSelect: () => {
@@ -41,7 +51,7 @@ export const ProfileOption: React.FC<any> = props => {
       },
     },
     {
-      id: 2,
+      id: 3,
       name: 'Log out',
       icon: icons.logout,
       onSelect: () => logout(),
@@ -61,14 +71,16 @@ export const ProfileOption: React.FC<any> = props => {
           <FlatList
             data={data}
             keyExtractor={item => item.name}
-            renderItem={({item}) => (
-              <TouchableOpacity style={styles.option} onPress={item.onSelect}>
-                <Image
-                  source={item.icon}
-                  style={{marginTop: normalize(2)}}></Image>
-                <Text style={{marginLeft: normalize(16)}}>{item.name}</Text>
-              </TouchableOpacity>
-            )}
+            renderItem={({item, index}) => {
+              return (
+                <TouchableOpacity style={styles.option} onPress={item.onSelect}>
+                  <Image
+                    source={item.icon}
+                    style={{marginTop: normalize(2)}}></Image>
+                  <Text style={{marginLeft: normalize(16)}}>{item.name}</Text>
+                </TouchableOpacity>
+              );
+            }}
           />
         </View>
       )}

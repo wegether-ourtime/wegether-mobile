@@ -18,6 +18,7 @@ import {stylesCentral} from '../../common/styles/StylesCentral';
 import {ProfileOption} from '../../components/Option/ProfileOption';
 import MyEventNavigator from '../../navigations/topTabs/MyEventNavigator';
 import {useAuthStore} from '../../stores/authStore';
+import {useFileStore} from '../../stores/fileStore';
 import {useUserStore} from '../../stores/userStore';
 
 const ProfileScreen: React.FC<any> = ({navigation}) => {
@@ -25,9 +26,11 @@ const ProfileScreen: React.FC<any> = ({navigation}) => {
   const loading = useUserStore(state => state.loading);
   const [coverImg, setCoverImg] = useState();
   const [profileImg, setProfileImg] = useState();
+  const [userId, setUserId] = useState<any>();
+  const getUserId = async () => setUserId(await AsyncStorage.getItem('userId'));
   const getUser = async () => {
-    // useUserStore.getState().setLoading(true)
-    const userId = await AsyncStorage.getItem('userId');
+    // // useUserStore.getState().setLoading(true)
+    // const userId = await AsyncStorage.getItem('userId');
     const user = await useUserStore.getState().getUser(userId ?? '');
     setCoverImg(
       await user?.files?.find((f: any) => f.resource == FileResource.USER_COVER)
@@ -43,28 +46,40 @@ const ProfileScreen: React.FC<any> = ({navigation}) => {
   const [toggleOption, setToggleOption] = useState<boolean>(false);
 
   useEffect(() => {
+    getUserId();
     getUser();
-  }, []);
+  }, [!userId]);
 
   useFocusEffect(
     useCallback(() => {
+      getUserId();
       getUser();
-    }, []),
+    }, [!userId]),
   );
 
   const onPressChangeImg = async (imgType: 'profile' | 'cover') => {
-    console.log('click');
-    const img = await launchImageLibrary(
+    await launchImageLibrary(
       {
         mediaType: 'photo',
       },
-      res => {
-        if (!res.didCancel)
+      async res => {
+        if (!res.didCancel) {
+          const file = await useFileStore
+            .getState()
+            .uploadFile(
+              res,
+              imgType === 'profile'
+                ? FileResource.USER_PROFILE
+                : FileResource.USER_COVER,
+              userId,
+            );
+
           if (imgType === 'profile') {
-            console.log(res);
-            // if (!res.didCancel) setEventImg(res);
+            setProfileImg(file?.path);
           } else {
+            setCoverImg(file?.path);
           }
+        }
       },
     );
   };
