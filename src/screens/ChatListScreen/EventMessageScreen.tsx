@@ -14,10 +14,10 @@ import * as RootNavigation from '../../navigations/RootNavigation';
 import {ChannelList} from 'stream-chat-react-native';
 
 const EventMessageScreen: React.FC<any> = ({navigation}) => {
-  const eventChats = useChatStore(state => state.eventChats);
+  const eventChats = useChatStore(state => state.eventList);
   const getUserFriendChats = async () => {
     const userId = await AsyncStorage.getItem('userId');
-    await useChatStore.getState().getEventChats(userId ?? '');
+    await useChatStore.getState().getEventList(userId ?? '');
   };
 
   useEffect(() => {

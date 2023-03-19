@@ -10,6 +10,7 @@ export default interface Chat {
   text: string;
   userFriend: UserFriend;
   event: Event;
+  senderImg: string;
 
   createdAt: Date;
   updatedAt: Date;

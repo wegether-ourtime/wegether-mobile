@@ -32,15 +32,8 @@ const ProfileScreen: React.FC<any> = ({navigation}) => {
     // // useUserStore.getState().setLoading(true)
     const userId = await AsyncStorage.getItem('userId');
     const user = await useUserStore.getState().getUser(userId ?? '');
-    setCoverImg(
-      await user?.files?.find((f: any) => f.resource == FileResource.USER_COVER)
-        ?.path,
-    );
-    setProfileImg(
-      await user?.files?.find(
-        (f: any) => f.resource == FileResource.USER_PROFILE,
-      )?.path,
-    );
+    setCoverImg(user?.imgCoverUrl);
+    setProfileImg(user?.imgProfileUrl);
     // useUserStore.getState().setLoading(false)
   };
   const [toggleOption, setToggleOption] = useState<boolean>(false);

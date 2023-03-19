@@ -27,7 +27,6 @@ const InterestScreen: React.FC<any> = ({navigation}) => {
   //   useUserCategoryStore.getState().createUserCategories(payload);
 
   const onSelect = (categoryId: string) => {
-    console.log(categoryId);
     Toast.show({
       type: 'success'
     });

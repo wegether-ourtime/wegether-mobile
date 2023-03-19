@@ -35,7 +35,11 @@ const ChatScreen: React.FC<any> = ({navigation, route}) => {
   const getChats = async () => {
     const userId = (await AsyncStorage.getItem('userId')) ?? '';
     setUserId(userId);
-    await useChatStore.getState().getChats({userId});
+    if (userFriendId) {
+      await useChatStore.getState().getDirectChats(userFriendId);
+    } else if (eventId) {
+      await useChatStore.getState().getEventChats(eventId);
+    }
   };
 
   useEffect(() => {
@@ -72,10 +76,10 @@ const ChatScreen: React.FC<any> = ({navigation, route}) => {
             data={chats}
             keyExtractor={item => item.chatId}
             renderItem={({item}) => {
-              const userImg = item?.userFriend?.user?.files?.find(
-                (f: any) => f.resource === FileResource.USER_PROFILE,
-              );
-
+              // const userImg = item?.userFriend?.user?.files?.find(
+              //   (f: any) => f.resource === FileResource.USER_PROFILE,
+              // );
+              console.log(item.senderId)
               return (
                 <View
                   style={[
@@ -91,7 +95,7 @@ const ChatScreen: React.FC<any> = ({navigation, route}) => {
                       // navigation.navigate('FriendProfileScreen')
                       RootNavigation.navigate('Profile', {
                         screen: 'FriendProfileScreen',
-                        params: {userId: userId},
+                        params: {userId: item.senderId},
                       });
                     }}>
                     {!(item.senderId === userId) && (
@@ -100,7 +104,11 @@ const ChatScreen: React.FC<any> = ({navigation, route}) => {
                         containerStyle={styles.imgContainer}
                         size={normalize(40)}
                         rounded
-                        source={userImg ? {uri: userImg.path} : images.profile}
+                        source={
+                          item.senderImg
+                            ? {uri: item.senderImg}
+                            : images.wegether
+                        }
                       />
                     )}
                   </TouchableOpacity>

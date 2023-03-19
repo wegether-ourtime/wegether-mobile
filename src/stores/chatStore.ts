@@ -6,13 +6,13 @@ import Chat from '../models/Chat';
 interface ChatState {
   chats: Chat[];
   chat: Chat | null;
-  userFriendChats: any[];
-  eventChats: any[];
+  userFriendList: any[];
+  eventList: any[];
   loading: boolean;
-  getChats: (criteria: any) => any;
-  getChat: (chatId: string) => any;
-  getUserFriendChats: (userId: string) => any;
-  getEventChats: (userId: string) => any;
+  getDirectChats: (userFriendId: string) => any;
+  getEventChats: (eventId: string) => any;
+  getUserFriendList: (userId: string) => any;
+  getEventList: (userId: string) => any;
   createChat: (payload: any) => any;
   updateChat: (chatId: string, payload: any) => any;
   deleteChat: (chatId: string) => void;
@@ -21,13 +21,13 @@ interface ChatState {
 export const useChatStore = create<ChatState>(set => ({
   chats: [],
   chat: null,
-  userFriendChats: [],
-  eventChats: [],
+  userFriendList: [],
+  eventList: [],
   loading: false,
-  getChats: async (criteria: any) => {
+  getDirectChats: async (userFriendId: any) => {
     try {
       set({loading: true});
-      const {data} = await axios.get(`${BASE_URL}/chat`, {...criteria});
+      const {data} = await axios.get(`${BASE_URL}/chat/direct/${userFriendId}`);
       const chats = data;
 
       set({chats});
@@ -38,46 +38,46 @@ export const useChatStore = create<ChatState>(set => ({
       set({loading: false});
     }
   },
-  getChat: async (chatId: string) => {
+  getEventChats: async (eventId: string) => {
     try {
       set({loading: true});
-      const {data} = await axios.get(`${BASE_URL}/chat/${chatId}`);
-      const chat = data;
+      const {data} = await axios.get(`${BASE_URL}/chat/event/${eventId}`);
+      const chats = data;
 
-      set({chat});
-      return chat;
+      set({chats});
+      return chats;
     } catch (err) {
       console.log(err);
     } finally {
       set({loading: false});
     }
   },
-  getUserFriendChats: async (userId: string) => {
+  getUserFriendList: async (userId: string) => {
     try {
       set({loading: true});
       const {data} = await axios.get(
         `${BASE_URL}/chat/get-user-friend-chat-list/${userId}`,
       );
-      const userFriendChats = data;
+      const userFriendList = data;
 
-      set({userFriendChats});
-      return userFriendChats;
+      set({userFriendList});
+      return userFriendList;
     } catch (err) {
       console.log(err);
     } finally {
       set({loading: false});
     }
   },
-  getEventChats: async (userId: string) => {
+  getEventList: async (userId: string) => {
     try {
       set({loading: true});
       const {data} = await axios.get(
         `${BASE_URL}/chat/get-event-chat-list/${userId}`,
       );
-      const eventChats = data;
+      const eventList = data;
 
-      set({eventChats});
-      return eventChats;
+      set({eventList});
+      return eventList;
     } catch (err) {
       console.log(err);
     } finally {

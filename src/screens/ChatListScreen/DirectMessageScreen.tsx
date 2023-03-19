@@ -15,10 +15,10 @@ import {ChannelList} from 'stream-chat-react-native';
 import fonts from '../../common/assets/fonts';
 
 const DirectMessageScreen: React.FC<any> = ({navigation}) => {
-  const userFriendChats = useChatStore(state => state.userFriendChats);
+  const userFriendChats = useChatStore(state => state.userFriendList);
   const getUserFriendChats = async () => {
     const userId = await AsyncStorage.getItem('userId');
-    await useChatStore.getState().getUserFriendChats(userId ?? '');
+    await useChatStore.getState().getUserFriendList(userId ?? '');
   };
 
   useEffect(() => {

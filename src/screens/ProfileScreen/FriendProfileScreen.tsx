@@ -21,26 +21,16 @@ import {useAuthStore} from '../../stores/authStore';
 import {useFileStore} from '../../stores/fileStore';
 import {useUserStore} from '../../stores/userStore';
 
-const FriendProfileScreen: React.FC<any> = ({navigation}) => {
+const FriendProfileScreen: React.FC<any> = ({navigation, route}) => {
+  const [userId] = useState(route?.params?.userId);
   const user = useUserStore(state => state.user);
   const loading = useUserStore(state => state.loading);
   const [coverImg, setCoverImg] = useState();
   const [profileImg, setProfileImg] = useState();
-  // const [userId, setUserId] = useState<any>();
-  // const getUserId = async () => setUserId(await AsyncStorage.getItem('userId'));
   const getUser = async () => {
-    // // useUserStore.getState().setLoading(true)
-    const userId = await AsyncStorage.getItem('userId');
     const user = await useUserStore.getState().getUser(userId ?? '');
-    setCoverImg(
-      await user?.files?.find((f: any) => f.resource == FileResource.USER_COVER)
-        ?.path,
-    );
-    setProfileImg(
-      await user?.files?.find(
-        (f: any) => f.resource == FileResource.USER_PROFILE,
-      )?.path,
-    );
+    setCoverImg(user?.imgCoverUrl);
+    setProfileImg(user?.imgProfileUrl);
     // useUserStore.getState().setLoading(false)
   };
   const [toggleOption, setToggleOption] = useState<boolean>(false);
@@ -89,11 +79,11 @@ const FriendProfileScreen: React.FC<any> = ({navigation}) => {
         <Image
           style={styles.cover}
           source={coverImg ? {uri: coverImg} : images.cover}></Image>
-        <TouchableOpacity
+        {/* <TouchableOpacity
           containerStyle={styles.changeCoverImg}
           onPress={() => onPressChangeImg('cover')}>
           <Image source={icons.changeImage}></Image>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
         <Avatar
           avatarStyle={styles.profile}
           containerStyle={styles.profileContainer}
@@ -101,11 +91,11 @@ const FriendProfileScreen: React.FC<any> = ({navigation}) => {
           rounded
           source={profileImg ? {uri: profileImg} : icons.profileActive}
         />
-        <TouchableOpacity
+        {/* <TouchableOpacity
           containerStyle={styles.changeProfileImg}
           onPress={() => onPressChangeImg('profile')}>
           <Image source={icons.changeImage}></Image>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
         <View style={styles.user}>
           <Text style={[styles.name, {paddingVertical: normalize(1)}]}>
             {user?.fullName}
@@ -120,7 +110,7 @@ const FriendProfileScreen: React.FC<any> = ({navigation}) => {
       <View style={{flex: 10}}>
         <MyEventNavigator />
       </View>
-      <ProfileOption style={[styles.option]}></ProfileOption>
+      {/* <ProfileOption style={[styles.option]}></ProfileOption> */}
       <Spinner
         visible={loading}
         textContent={'Loading...'}
