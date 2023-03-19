@@ -1,4 +1,14 @@
-import {View, Text, StyleSheet, Image, TextInput} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  TextInput,
+  KeyboardAvoidingView,
+  Platform,
+  TouchableWithoutFeedback,
+  Keyboard,
+} from 'react-native';
 import React, {useState} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {stylesApp} from '../../common/styles/AppStyle';
@@ -47,49 +57,56 @@ const LoginScreen: React.FC<any> = ({navigation}) => {
   // const imageWidth = screen.width;
 
   return (
-    <SafeAreaView style={stylesApp.container}>
-      <CustomHeader
-        title="Login with E-mail"
-        showBackBtn
-        onPressBack={() => navigation.goBack()}
-      />
-      <View style={[{height: '100%'}, styles.main]}>
-        {/* <View style={[]}>
-          <Image
-            source={image.wegether}
-            style={{height: imageHeight, width: imageWidth}}
-            resizeMode={'contain'}
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      style={{flex: 1}}>
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <SafeAreaView style={stylesApp.container}>
+          <CustomHeader
+            title="Login with E-mail"
+            showBackBtn
+            onPressBack={() => navigation.goBack()}
           />
-        </View> */}
-        <View style={[{paddingTop: '50%'}]}>
-          <TextInput
-            value={form.email}
-            style={styles.input}
-            editable={true}
-            placeholder={'Email'}
-            autoCapitalize='none'
-            // placeholderTextColor={colors.disable}
-            onChangeText={value => onChangeText('email', value)}
-          />
-          <TextInput
-            value={form.password}
-            secureTextEntry={true}
-            style={styles.input}
-            editable={true}
-            placeholder={'Password'}
-            maxLength={12}
-            // placeholderTextColor={colors.disable}
-            onChangeText={value => onChangeText('password', value)}
-          />
-        </View>
-        <Touchable
-          label={'Login'}
-          color={colors.primary}
-          fontColor={colors.white}
-          style={styles.button}
-          onPress={() => login()}></Touchable>
-      </View>
-    </SafeAreaView>
+          <View style={[{height: '100%'}, styles.main]}>
+            {/* <View style={[]}>
+                  <Image
+                    source={image.wegether}
+                    style={{height: imageHeight, width: imageWidth}}
+                    resizeMode={'contain'}
+                  />
+                </View> */}
+            <View style={[{paddingTop: '50%'}]}>
+              <TextInput
+                value={form.email}
+                style={styles.input}
+                editable={true}
+                placeholder={'Email'}
+                autoCapitalize="none"
+                // autoFocus={autoFocus}
+                // placeholderTextColor={colors.disable}
+                onChangeText={value => onChangeText('email', value)}
+              />
+              <TextInput
+                value={form.password}
+                secureTextEntry={true}
+                style={styles.input}
+                editable={true}
+                placeholder={'Password'}
+                maxLength={12}
+                // placeholderTextColor={colors.disable}
+                onChangeText={value => onChangeText('password', value)}
+              />
+            </View>
+            <Touchable
+              label={'Login'}
+              color={colors.primary}
+              fontColor={colors.white}
+              style={styles.button}
+              onPress={() => login()}></Touchable>
+          </View>
+        </SafeAreaView>
+      </TouchableWithoutFeedback>
+    </KeyboardAvoidingView>
   );
 };
 export default LoginScreen;

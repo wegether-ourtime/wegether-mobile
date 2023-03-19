@@ -35,13 +35,17 @@ const EventDetailScreen: React.FC<any> = ({navigation, route}) => {
   const insets = useSafeAreaInsets();
   const {eventId} = route.params;
   const event = useEventStore(state => state.event);
+  const [userId, setUserId] = useState<any>();
+  const getUserId = async () => setUserId(await AsyncStorage.getItem('userId'));
   const [joined, setJoined] = useState<boolean | undefined>(undefined);
   const [isHost, setIsHost] = useState<boolean | undefined>(undefined);
+
   const [eventImgUri, setEventImgUri] = useState<string | undefined>(undefined);
 
   useEffect(() => {
+    getUserId();
     getEvent();
-  }, []);
+  }, [!userId]);
 
   const onPressJoin = () => {
     useUserEventStore.getState().createUserEvent({
@@ -60,9 +64,13 @@ const EventDetailScreen: React.FC<any> = ({navigation, route}) => {
 
   const getEvent = async () => {
     const event = await useEventStore.getState().getEvent(eventId);
-    const userEvent = await event.userEvents.find(async (ue: UserEvent) => {
-      const userId = await AsyncStorage.getItem('userId');
-      return ue.userId == userId;
+    // find joined?
+    const userEvent = await event.userEvents.find(
+      (ue: UserEvent) => ue.userId == userId,
+    );
+
+    useEventStore.getState().setForm({
+      ...event,
     });
 
     const eventImg = event?.files?.find(
@@ -85,6 +93,10 @@ const EventDetailScreen: React.FC<any> = ({navigation, route}) => {
   useFocusEffect(
     useCallback(() => {
       getEvent();
+
+      return () => {
+        useEventStore.getState().clearForm();
+      };
     }, [!event]),
   );
 

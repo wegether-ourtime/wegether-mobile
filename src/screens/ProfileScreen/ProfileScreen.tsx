@@ -26,11 +26,11 @@ const ProfileScreen: React.FC<any> = ({navigation}) => {
   const loading = useUserStore(state => state.loading);
   const [coverImg, setCoverImg] = useState();
   const [profileImg, setProfileImg] = useState();
-  const [userId, setUserId] = useState<any>();
-  const getUserId = async () => setUserId(await AsyncStorage.getItem('userId'));
+  // const [userId, setUserId] = useState<any>();
+  // const getUserId = async () => setUserId(await AsyncStorage.getItem('userId'));
   const getUser = async () => {
     // // useUserStore.getState().setLoading(true)
-    // const userId = await AsyncStorage.getItem('userId');
+    const userId = await AsyncStorage.getItem('userId');
     const user = await useUserStore.getState().getUser(userId ?? '');
     setCoverImg(
       await user?.files?.find((f: any) => f.resource == FileResource.USER_COVER)
@@ -46,15 +46,13 @@ const ProfileScreen: React.FC<any> = ({navigation}) => {
   const [toggleOption, setToggleOption] = useState<boolean>(false);
 
   useEffect(() => {
-    getUserId();
     getUser();
-  }, [!userId]);
+  }, []);
 
   useFocusEffect(
     useCallback(() => {
-      getUserId();
       getUser();
-    }, [!userId]),
+    }, []),
   );
 
   const onPressChangeImg = async (imgType: 'profile' | 'cover') => {
@@ -64,6 +62,7 @@ const ProfileScreen: React.FC<any> = ({navigation}) => {
       },
       async res => {
         if (!res.didCancel) {
+          const userId = (await AsyncStorage.getItem('userId')) ?? '';
           const file = await useFileStore
             .getState()
             .uploadFile(

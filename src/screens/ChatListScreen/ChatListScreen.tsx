@@ -16,7 +16,7 @@ const ChatListScreen: React.FC<any> = ({navigation}) => {
     <View style={[stylesCentral.container, {paddingTop: insets.top}]}>
       <CustomHeader
         title={'Message'}
-        showBackBtn
+        showBackBtn={false}
         onPressBack={() => navigation.goBack()}
       />
       <View style={{flex: 10}}>

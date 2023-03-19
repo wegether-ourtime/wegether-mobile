@@ -106,17 +106,17 @@ const CreateEventScreen: React.FC<any> = ({navigation, route}) => {
     useEventStore.getState().clearForm();
   }, []);
 
-  // useFocusEffect(
-  //   useCallback(() => {
-  //     getEvent();
-  //   }, []),
-  // );
+  useFocusEffect(
+    useCallback(() => {
+      getEvent();
+    }, []),
+  );
 
   return (
     <SafeAreaView style={[stylesApp.container]}>
       <CustomHeader
         title={isEdit ? form?.eventName : 'Create Event'}
-        showBackBtn
+        showBackBtn={isEdit}
         onPressBack={() => navigation.goBack()}
       />
       <View style={styles.main}>

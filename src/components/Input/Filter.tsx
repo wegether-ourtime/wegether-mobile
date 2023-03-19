@@ -21,16 +21,20 @@ export const Filter: React.FC<any> = props => {
 
   return (
     <View style={styles.main}>
-      <TouchableOpacity onPress={onSearch}>
-        <Image source={icons.search} />
-      </TouchableOpacity>
       <TextInput
         style={styles.input}
         placeholder={'What are you interest in?'}
         editable={true}
         onChangeText={value => onChangeText('search', value)}></TextInput>
-
       <TouchableOpacity
+        onPress={onSearch}
+        containerStyle={{
+          marginHorizontal: normalize(8),
+        }}>
+        <Image source={icons.search} />
+      </TouchableOpacity>
+      <TouchableOpacity
+        containerStyle={{marginHorizontal: normalize(8)}}
         onPress={() => {
           SheetManager.show('FilterEventSheet');
         }}>
@@ -42,14 +46,12 @@ export const Filter: React.FC<any> = props => {
 
 const styles = StyleSheet.create({
   main: {
-    width: '100%',
-    // padding: normalize(12),
-    // margin: normalize(6),
+    marginVertical: normalize(8),
     alignSelf: 'flex-start',
     flexDirection: 'row',
     flexWrap: 'nowrap',
     alignItems: 'center',
-    justifyContent: 'center',
+    // backgroundColor: 'blue'
   },
   headerSafeArea: {
     backgroundColor: colors.background,
@@ -60,9 +62,11 @@ const styles = StyleSheet.create({
     height: normalize(75),
   },
   input: {
-    width: normalize(250),
-    margin: normalize(15),
-    padding: normalize(15),
+    width: normalize(272),
+    height: normalize(40),
+    marginLeft: normalize(16),
+    marginRight: normalize(8),
+    paddingHorizontal: normalize(16),
     borderColor: colors.disable,
     borderWidth: 0.5,
     borderRadius: normalize(8),

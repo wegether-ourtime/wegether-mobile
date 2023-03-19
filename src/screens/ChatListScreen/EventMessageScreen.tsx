@@ -40,7 +40,7 @@ const EventMessageScreen: React.FC<any> = ({navigation}) => {
               onPress={() => {
                 RootNavigation.navigate('Main', {
                   screen: 'ChatScreen',
-                  params: {eventId: item.eventId},
+                  params: {eventId: item.eventId, chatName: item.eventName},
                 });
               }}>
               <Avatar

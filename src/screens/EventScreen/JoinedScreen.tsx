@@ -24,9 +24,9 @@ const JoinedScreen: React.FC<Prop> = (props: Prop) => {
   const loading = useEventStore(state => state.loading);
   const criteria = useEventStore(state => state.criteria);
   const [userId, setUserId] = useState<any>();
-  const getUserId = async () => setUserId(await AsyncStorage.getItem('userId'));
   const getEvents = async () => {
     const userId = await AsyncStorage.getItem('userId');
+    setUserId(userId);
     const event = await useEventStore.getState().getEvents({
       eventType: EventType.JOINED,
       userId,
@@ -36,17 +36,14 @@ const JoinedScreen: React.FC<Prop> = (props: Prop) => {
 
   useFocusEffect(
     useCallback(() => {
-      getUserId();
       getEvents();
-    }, [!userId]),
+    }, []),
   );
 
   useEffect(() => {
-    getUserId();
     getEvents();
-  }, [!userId]);
+  }, []);
 
-  // const [data, setData] = useState<any>([]);
   return (
     <>
       <View style={[{flex: 1, backgroundColor: colors.grayBg, padding: 8}]}>

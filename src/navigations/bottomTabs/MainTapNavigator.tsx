@@ -27,6 +27,7 @@ import {
 import ScanScreen from '../../screens/ScanScreen/ScanScreen';
 import EventFormScreen from '../../screens/EventFormScreen/EventFormScreen';
 import ChatListScreen from '../../screens/ChatListScreen/ChatListScreen';
+import {ProfileNavigator} from '../ProfileNavigator';
 
 const Tab = createBottomTabNavigator();
 
@@ -34,41 +35,42 @@ const MainTapNavigator: React.FC<any> = ({navigation}) => {
   const [loading, setLoading] = useState(true);
   const [registerNoti, setRegisterNoti] = useState(false);
   const [registerfailedModalNoti, setRegisterFailedModalNoti] = useState(false);
-  const [initialRouteName, setInitialRouteName] = useState('home');
+  const [initialRouteName, setInitialRouteName] = useState('Home');
   const {actiontaskId, setActiontaskId} = useContext(ActionContext);
   const ListPath = [
     {
-      name: 'home',
+      name: 'Home',
       title: 'หน้าหลัก',
       component: EventScreen,
       activeIcon: icons.homeActive,
       inactiveIcon: icons.homeInactive,
     },
     {
-      name: 'scan',
+      name: 'Scan',
       title: 'หน้าสแกน qr code',
       component: ScanScreen,
       activeIcon: icons.qrActive,
       inactiveIcon: icons.qrInactive,
     },
     {
-      name: 'createEvent',
+      name: 'CreateEvent',
       title: 'หน้าเพิ่มกิจกรรม',
       component: EventFormScreen,
       activeIcon: icons.createEventActive,
       inactiveIcon: icons.createEventInactive,
     },
     {
-      name: 'chat',
+      name: 'Chat',
       title: 'ข้อความ',
       component: ChatListScreen,
       activeIcon: icons.chatActive,
       inactiveIcon: icons.chatInactive,
     },
     {
-      name: 'profile',
+      name: 'Profile',
       title: 'หน้าโปรไฟล์',
-      component: ProfileScreen,
+      // ProfileScreen
+      component: ProfileNavigator,
       activeIcon: icons.profileActive,
       inactiveIcon: icons.profileInactive,
     },
@@ -123,16 +125,6 @@ const MainTapNavigator: React.FC<any> = ({navigation}) => {
                               : {width: 25, height: 25}
                           }
                         />
-
-                        {/* <Text
-                          style={{
-                            fontFamily: fonts.medium,
-                            fontSize: normalize(14),
-                            color: isFocused ? colors.primary : colors.gray,
-                            marginTop: item.name === 'profile' ? 4 : 2,
-                          }}>
-                          {item.title}
-                        </Text> */}
                       </View>
                     </TouchableOpacity>
                   );

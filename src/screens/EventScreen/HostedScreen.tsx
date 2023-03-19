@@ -22,10 +22,10 @@ const HostedScreen: React.FC<Prop> = (props: Prop) => {
   const events = useEventStore(state => state.events);
   const loading = useEventStore(state => state.loading);
   const criteria = useEventStore(state => state.criteria);
-  const [userId, setUserId] = useState<any>();
-  const getUserId = async () => setUserId(await AsyncStorage.getItem('userId'));
+  const [userId, setUserId] = useState<string>('');
   const getEvents = async () => {
-    const userId = await AsyncStorage.getItem('userId');
+    const userId = (await AsyncStorage.getItem('userId')) ?? '';
+    setUserId(userId);
     const event = await useEventStore.getState().getEvents({
       eventType: EventType.HOSTED,
       userId,
@@ -35,17 +35,14 @@ const HostedScreen: React.FC<Prop> = (props: Prop) => {
 
   useFocusEffect(
     useCallback(() => {
-      getUserId();
       getEvents();
-    }, [!userId]),
+    }, []),
   );
 
   useEffect(() => {
-    getUserId();
     getEvents();
-  }, [!userId]);
+  }, []);
 
-  // const [data, setData] = useState<any>([]);
   return (
     <>
       <View style={[{flex: 1, backgroundColor: colors.grayBg, padding: 8}]}>
