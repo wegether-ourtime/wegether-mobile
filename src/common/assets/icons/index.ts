@@ -21,4 +21,8 @@ export default {
   editProfile: require('./edit-profile.png'),
   logout: require('./logout.png'),
   changeImage: require('./change-image.png'),
+
+  img: require('./chat/img.png'),
+  location: require('./chat/location.png'),
+  peoples: require('./chat/peoples.png'),
 };

@@ -22,6 +22,8 @@ import {GiftedChat, InputToolbar} from 'react-native-gifted-chat';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import fonts from '../../common/assets/fonts';
 import * as RootNavigation from '../../navigations/RootNavigation';
+import {useFocusEffect} from '@react-navigation/native';
+import {socket} from '../../common/function/utility';
 
 const ChatScreen: React.FC<any> = ({navigation, route}) => {
   const [userFriendId] = useState(route?.params?.userFriendId);
@@ -42,18 +44,25 @@ const ChatScreen: React.FC<any> = ({navigation, route}) => {
     }
   };
 
-  useEffect(() => {
-    getChats();
-  }, []);
+  // useEffect(() => {
+  //   getChats();
+  // }, []);
+
+  useFocusEffect(
+    useCallback(() => {
+      getChats();
+      useChatStore.getState().socket().receiveMessage({userFriendId, eventId});
+      return () =>
+        useChatStore.getState().socket().disconnect({userFriendId, eventId});
+    }, []),
+  );
 
   const onSend = async ({message, img}: {message?: string; img?: any}) => {
     const userId = (await AsyncStorage.getItem('userId')) ?? '';
-    await useChatStore.getState().createChat({
-      ...(userFriendId ? {userFriendId, receiverId: userFriend?.friendId} : {}),
-      ...(eventId ? {eventId} : {}),
-      senderId: userId,
-      text: message,
-    });
+    useChatStore
+      .getState()
+      .socket()
+      .sendMessage({userId, userFriendId, eventId, userFriend, message});
     await getChats();
     setMessage('');
   };
@@ -76,10 +85,6 @@ const ChatScreen: React.FC<any> = ({navigation, route}) => {
             data={chats}
             keyExtractor={item => item.chatId}
             renderItem={({item}) => {
-              // const userImg = item?.userFriend?.user?.files?.find(
-              //   (f: any) => f.resource === FileResource.USER_PROFILE,
-              // );
-              console.log(item.senderId)
               return (
                 <View
                   style={[

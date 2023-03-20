@@ -7,7 +7,8 @@ const Stack = createStackNavigator();
 export const ProfileNavigator: React.FC = () => {
   return (
     <Stack.Navigator
-      screenOptions={{headerShown: false, gestureEnabled: false}}>
+      screenOptions={{headerShown: false, gestureEnabled: false}}
+      initialRouteName="ProfileScreen">
       <Stack.Screen name="ProfileScreen" component={ProfileScreen} />
       <Stack.Screen name="FriendProfileScreen" component={FriendProfileScreen} />
     </Stack.Navigator>

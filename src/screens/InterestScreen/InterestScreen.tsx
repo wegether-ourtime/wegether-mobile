@@ -9,7 +9,7 @@ import {
   Platform,
   Button,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {stylesApp} from '../../common/styles/AppStyle';
 import {Category} from '../../components/Category/Category';
@@ -20,21 +20,61 @@ import * as RootNavigation from '../../navigations/RootNavigation';
 import {useUserCategoryStore} from '../../stores/userCategoryStore';
 import CustomHeader from '../../components/Text/CustomHeader';
 import {Toast} from 'react-native-toast-message/lib/src/Toast';
+import {FlatList} from 'react-native-gesture-handler';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useFocusEffect} from '@react-navigation/native';
 
 const InterestScreen: React.FC<any> = ({navigation}) => {
-  const [data, setData] = useState({});
-  // const createUserCategories = (payload: any) =>
-  //   useUserCategoryStore.getState().createUserCategories(payload);
+  // const [userId] = useState(route?.params?.userId);
+  const [selectCategories, setSelectCategories] = useState<string[]>([]);
+  // const userCategories = useUserCategoryStore(state => state.userCategories);
+  const updateUserCategories = (payload: any) =>
+    useUserCategoryStore.getState().updateUserCategories(payload);
+  const getUserCategories = async () => {
+    const userId = await AsyncStorage.getItem('userId');
+    const userCategories = await useUserCategoryStore
+      .getState()
+      .getUserCategories({userId});
 
-  const onSelect = (categoryId: string) => {
-    Toast.show({
-      type: 'success'
-    });
+    setSelectCategories(
+      userCategories.map((uc: any) => {
+        return uc.categoryId;
+      }),
+    );
   };
 
-  useEffect(() => {}, []);
+  const onSelect = async (categoryId: string) => {
+    if (!selectCategories.find(sc => sc === categoryId)) {
+      if (selectCategories.length == 3) {
+        Toast.show({
+          type: 'fail',
+        });
+      } else {
+        setSelectCategories([...selectCategories, categoryId]);
+      }
+    } else {
+      setSelectCategories(selectCategories.filter(sc => sc != categoryId));
+    }
+  };
 
-  const categories = [
+  const onSubmit = async () => {
+    const userId = await AsyncStorage.getItem('userId');
+    console.log(selectCategories)
+    await updateUserCategories({userId, categoriesId: selectCategories});
+    // await getUserCategories();
+  };
+
+  useEffect(() => {
+    getUserCategories();
+  }, []);
+
+  useFocusEffect(
+    useCallback(() => {
+      getUserCategories();
+    }, []),
+  );
+
+  const [categories, setCategories] = useState<any>([
     {
       id: 'ae265f73-d52c-4bac-9924-6e54d5395b01',
       name: 'Movies & Cinema',
@@ -90,7 +130,7 @@ const InterestScreen: React.FC<any> = ({navigation}) => {
       name: 'Language Exchange',
       icon: icons.party,
     },
-  ];
+  ]);
 
   return (
     <SafeAreaView style={stylesApp.container}>
@@ -104,30 +144,41 @@ const InterestScreen: React.FC<any> = ({navigation}) => {
           <Text>Choose at least one category to find your connection</Text>
         </View>
         <View style={styles.categories}>
-          {categories.map(c => {
+          {categories.map((item: any, index: number) => {
             return (
               <Category
-                categoryId={c.id}
-                name={c.name}
-                icon={c.icon}
-                selectedTextColor={colors.white}
-                selectedBackgroundColor={colors.primary}
-                onSelect={(categoryId: string) =>
-                  onSelect(categoryId)
-                }></Category>
+                key={item.id}
+                categoryId={item.id}
+                name={item.name}
+                icon={item.icon}
+                selected={
+                  selectCategories.find((sc: string) => sc === item.id)
+                    ? true
+                    : false
+                }
+                disabled={
+                  selectCategories.length === 3 &&
+                  !selectCategories.find((sc: string) => sc === item.id)
+                }
+                onSelect={(categoryId: string) => {
+                  onSelect(categoryId);
+                }}></Category>
             );
           })}
         </View>
-
+        <View style={{alignSelf: 'center'}}>
+          <Text>{selectCategories.length} / 3</Text>
+        </View>
         <Touchable
           label={'Next'}
           color={colors.primary}
           fontColor={colors.white}
           style={[styles.button]}
           onPress={() => {
-            RootNavigation.navigate('Main', {
-              screen: 'InterestScreen',
-            });
+            onSubmit();
+            // RootNavigation.navigate('Main', {
+            //   screen: 'InterestScreen',
+            // });
           }}></Touchable>
       </View>
     </SafeAreaView>

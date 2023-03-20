@@ -107,7 +107,7 @@ const ProfileScreen: React.FC<any> = ({navigation}) => {
         </View>
         <View style={styles.bio}>
           <Text style={styles.bioText}>{user?.gender}</Text>
-          <Text style={styles.bioText}> {user?.bio}</Text>
+          <Text style={styles.bioText}>{user?.bio}</Text>
         </View>
       </View>
       <View style={{flex: 10}}>

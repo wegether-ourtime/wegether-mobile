@@ -7,9 +7,9 @@ interface UserCategoryState {
   userCategories: Category[];
   userCategory: Category | null;
   loading: boolean;
-  getUserCategories: (criteria: any) => void;
-  getUserCategory: (userCategoryId: string) => void;
-  createUserCategories: (createCategory: string) => void;
+  getUserCategories: (criteria: any) => any;
+  getUserCategory: (userCategoryId: string) => any;
+  updateUserCategories: (payload: string) => any;
 }
 
 export const useUserCategoryStore = create<UserCategoryState>(set => ({
@@ -17,27 +17,53 @@ export const useUserCategoryStore = create<UserCategoryState>(set => ({
   userCategory: null,
   loading: false,
   getUserCategories: async (criteria: any) => {
-    const {data} = await axios.get(`${BASE_URL}/user-category`, {...criteria});
-    const userCategories = data;
+    try {
+      set({loading: true});
+      const {data} = await axios.get(`${BASE_URL}/user-category`, {
+        params: {...criteria},
+      });
+      const userCategories = data;
 
-    set({userCategories});
+      set({userCategories});
+      return userCategories;
+    } catch (err) {
+      console.log(err);
+    } finally {
+      set({loading: false});
+    }
   },
   getUserCategory: async (userCategoryId: string) => {
-    const {data} = await axios.get(
-      `${BASE_URL}/user-category/${userCategoryId}`,
-    );
-    const userCategory = data;
+    try {
+      set({loading: true});
+      const {data} = await axios.get(
+        `${BASE_URL}/user-category/${userCategoryId}`,
+      );
+      const userCategory = data;
 
-    set({userCategory});
+      set({userCategory});
+      return userCategory;
+    } catch (err) {
+      console.log(err);
+    } finally {
+      set({loading: false});
+    }
   },
-  createUserCategories: async (createCategory: any) => {
-    const {data} = await axios.post(`${BASE_URL}/user-category`, {
-      ...createCategory,
-    });
-    const userCategory = data;
+  updateUserCategories: async (payload: any) => {
+    try {
+      set({loading: true});
+      const {data} = await axios.post(`${BASE_URL}/user-category`, {
+        ...payload,
+      });
+      const userCategory = data;
 
-    set({userCategory});
+      set({userCategory});
+      return userCategory;
+    } catch (err) {
+      console.log(err);
+    } finally {
+      set({loading: false});
+    }
   },
-  setCategory: (userCategory: any) => set({userCategory}),
-  //   setLoading: loading => set({loading}),
+  // setCategory: (userCategory: any) => set({userCategory}),
+  // setLoading: loading => set({loading}),
 }));

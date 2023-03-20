@@ -12,8 +12,9 @@ interface Props {
   icon?: any;
   textColor?: string;
   backgroundColor?: string;
-  selectedTextColor?: string;
-  selectedBackgroundColor?: string;
+  selected?: boolean;
+  // selectedTextColor?: string;
+  // selectedBackgroundColor?: string;
 }
 
 export const Category: React.FC<Props> = props => {
@@ -25,24 +26,25 @@ export const Category: React.FC<Props> = props => {
     icon,
     backgroundColor,
     textColor,
-    selectedTextColor,
-    selectedBackgroundColor,
+    selected
+    // selectedTextColor,
+    // selectedBackgroundColor,
   } = props;
-  const [selected, setSelected] = useState(false);
+  // let [selected, setSelected] = useState(props.selected);
 
   return (
     <TouchableOpacity
       disabled={disabled}
       onPress={() => {
+        // setSelected(!selected);
         onSelect(categoryId ?? '');
-        setSelected(!selected);
       }}>
       <View
         style={[
           styles.main,
           {
             backgroundColor: selected
-              ? selectedBackgroundColor
+              ? colors.primary
               : backgroundColor ?? colors.white,
           },
         ]}>
@@ -54,7 +56,7 @@ export const Category: React.FC<Props> = props => {
         <Text
           style={[
             styles.text,
-            {color: selected ? selectedTextColor : textColor ?? colors.primary},
+            {color: selected ? colors.white : textColor ?? colors.primary},
           ]}>
           {name}
         </Text>

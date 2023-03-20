@@ -19,17 +19,19 @@ import {color} from '@rneui/themed/dist/config';
 import {useAuthStore} from '../../stores/authStore';
 import * as RootNavigation from '../../navigations/RootNavigation';
 import {useState} from 'react';
+import {useUserFriendStore} from '../../stores/userFriendStore';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export const ProfileOption: React.FC<any> = props => {
   const [toggleOption, setToggleOption] = useState<boolean>(false);
-  const {style} = props;
+  const {style, isFriend, friendId} = props;
   const logout = async () => {
     useAuthStore.getState().logout();
     RootNavigation.navigate('Auth', {
       screen: 'HomeScreen',
     });
   };
-  const data = [
+  const myProfileOption = [
     {
       id: 1,
       name: 'Edit Interests',
@@ -58,6 +60,21 @@ export const ProfileOption: React.FC<any> = props => {
     },
   ];
 
+  const friendProfileOption = [
+    {
+      id: 1,
+      name: 'Add Friend',
+      icon: icons.peoples,
+      onSelect: async () => {
+        const userId = (await AsyncStorage.getItem('userId')) ?? '';
+        useUserFriendStore.getState().createUserFriend({
+          userId,
+          friendId,
+        });
+      },
+    },
+  ];
+
   return (
     <View style={[styles.main, style]}>
       <TouchableOpacity
@@ -69,7 +86,7 @@ export const ProfileOption: React.FC<any> = props => {
       {toggleOption && (
         <View style={styles.options}>
           <FlatList
-            data={data}
+            data={isFriend ? friendProfileOption : myProfileOption}
             keyExtractor={item => item.name}
             renderItem={({item, index}) => {
               return (

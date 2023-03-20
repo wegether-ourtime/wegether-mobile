@@ -14,5 +14,5 @@ export const decimalConvert = (string: string) =>
   String(parseFloat(string).toFixed(2));
 
 export const socket = io(BASE_URL, {
-  path: '/chat',
+  path: '/chat-gateway',
 });

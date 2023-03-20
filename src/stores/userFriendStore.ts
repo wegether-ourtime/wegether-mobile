@@ -9,9 +9,9 @@ interface UserFriendState {
   loading: boolean;
   getUserFriends: (criteria: any) => any;
   getUserFriend: (userFriendId: string) => any;
-  createUserFriend: (createFriend: string) => any;
-  updateUserFriend: (userFriendId: string) => any;
-  deleteUserFriend: (userFriendId: string) => any;
+  createUserFriend: (payload: any) => any;
+  updateUserFriend: (userFriendId: string, payload: any) => any;
+  deleteUserFriend: (userFriendId: any) => any;
 }
 
 export const useUserFriendStore = create<UserFriendState>(set => ({
@@ -19,34 +19,76 @@ export const useUserFriendStore = create<UserFriendState>(set => ({
   userFriend: null,
   loading: false,
   getUserFriends: async (criteria: any) => {
-    const {data} = await axios.get(`${BASE_URL}/user-friend`, {...criteria});
-    const userFriends = data;
+    try {
+      set({loading: true});
+      const {data} = await axios.get(`${BASE_URL}/user-friend`, {...criteria});
+      const userFriends = data;
 
-    set({userFriends});
+      set({userFriends});
+      return userFriends;
+    } catch (err) {
+      console.log(err);
+    } finally {
+      set({loading: false});
+    }
   },
   getUserFriend: async (userFriendId: string) => {
-    const {data} = await axios.get(`${BASE_URL}/user-friend/${userFriendId}`);
-    const userFriend = data;
+    try {
+      set({loading: true});
+      const {data} = await axios.get(`${BASE_URL}/user-friend/${userFriendId}`);
+      const userFriend = data;
 
-    set({userFriend});
+      set({userFriend});
+      return userFriend;
+    } catch (err) {
+      console.log(err);
+    } finally {
+      set({loading: false});
+    }
   },
-  createUserFriend: async (createFriend: any) => {
-    const {data} = await axios.post(`${BASE_URL}/user-friend`, {
-      ...createFriend,
-    });
-    const userFriend = data;
+  createUserFriend: async (payload: any) => {
+    try {
+      set({loading: true});
+      const {data} = await axios.post(`${BASE_URL}/user-friend`, {
+        ...payload,
+      });
+      const userFriend = data;
 
-    set({userFriend});
+      set({userFriend});
+      return userFriend;
+    } catch (err) {
+      console.log(err);
+    } finally {
+      set({loading: false});
+    }
   },
-  updateUserFriend: async (userFriendId: string) => {
-    const {data} = await axios.post(`${BASE_URL}/user-friend`, {});
-    const userFriend = data;
+  updateUserFriend: async (userFriendId: string, payload: any) => {
+    try {
+      set({loading: true});
+      const {data} = await axios.patch(
+        `${BASE_URL}/user-friend/${userFriendId}`,
+        {...payload},
+      );
+      const userFriend = data;
 
-    set({userFriend});
+      set({userFriend});
+      return userFriend;
+    } catch (err) {
+      console.log(err);
+    } finally {
+      set({loading: false});
+    }
   },
   deleteUserFriend: async (userFriendId: string) => {
-    await axios.delete(`${BASE_URL}/user-friend/${userFriendId}`);
-    set({});
+    try {
+      set({loading: true});
+      await axios.delete(`${BASE_URL}/user-friend/${userFriendId}`);
+      set({});
+    } catch (err) {
+      console.log(err);
+    } finally {
+      set({loading: false});
+    }
   },
   setFriend: (userFriend: any) => set({userFriend}),
   //   setLoading: loading => set({loading}),

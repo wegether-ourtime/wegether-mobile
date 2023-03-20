@@ -2,6 +2,7 @@ import {create} from 'zustand';
 import axios from 'axios';
 import {BASE_URL} from '../config';
 import Chat from '../models/Chat';
+import {socket} from '../common/function/utility';
 
 interface ChatState {
   chats: Chat[];
@@ -16,6 +17,11 @@ interface ChatState {
   createChat: (payload: any) => any;
   updateChat: (chatId: string, payload: any) => any;
   deleteChat: (chatId: string) => void;
+  socket: () => {
+    sendMessage: ({}) => void;
+    receiveMessage: ({}) => void;
+    disconnect: ({}) => void;
+  };
 }
 
 export const useChatStore = create<ChatState>(set => ({
@@ -104,4 +110,47 @@ export const useChatStore = create<ChatState>(set => ({
   },
   setChat: (chat: any) => set({chat}),
   //   setLoading: loading => set({loading}),
+
+  // socket
+  socket: () => {
+    const sendMessage = async ({
+      userId,
+      userFriendId,
+      eventId,
+      userFriend,
+      message,
+    }: any) => {
+      socket.emit(`send-message`, {
+        senderId: userId,
+        ...(userFriendId
+          ? {userFriendId, receiverId: userFriend?.friendId}
+          : {}),
+        ...(eventId ? {eventId} : {}),
+        text: message,
+      });
+    };
+
+    const receiveMessage = async ({userFriendId, eventId}: any) => {
+      if (userFriendId) {
+        socket.on(`receive-direct-message-${userFriendId}`, chat => {
+          console.log(chat);
+        });
+      } else if (eventId) {
+        socket.on(`receive-event-message-${eventId}`, chat => {
+          console.log(chat);
+        });
+      }
+    };
+
+    const disconnect = async ({userFriendId, eventId}: any) => {
+      socket.removeListener(`receive-direct-message-${userFriendId}`);
+      socket.removeListener(`receive-event-message-${eventId}`);
+    };
+
+    return {
+      sendMessage,
+      receiveMessage,
+      disconnect,
+    };
+  },
 }));

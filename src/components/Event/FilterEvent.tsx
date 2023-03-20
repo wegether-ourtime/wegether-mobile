@@ -79,7 +79,6 @@ export const FilterEventSheet = (props: SheetProps) => {
   ];
 
   const onSelect = (categoryId: string) => {
-    console.log(criteria);
     if (!criteria?.categoriesId) {
       useEventStore.getState().setCriteria({
         ...criteria,
@@ -122,15 +121,22 @@ export const FilterEventSheet = (props: SheetProps) => {
       <View style={styles.container}>
         <Text style={styles.header}>Filters</Text>
         <View style={styles.categories}>
-          {categories.map(c => {
+          {categories.map(item => {
             return (
               <Category
-                key={c.id}
-                categoryId={c.id}
-                name={c.name}
-                icon={c.icon}
-                selectedTextColor={colors.white}
-                selectedBackgroundColor={colors.primary}
+                key={item.id}
+                categoryId={item.id}
+                name={item.name}
+                icon={item.icon}
+                selected={
+                  criteria?.categoriesId.find((sc: string) => sc === item.id)
+                    ? true
+                    : false
+                }
+                // disabled={
+                //   criteria?.categoriesId.length === 3 &&
+                //   !criteria?.categoriesId.find((sc: string) => sc === item.id)
+                // }
                 onSelect={(categoryId: string) =>
                   onSelect(categoryId)
                 }></Category>

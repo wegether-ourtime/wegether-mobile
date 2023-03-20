@@ -31,10 +31,6 @@ const DirectMessageScreen: React.FC<any> = ({navigation}) => {
         data={userFriendChats}
         keyExtractor={item => item.name}
         renderItem={({item}) => {
-          const userProfileImg = item?.files?.find(
-            (f: any) => f.resource === FileResource.USER_PROFILE,
-          );
-
           return (
             <TouchableOpacity
               style={styles.chatContainer}
@@ -50,12 +46,14 @@ const DirectMessageScreen: React.FC<any> = ({navigation}) => {
                 size={normalize(56)}
                 rounded
                 source={
-                  userProfileImg ? {uri: userProfileImg.path} : images.cover
+                  item?.friend?.imgProfileUrl
+                    ? {uri: item?.friend?.imgProfileUrl}
+                    : images.cover
                 }
               />
               {/* <Image source={item.icon} style={{marginTop: normalize(2)}}></Image> */}
               <View style={styles.chatDetail}>
-                <Text style={styles.chatName}>{item.eventName}</Text>
+                <Text style={styles.chatName}>{item?.friend?.fullName}</Text>
               </View>
             </TouchableOpacity>
           );

@@ -104,13 +104,19 @@ const FriendProfileScreen: React.FC<any> = ({navigation, route}) => {
         </View>
         <View style={styles.bio}>
           <Text style={styles.bioText}>{user?.gender}</Text>
-          <Text style={styles.bioText}> {user?.bio}</Text>
+          <Text style={styles.bioText}>{user?.bio}</Text>
         </View>
       </View>
       <View style={{flex: 10}}>
         <MyEventNavigator />
       </View>
-      {/* <ProfileOption style={[styles.option]}></ProfileOption> */}
+      {/* <TouchableOpacity containerStyle={styles.option}>
+        <Text>Add Friend</Text>
+      </TouchableOpacity> */}
+      <ProfileOption
+        isFriend
+        friendId={userId}
+        style={[styles.option]}></ProfileOption>
       <Spinner
         visible={loading}
         textContent={'Loading...'}
