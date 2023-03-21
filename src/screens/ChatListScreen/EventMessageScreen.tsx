@@ -18,6 +18,7 @@ const EventMessageScreen: React.FC<any> = ({navigation}) => {
   const getUserFriendChats = async () => {
     const userId = await AsyncStorage.getItem('userId');
     await useChatStore.getState().getEventList(userId ?? '');
+    console.log(eventChats[0])
   };
 
   useEffect(() => {

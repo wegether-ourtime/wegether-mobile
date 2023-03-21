@@ -6,13 +6,13 @@ import {colors, font, icons} from '../../common/assets';
 import {height, normalize} from '../../common/function/normalize';
 import {stylesApp} from '../../common/styles/AppStyle';
 import CustomHeader from '../../components/Text/CustomHeader';
-import {useEventStore} from '../../stores/eventStore';
 import {useLocationStore} from '../../stores/locationStore';
+import {useUserStore} from '../../stores/userStore';
 
-const LocationScreen: React.FC<any> = ({navigation}) => {
+const LivingPlaceScreen: React.FC<any> = ({navigation}) => {
   const locations = useLocationStore(state => state.locations);
   const criteria = useLocationStore(state => state.criteria);
-  const form = useEventStore(state => state.form);
+  const form = useUserStore(state => state.userProfileForm);
   const setCriteria = (criteria: any) =>
     useLocationStore.getState().setCriteria(criteria);
 
@@ -24,8 +24,10 @@ const LocationScreen: React.FC<any> = ({navigation}) => {
   };
 
   const onSelect = async (location: any) => {
-    const form = useEventStore.getState().form;
-    await useEventStore.getState().setForm({...form, location});
+    const form = useUserStore.getState().userProfileForm;
+    await useUserStore
+      .getState()
+      .setUserProfileForm({...form, livingPlace: location});
     await navigation.goBack();
   };
 
@@ -36,7 +38,7 @@ const LocationScreen: React.FC<any> = ({navigation}) => {
   return (
     <SafeAreaView style={[stylesApp.container]}>
       <CustomHeader
-        title="Location"
+        title="Living Place"
         showBackBtn
         onPressBack={() => navigation.goBack()}
       />
@@ -44,7 +46,7 @@ const LocationScreen: React.FC<any> = ({navigation}) => {
         <View style={styles.search}>
           <TextInput
             style={styles.input}
-            placeholder={'Where are you going?'}
+            placeholder={'Where are you living?'}
             editable={true}
             onChangeText={value => onChangeText('search', value)}></TextInput>
           <TouchableOpacity
@@ -76,11 +78,26 @@ const LocationScreen: React.FC<any> = ({navigation}) => {
             </TouchableOpacity>
           )}
         />
+        {/* <ScrollView
+          style={{flex: 1}}
+          contentContainerStyle={{
+            paddingBottom: normalize(130),
+          }}>
+          <FlatList
+            data={locations}
+            keyExtractor={item => item.name}
+            renderItem={({item}) => (
+              <View>
+                <Text>{item.name}</Text>
+              </View>
+            )}
+          />
+        </ScrollView> */}
       </View>
     </SafeAreaView>
   );
 };
-export default LocationScreen;
+export default LivingPlaceScreen;
 
 const styles = StyleSheet.create({
   main: {
@@ -101,7 +118,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    
   },
   option: {
     marginVertical: normalize(8),

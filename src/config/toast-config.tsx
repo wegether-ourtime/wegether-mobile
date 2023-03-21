@@ -133,7 +133,7 @@ const styles = StyleSheet.create({
   },
   info: {
     fontSize: normalize(16),
-    fontFamily: fonts.medium,
+    fontFamily: fonts.bold,
     color: colors.white,
   },
   infolight: {

@@ -19,22 +19,40 @@ export const useCategoryStore = create<EventCategoryState>(set => ({
   eventCategory: null,
   loading: false,
   getEventCategories: async (criteria: any) => {
-    const {data} = await axios.get(`${BASE_URL}/event-category`, {...criteria});
-    const eventCategories = data;
+    try {
+      set({loading: true});
+      const {data} = await axios.get(`${BASE_URL}/event-category`, {
+        ...criteria,
+      });
+      const eventCategories = data;
 
-    set({eventCategories});
+      set({eventCategories});
+      return eventCategories;
+    } catch (err) {
+      console.log(err);
+    } finally {
+      set({loading: false});
+    }
   },
   getEventCategory: async (eventCategoryId: string) => {
-    const {data} = await axios.get(
-      `${BASE_URL}/event-category/${eventCategoryId}`,
-    );
-    const eventCategory = data;
+    try {
+      set({loading: true});
+      const {data} = await axios.get(
+        `${BASE_URL}/event-category/${eventCategoryId}`,
+      );
+      const eventCategory = data;
 
-    set({eventCategory});
+      set({eventCategory});
+      return eventCategory;
+    } catch (err) {
+      console.log(err);
+    } finally {
+      set({loading: false});
+    }
   },
-  createEventCategory: async (createCategory: any) => {
+  createEventCategory: async (payload: any) => {
     const {data} = await axios.post(`${BASE_URL}/event-category`, {
-      ...createCategory,
+      ...payload,
     });
     const eventCategory = data;
 

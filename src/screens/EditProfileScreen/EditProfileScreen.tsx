@@ -2,7 +2,7 @@ import {useEffect, useState} from 'react';
 import {StyleSheet, Text, TextInput, View, Image} from 'react-native';
 import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {colors, icons} from '../../common/assets';
+import {colors, font, icons} from '../../common/assets';
 import {height, normalize} from '../../common/function/normalize';
 import {stylesApp} from '../../common/styles/AppStyle';
 import CustomHeader from '../../components/Text/CustomHeader';
@@ -12,10 +12,16 @@ import {launchImageLibrary} from 'react-native-image-picker';
 import {useUserStore} from '../../stores/userStore';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {Touchable} from '../../components/Button/Touchable';
+import {Picker} from '@react-native-picker/picker';
+import {PickerInput} from '../../components/Input/Picker';
+import DropDownPicker from 'react-native-dropdown-picker';
 
 const EditProfileScreen: React.FC<any> = ({navigation}) => {
   const form = useUserStore(state => state.userProfileForm);
   const user = useAuthStore(state => state.user);
+  const [open, setOpen] = useState(false);
+  const [value, setValue] = useState(null);
+  const [items, setItems] = useState([]);
 
   const onSubmit = async () => {
     const userId = await AsyncStorage.getItem('userId');
@@ -65,6 +71,61 @@ const EditProfileScreen: React.FC<any> = ({navigation}) => {
             // placeholderTextColor={colors.disable}
             onChangeText={value => onChangeText('fullName', value)}
           />
+          {/* <DropDownPicker
+            listMode="SCROLLVIEW"
+            scrollViewProps={{
+              nestedScrollEnabled: true,
+            }}
+            zIndex={3000}
+            zIndexInverse={1000}
+            style={{
+              width: normalize(312),
+              backgroundColor: colors.background,
+              ...styles.input,
+            }}
+            textStyle={{
+              paddingLeft: normalize(8),
+              color: colors.disable,
+              // fontFamily: font.bold,
+              fontSize: normalize(14),
+            }}
+            open={open}
+            value={value}
+            items={items}
+            // items={["Male", "Female"]}
+            setOpen={setOpen}
+            // onSelectItem={value => {
+            //   setBrand(value);
+            // }}
+            setValue={setValue}
+            dropDownDirection="BOTTOM"
+            dropDownContainerStyle={[
+              styles.input,
+              ,
+              {
+                width: normalize(312),
+                borderColor: colors.disable,
+              },
+            ]}
+          /> */}
+          <TouchableOpacity
+            style={styles.input}
+            // disabled={view}
+            onPress={() => {
+              RootNavigation.navigate('Main', {
+                screen: 'LivingPlaceScreen',
+              });
+            }}>
+            {form?.livingPlace ? (
+              <Text style={{color: colors.fontBlack}}>
+                {form.livingPlace.name}
+              </Text>
+            ) : (
+              <Text style={{color: colors.grayPlaceholder}}>
+                Where are you living?
+              </Text>
+            )}
+          </TouchableOpacity>
           <TextInput
             value={form?.bio}
             style={[

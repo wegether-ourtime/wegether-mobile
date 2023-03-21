@@ -64,8 +64,6 @@ export const useUserStore = create<UserState>(set => ({
       set({loading: true});
       const {data} = await axios.patch(`${BASE_URL}/user/${userId}`, payload);
       const user = data;
-      console.log('p: ', payload);
-      console.log('u: ', user);
 
       set({user});
       return user;

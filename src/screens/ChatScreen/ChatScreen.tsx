@@ -77,8 +77,10 @@ const ChatScreen: React.FC<any> = ({navigation, route}) => {
         onPressBack={() => navigation.goBack()}
       />
       <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        style={{height: '100%'}}>
+        behavior="height"
+        style={{height: '100%', backgroundColor: 'red'}}
+        enabled
+        keyboardVerticalOffset={100}>
         <View style={[styles.container]}>
           <FlatList
             // inverted
@@ -125,64 +127,27 @@ const ChatScreen: React.FC<any> = ({navigation, route}) => {
             }}
           />
         </View>
-        <View style={styles.inputTools}>
-          <TextInput
-            style={styles.textInput}
-            // underlineColorAndroid="transparent"
-            autoCapitalize="none"
-            placeholder="type"
-            onChangeText={text => onChangeMessage(text)}
-            value={message}
-          />
-          <TouchableOpacity
-            onPress={() => {
-              onSend({message, img: imgMessage});
-            }}>
-            <Text>Send</Text>
-          </TouchableOpacity>
-        </View>
-        {/* <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          <View style={styles.inner}>
-            <Text style={styles.header}>Header</Text>
-            <TextInput placeholder="Username" style={styles.textInput} />
-            <View style={styles.btnContainer}>
-              <Button title="Submit" onPress={() => null} />
-            </View>
+        <View style={styles.bottom}>
+          <View style={styles.inputTools}>
+            <TextInput
+              style={styles.textInput}
+              // underlineColorAndroid="transparent"
+              autoCapitalize="none"
+              placeholder="type"
+              onChangeText={text => onChangeMessage(text)}
+              value={message}
+            />
+            <TouchableOpacity
+              containerStyle={styles.sendButton}
+              onPress={() => {
+                onSend({message, img: imgMessage});
+              }}>
+              <Text>Send</Text>
+            </TouchableOpacity>
           </View>
-        </TouchableWithoutFeedback> */}
+        </View>
       </KeyboardAvoidingView>
-
-      {/* <GiftedChat
-        alignTop={false}
-        wrapInSafeArea={false}
-        listViewProps={{
-          contentContainerStyle: styles.chatContainer,
-
-        }}
-        // quickReplyTextStyle={{backgroundColor: 'bue'}}
-        // bottomOffset={Platform.OS === 'ios' ? 10 : 0}
-        messagesContainerStyle={{}}
-        bottomOffset={33}
-        // renderInputToolbar={}
-        onInputTextChanged={value => {
-          console.log(value);
-        }}
-        scrollToBottom
-        keyboardShouldPersistTaps='never'
-        // isTyping={typing}
-        renderInputToolbar={props => customtInputToolbar(props)}
-        messages={messages}
-        onSend={messages => onSend(messages)}
-        user={{
-          _id: 'c',
-          name: 'CCC',
-        }}
-      /> */}
     </SafeAreaView>
-    // <Channel channel={userFriendId ?? eventId}>
-    //   <MessageList />
-    //   <MessageInput />
-    // </Channel>
   );
 };
 
@@ -193,7 +158,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#D6DDFF',
   },
   container: {
-    height: '90%',
+    height: '85%',
     backgroundColor: '#D6DDFF',
   },
   img: {
@@ -223,17 +188,26 @@ const styles = StyleSheet.create({
     fontFamily: fonts.medium,
     fontSize: normalize(12),
   },
+  bottom: {},
   inputTools: {
-    height: '10%',
+    height: normalize(80),
     backgroundColor: colors.white,
     flexDirection: 'row',
   },
   textInput: {
-    height: normalize(32),
+    height: normalize(40),
     width: normalize(256),
+    paddingHorizontal: normalize(8),
     marginHorizontal: normalize(16),
     backgroundColor: colors.white,
     fontFamily: fonts.medium,
     fontSize: normalize(16),
+    borderRadius: normalize(8),
+  },
+  sendButton: {
+    height: normalize(20),
+    marginHorizontal: normalize(8),
+    backgroundColor: 'red',
+    justifyContent: 'center',
   },
 });

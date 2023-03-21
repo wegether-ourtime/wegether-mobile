@@ -15,6 +15,7 @@ import ChatListScreen from '../screens/ChatListScreen/ChatListScreen';
 import LocationScreen from '../screens/LocationScreen/LocationScreen';
 import FriendProfileScreen from '../screens/ProfileScreen/FriendProfileScreen';
 import EditProfileScreen from '../screens/EditProfileScreen/EditProfileScreen';
+import LivingPlaceScreen from '../screens/LocationScreen/LivingPlaceScreen';
 
 export type StackParamList = {
   // DeleteProfileScreen: {
@@ -32,6 +33,7 @@ export type StackParamList = {
   ChatListScreen: any;
   ChatScreen: any;
   LocationScreen: any;
+  LivingPlaceScreen: any;
 };
 export type StackNativeScreenProps<T extends keyof StackParamList> =
   NativeStackScreenProps<StackParamList, T>;
@@ -60,6 +62,7 @@ const MainNavigator: React.FC = () => {
         component={FriendProfileScreen}
       />
       <Stack.Screen name="LocationScreen" component={LocationScreen} />
+      <Stack.Screen name="LivingPlaceScreen" component={LivingPlaceScreen} />
     </Stack.Navigator>
   );
 };

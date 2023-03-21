@@ -59,9 +59,12 @@ const InterestScreen: React.FC<any> = ({navigation}) => {
 
   const onSubmit = async () => {
     const userId = await AsyncStorage.getItem('userId');
-    console.log(selectCategories)
     await updateUserCategories({userId, categoriesId: selectCategories});
-    // await getUserCategories();
+    Toast.show({
+      type: 'success',
+      text1: 'Success',
+      text2: 'Update intesrests success.',
+    });
   };
 
   useEffect(() => {
@@ -170,15 +173,12 @@ const InterestScreen: React.FC<any> = ({navigation}) => {
           <Text>{selectCategories.length} / 3</Text>
         </View>
         <Touchable
-          label={'Next'}
+          label={'Save'}
           color={colors.primary}
           fontColor={colors.white}
           style={[styles.button]}
           onPress={() => {
             onSubmit();
-            // RootNavigation.navigate('Main', {
-            //   screen: 'InterestScreen',
-            // });
           }}></Touchable>
       </View>
     </SafeAreaView>
