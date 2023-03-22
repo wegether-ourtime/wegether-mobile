@@ -22,7 +22,9 @@ export default {
   logout: require('./logout.png'),
   changeImage: require('./change-image.png'),
 
-  img: require('./chat/img.png'),
-  location: require('./chat/location.png'),
-  peoples: require('./chat/peoples.png'),
+  img: require('./img.png'),
+  location: require('./location.png'),
+  peoples: require('./peoples.png'),
+  time: require('./time.png'),
+  calendar: require('./calendar.png'),
 };

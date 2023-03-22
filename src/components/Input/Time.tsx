@@ -14,7 +14,7 @@ import {Touchable} from '../Button/Touchable';
 import {useEventStore} from '../../stores/eventStore';
 
 export const TimeInput: React.FC<any> = props => {
-  const {disabled} = props;
+  const {disabled, style} = props;
   const form = useEventStore(state => state.form);
   const onPress = () => {
     SheetManager.show('TimeInputSheet');
@@ -24,7 +24,7 @@ export const TimeInput: React.FC<any> = props => {
     <View>
       <TouchableOpacity
         disabled={disabled}
-        style={styles.input}
+        style={style}
         onPress={onPress}>
         {form?.startDate ? (
           <Text>
@@ -122,16 +122,16 @@ const styles = StyleSheet.create({
     paddingHorizontal: normalize(16),
     paddingVertical: normalize(15),
   },
-  input: {
-    height: normalize(50),
-    marginVertical: normalize(10),
-    margin: normalize(30),
-    paddingLeft: normalize(15),
-    borderColor: colors.disable,
-    borderWidth: 0.5,
-    borderRadius: normalize(8),
-    justifyContent: 'center',
-  },
+  // input: {
+  //   height: normalize(50),
+  //   marginVertical: normalize(10),
+  //   margin: normalize(30),
+  //   paddingLeft: normalize(15),
+  //   borderColor: colors.disable,
+  //   borderWidth: 0.5,
+  //   borderRadius: normalize(8),
+  //   justifyContent: 'center',
+  // },
   button: {
     padding: normalize(10),
   },

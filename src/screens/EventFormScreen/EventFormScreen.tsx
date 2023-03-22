@@ -130,6 +130,7 @@ const CreateEventScreen: React.FC<any> = ({navigation, route}) => {
             style={[
               styles.input,
               {
+                marginHorizontal: normalize(24),
                 padding: normalize(0),
                 height: normalize(200),
                 alignItems: 'center',
@@ -172,18 +173,24 @@ const CreateEventScreen: React.FC<any> = ({navigation, route}) => {
               </TouchableOpacity>
             )}
           </View>
-          <TextInput
-            value={form?.eventName}
-            style={styles.input}
-            editable={true}
-            placeholder={'Event Name'}
-            // placeholderTextColor={colors.disable}
-            onChangeText={value => onChangeText('eventName', value)}
-          />
+          <View style={styles.inputConatiner}>
+            <View style={styles.inputName}>
+              <Text style={{marginHorizontal: normalize(4)}}>Name</Text>
+            </View>
+            <TextInput
+              value={form?.eventName}
+              style={styles.input}
+              editable={true}
+              placeholder={'Event Name'}
+              // placeholderTextColor={colors.disable}
+              onChangeText={value => onChangeText('eventName', value)}
+            />
+          </View>
           <View
             style={{
-              marginLeft: normalize(30),
-              marginVertical: normalize(10),
+              ...styles.inputConatiner,
+              // marginHorizontal: normalize(24),
+              // marginVertical: normalize(8),
               flexDirection: 'row',
               alignItems: 'center',
             }}>
@@ -196,43 +203,82 @@ const CreateEventScreen: React.FC<any> = ({navigation, route}) => {
               ></Couter>
             </View>
           </View>
-          <CalendarInput
-          // disabled={view}
-          ></CalendarInput>
-          <TimeInput
-          // disabled={view}
-          ></TimeInput>
-          <TouchableOpacity
-            style={styles.input}
-            // disabled={view}
-            onPress={() => {
-              RootNavigation.navigate('Main', {
-                screen: 'LocationScreen',
-              });
-            }}>
-            {form?.location ? (
-              <Text style={{color: colors.fontBlack}}>
-                {form.location.name}
-              </Text>
-            ) : (
-              <Text style={{color: colors.grayPlaceholder}}>Location</Text>
-            )}
-          </TouchableOpacity>
-          <TextInput
-            value={form?.eventDetail}
-            style={[
-              styles.input,
-              {
-                minHeight: normalize(100),
-                paddingTop: normalize(15),
-                textAlignVertical: 'top',
-              },
-            ]}
-            // editable={!view ?? true}
-            placeholder={'รายละเอียดเพิ่มเติม'}
-            multiline
-            onChangeText={value => onChangeText('eventDetail', value)}
-          />
+          <View style={styles.inputConatiner}>
+            <View style={styles.inputName}>
+              <Image
+                source={icons.calendar}
+                style={{marginHorizontal: normalize(4)}}
+              />
+              <Text style={{marginHorizontal: normalize(4)}}>Days</Text>
+            </View>
+            <CalendarInput
+              style={styles.input}
+              // disabled={view}
+            ></CalendarInput>
+          </View>
+          <View style={styles.inputConatiner}>
+            <View style={styles.inputName}>
+              <Image
+                source={icons.time}
+                style={{marginHorizontal: normalize(4)}}
+              />
+              <Text style={{marginHorizontal: normalize(4)}}>Times</Text>
+            </View>
+            <TimeInput
+              style={styles.input}
+              // disabled={view}
+            ></TimeInput>
+          </View>
+          <View style={styles.inputConatiner}>
+            <View style={styles.inputName}>
+              <Image
+                source={icons.location}
+                style={{marginHorizontal: normalize(4)}}
+              />
+              <Text style={{marginHorizontal: normalize(4)}}>Location</Text>
+            </View>
+            <TouchableOpacity
+              style={styles.input}
+              // disabled={view}
+              onPress={() => {
+                RootNavigation.navigate('Main', {
+                  screen: 'LocationScreen',
+                });
+              }}>
+              {form?.location ? (
+                <Text style={{color: colors.fontBlack}}>
+                  {form.location.name}
+                </Text>
+              ) : (
+                <Text style={{color: colors.grayPlaceholder}}>Location</Text>
+              )}
+            </TouchableOpacity>
+          </View>
+          <View style={styles.inputConatiner}>
+            <View style={styles.inputName}>
+              {/* <Image
+                source={icons.calendar}
+                style={{marginHorizontal: normalize(4)}}
+              /> */}
+              <Text style={{marginHorizontal: normalize(4)}}>Detail</Text>
+            </View>
+            <TextInput
+              value={form?.eventDetail}
+              style={[
+                styles.input,
+                {
+                  height: normalize(72),
+                  paddingTop: normalize(15),
+                  textAlignVertical: 'top',
+                },
+              ]}
+              // editable={!view ?? true}
+              placeholder={'รายละเอียดเพิ่มเติม'}
+              multiline
+              maxLength={133}
+              onChangeText={value => onChangeText('eventDetail', value)}
+            />
+          </View>
           <Touchable
             label={'Post'}
             // disable={!validateField}
@@ -240,7 +286,7 @@ const CreateEventScreen: React.FC<any> = ({navigation, route}) => {
             disable={false}
             color={colors.primary}
             fontColor={colors.white}
-            style={[styles.button, {marginTop: normalize(30)}]}
+            style={[styles.button, {marginVertical: normalize(30)}]}
             onPress={() => onSubmit()}></Touchable>
         </ScrollView>
       </View>
@@ -256,23 +302,33 @@ export default CreateEventScreen;
 
 const styles = StyleSheet.create({
   main: {
-    // flex: 0,
-    // flexDirection: 'column',
-    height: '100%',
+    flexDirection: 'row',
+    alignSelf: 'flex-start'
   },
   button: {
-    margin: normalize(20),
-    marginBottom: normalize(0),
+    margin: normalize(24),
+    // marginBottom: normalize(0),
     padding: normalize(10),
   },
   input: {
-    height: normalize(50),
-    marginVertical: normalize(10),
-    margin: normalize(30),
+    height: normalize(48),
+    // marginVertical: normalize(10),
+    // margin: normalize(30),
     padding: normalize(15),
     borderColor: colors.disable,
     borderWidth: 0.5,
     borderRadius: normalize(8),
     color: colors.fontBlack,
+
+  },
+  inputConatiner: {
+    // height: normalize(50),
+    marginVertical: normalize(4),
+    marginHorizontal: normalize(24),
+    // padding: normalize(15),
+  },
+  inputName: {
+    flexDirection: 'row',
+    marginVertical: normalize(12),
   },
 });

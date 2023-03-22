@@ -55,11 +55,7 @@ const EventDetailScreen: React.FC<any> = ({navigation, route}) => {
   };
 
   const onPressCancel = () => {
-    SheetManager.show('CancleEventSheet');
-    // useUserEventStore.getState().deleteUserEvent({
-    //   eventId,
-    //   userId: user?.userId,
-    // });
+    SheetManager.show('CancelEventSheet');
   };
 
   const getEvent = async () => {

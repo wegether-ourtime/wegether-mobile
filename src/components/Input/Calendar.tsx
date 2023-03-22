@@ -14,7 +14,7 @@ import {Touchable} from '../Button/Touchable';
 import {useEventStore} from '../../stores/eventStore';
 
 export const CalendarInput: React.FC<any> = props => {
-  const {disabled} = props;
+  const {disabled, style} = props;
   const form = useEventStore(state => state.form);
   const onPress = () => {
     SheetManager.show('CalendarInputSheet');
@@ -24,7 +24,7 @@ export const CalendarInput: React.FC<any> = props => {
     <View>
       <TouchableOpacity
         disabled={disabled}
-        style={styles.input}
+        style={style}
         onPress={onPress}>
         {form?.startDate ? (
           <Text>
@@ -122,16 +122,16 @@ const styles = StyleSheet.create({
     fontFamily: font.medium,
     fontSize: normalize(20),
   },
-  input: {
-    height: normalize(50),
-    marginVertical: normalize(10),
-    margin: normalize(30),
-    paddingLeft: normalize(15),
-    borderColor: colors.disable,
-    borderWidth: 0.5,
-    borderRadius: normalize(8),
-    justifyContent: 'center',
-  },
+  // input: {
+  //   height: normalize(50),
+  //   marginVertical: normalize(10),
+  //   margin: normalize(30),
+  //   paddingLeft: normalize(15),
+  //   borderColor: colors.disable,
+  //   borderWidth: 0.5,
+  //   borderRadius: normalize(8),
+  //   justifyContent: 'center',
+  // },
   selectedDateContainerStyle: {
     height: normalize(30),
     width: normalize(30),
