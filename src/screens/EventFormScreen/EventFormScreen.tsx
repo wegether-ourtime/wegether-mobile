@@ -286,7 +286,7 @@ const CreateEventScreen: React.FC<any> = ({navigation, route}) => {
             disable={false}
             color={colors.primary}
             fontColor={colors.white}
-            style={[styles.button, {marginVertical: normalize(30)}]}
+            style={[styles.button]}
             onPress={() => onSubmit()}></Touchable>
         </ScrollView>
       </View>
@@ -312,8 +312,6 @@ const styles = StyleSheet.create({
   },
   input: {
     height: normalize(48),
-    // marginVertical: normalize(10),
-    // margin: normalize(30),
     padding: normalize(15),
     borderColor: colors.disable,
     borderWidth: 0.5,
@@ -322,10 +320,8 @@ const styles = StyleSheet.create({
 
   },
   inputConatiner: {
-    // height: normalize(50),
     marginVertical: normalize(4),
     marginHorizontal: normalize(24),
-    // padding: normalize(15),
   },
   inputName: {
     flexDirection: 'row',

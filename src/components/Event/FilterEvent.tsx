@@ -11,6 +11,9 @@ import {Category} from '../Category/Category';
 import {Toast} from 'react-native-toast-message/lib/src/Toast';
 import {useEventStore} from '../../stores/eventStore';
 import {Touchable} from '../Button/Touchable';
+import * as RootNavigation from '../../navigations/RootNavigation';
+import {CalendarInput} from '../Input/Calendar';
+import TimeInput from '../Input/Time';
 
 export const FilterEventSheet = (props: SheetProps) => {
   const criteria = useEventStore(state => state.criteria);
@@ -113,13 +116,16 @@ export const FilterEventSheet = (props: SheetProps) => {
   return (
     <ActionSheet
       containerStyle={{
-        height: normalize(600),
+        height: normalize(630),
       }}
+      // snapPoints={[50]}
       id={props.sheetId}
       useBottomSafeAreaPadding
       gestureEnabled={true}>
       <View style={styles.container}>
-        <Text style={styles.header}>Filters</Text>
+        <View style={styles.title}>
+          <Text style={styles.header}>Filters</Text>
+        </View>
         <View style={styles.categories}>
           {categories.map(item => {
             return (
@@ -143,13 +149,64 @@ export const FilterEventSheet = (props: SheetProps) => {
             );
           })}
         </View>
+        <View style={styles.inputConatiner}>
+          <View style={styles.inputName}>
+            <Image
+              source={icons.calendar}
+              style={{marginHorizontal: normalize(4)}}
+            />
+            <Text style={{marginHorizontal: normalize(4)}}>Days</Text>
+          </View>
+          <CalendarInput
+            style={styles.input}
+            // disabled={view}
+          ></CalendarInput>
+        </View>
+        <View style={styles.inputConatiner}>
+          <View style={styles.inputName}>
+            <Image
+              source={icons.time}
+              style={{marginHorizontal: normalize(4)}}
+            />
+            <Text style={{marginHorizontal: normalize(4)}}>Times</Text>
+          </View>
+          <TimeInput
+            style={styles.input}
+            // disabled={view}
+          ></TimeInput>
+        </View>
+        {/* <View style={styles.inputConatiner}>
+          <View style={styles.inputName}>
+            <Image
+              source={icons.location}
+              style={{marginHorizontal: normalize(4)}}
+            />
+            <Text style={{marginHorizontal: normalize(4)}}>Location</Text>
+          </View>
+          <TouchableOpacity
+            style={styles.input}
+            // disabled={view}
+            onPress={() => {
+              RootNavigation.navigate('Main', {
+                screen: 'LocationScreen',
+              });
+            }}>
+            {criteria?.location ? (
+              <Text style={{color: colors.fontBlack}}>
+                {criteria.location.name}
+              </Text>
+            ) : (
+              <Text style={{color: colors.grayPlaceholder}}>Location</Text>
+            )}
+          </TouchableOpacity>
+        </View> */}
         <Touchable
           label={'Save'}
           // disable={validateField}
           // color={!validateField ? colors.disable : colors.primary}
           color={colors.primary}
           fontColor={colors.white}
-          style={[styles.button, {marginTop: normalize(30)}]}
+          style={[styles.button]}
           onPress={() => onSubmit()}></Touchable>
       </View>
     </ActionSheet>
@@ -158,16 +215,19 @@ export const FilterEventSheet = (props: SheetProps) => {
 
 const styles = StyleSheet.create({
   container: {
-    paddingHorizontal: normalize(16),
-    paddingVertical: normalize(15),
+    paddingHorizontal: normalize(8),
+    paddingVertical: normalize(8),
+  },
+  title: {
+    marginHorizontal: normalize(16),
+    marginVertical: normalize(4),
   },
   header: {
     fontFamily: font.medium,
     fontSize: normalize(20),
   },
   categories: {
-    marginVertical: normalize(20),
-    margin: normalize(10),
+    margin: normalize(8),
     flexWrap: 'wrap',
     flexDirection: 'row',
   },
@@ -175,5 +235,25 @@ const styles = StyleSheet.create({
     margin: normalize(20),
     marginBottom: normalize(0),
     padding: normalize(10),
+  },
+  input: {
+    height: normalize(48),
+    // marginVertical: normalize(10),
+    // margin: normalize(30),
+    padding: normalize(15),
+    borderColor: colors.disable,
+    borderWidth: 0.5,
+    borderRadius: normalize(8),
+    color: colors.fontBlack,
+  },
+  inputConatiner: {
+    // height: normalize(50),
+    marginVertical: normalize(0),
+    marginHorizontal: normalize(24),
+    // padding: normalize(15),
+  },
+  inputName: {
+    flexDirection: 'row',
+    marginVertical: normalize(12),
   },
 });

@@ -14,7 +14,7 @@ import {Touchable} from '../Button/Touchable';
 import {useEventStore} from '../../stores/eventStore';
 
 export const CalendarInput: React.FC<any> = props => {
-  const {disabled, style} = props;
+  const {disabled, style, onChange} = props;
   const form = useEventStore(state => state.form);
   const onPress = () => {
     SheetManager.show('CalendarInputSheet');
@@ -22,10 +22,7 @@ export const CalendarInput: React.FC<any> = props => {
 
   return (
     <View>
-      <TouchableOpacity
-        disabled={disabled}
-        style={style}
-        onPress={onPress}>
+      <TouchableOpacity disabled={disabled} style={style} onPress={onPress}>
         {form?.startDate ? (
           <Text>
             {`${new Date(form?.startDate).toLocaleDateString('th-TH', {
@@ -85,7 +82,9 @@ export const CalendarSheet = (
       useBottomSafeAreaPadding
       gestureEnabled={true}>
       <View style={styles.container}>
-        <Text style={styles.header}>Choose Date</Text>
+        <View style={styles.title}>
+          <Text style={styles.header}>Choose Date</Text>
+        </View>
         <View style={{marginVertical: normalize(10)}}>
           <DateRangePicker
             onSelectDateRange={range => {
@@ -121,6 +120,10 @@ const styles = StyleSheet.create({
   header: {
     fontFamily: font.medium,
     fontSize: normalize(20),
+  },
+  title: {
+    marginHorizontal: normalize(16),
+    marginVertical: normalize(4),
   },
   // input: {
   //   height: normalize(50),

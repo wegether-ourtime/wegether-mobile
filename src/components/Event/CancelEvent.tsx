@@ -57,9 +57,8 @@ const styles = StyleSheet.create({
     paddingVertical: normalize(15),
   },
   title: {
-    margin: normalize(16),
-    // borderWidth: 0.5,
-    // borderRadius: normalize(8),
+    marginHorizontal: normalize(16),
+    marginVertical: normalize(4),
   },
   checkboxContainer: {
     height: normalize(50),

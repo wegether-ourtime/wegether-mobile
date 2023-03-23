@@ -29,6 +29,7 @@ import {useUserEventStore} from '../../stores/userEventStore';
 import * as RootNavigation from '../../navigations/RootNavigation';
 import {CalendarInput} from '../../components/Input/Calendar';
 import TimeInput from '../../components/Input/Time';
+import {Couter} from '../../components/Input/Couter';
 
 const EventDetailScreen: React.FC<any> = ({navigation, route}) => {
   const user = useAuthStore(state => state.user);
@@ -113,10 +114,11 @@ const EventDetailScreen: React.FC<any> = ({navigation, route}) => {
             style={[
               styles.input,
               {
+                marginHorizontal: normalize(24),
                 padding: normalize(0),
                 height: normalize(200),
                 alignItems: 'center',
-                justifyContent: 'space-between',
+                justifyContent: 'center',
               },
             ]}>
             <Image
@@ -124,34 +126,72 @@ const EventDetailScreen: React.FC<any> = ({navigation, route}) => {
               style={{height: '100%', width: '100%'}}
             />
           </View>
-          <View>
+          <View style={styles.inputConatiner}>
+            <View style={styles.inputName}>
+              <Text style={{marginHorizontal: normalize(4)}}>Name</Text>
+            </View>
             <TextInput
               value={event?.eventName}
               style={styles.input}
               editable={false}
               placeholder={'Event Name'}
             />
-            {/* <View
-              style={{
-                marginLeft: normalize(30),
-                marginVertical: normalize(10),
-                flexDirection: 'row',
-                alignItems: 'center',
-              }}>
-              <Text style={{paddingHorizontal: normalize(10)}}>
-                How many People?
-              </Text>
-              <View style={{paddingHorizontal: normalize(10)}}>
-                <Couter
-                // disabled={view}
-                ></Couter>
-              </View>
-            </View> */}
-            <CalendarInput disabled={true}></CalendarInput>
-            <TimeInput disabled={true}></TimeInput>
+          </View>
+          {/* <View
+            style={{
+              ...styles.inputConatiner,
+              // marginHorizontal: normalize(24),
+              // marginVertical: normalize(8),
+              flexDirection: 'row',
+              alignItems: 'center',
+            }}>
+            <Text style={{paddingHorizontal: normalize(10)}}>
+              How many People?
+            </Text>
+            <View style={{paddingHorizontal: normalize(10)}}>
+              <Couter disabled={true}></Couter>
+            </View>
+          </View> */}
+          <View style={styles.inputConatiner}>
+            <View style={styles.inputName}>
+              <Image
+                source={icons.calendar}
+                style={{marginHorizontal: normalize(4)}}
+              />
+              <Text style={{marginHorizontal: normalize(4)}}>Days</Text>
+            </View>
+            <CalendarInput
+              style={styles.input}
+              disabled={true}
+              // disabled={view}
+            ></CalendarInput>
+          </View>
+          <View style={styles.inputConatiner}>
+            <View style={styles.inputName}>
+              <Image
+                source={icons.time}
+                style={{marginHorizontal: normalize(4)}}
+              />
+              <Text style={{marginHorizontal: normalize(4)}}>Times</Text>
+            </View>
+            <TimeInput
+              style={styles.input}
+              disabled={true}
+              // disabled={view}
+            ></TimeInput>
+          </View>
+          <View style={styles.inputConatiner}>
+            <View style={styles.inputName}>
+              <Image
+                source={icons.location}
+                style={{marginHorizontal: normalize(4)}}
+              />
+              <Text style={{marginHorizontal: normalize(4)}}>Location</Text>
+            </View>
             <TouchableOpacity
               style={styles.input}
               disabled={true}
+              // disabled={view}
               onPress={() => {
                 RootNavigation.navigate('Main', {
                   screen: 'LocationScreen',
@@ -165,19 +205,30 @@ const EventDetailScreen: React.FC<any> = ({navigation, route}) => {
                 <Text style={{color: colors.grayPlaceholder}}>Location</Text>
               )}
             </TouchableOpacity>
+          </View>
+          <View style={styles.inputConatiner}>
+            <View style={styles.inputName}>
+              {/* <Image
+                source={icons.calendar}
+                style={{marginHorizontal: normalize(4)}}
+              /> */}
+              <Text style={{marginHorizontal: normalize(4)}}>Detail</Text>
+            </View>
             <TextInput
-              value={event?.eventDetail}
+              value={eventId?.eventDetail}
               style={[
                 styles.input,
                 {
-                  minHeight: normalize(100),
+                  height: normalize(72),
                   paddingTop: normalize(15),
                   textAlignVertical: 'top',
                 },
               ]}
-              editable={false}
+              // disable={!view ?? true}
               placeholder={'รายละเอียดเพิ่มเติม'}
+              editable={false}
               multiline
+              maxLength={133}
             />
           </View>
           {isHost ? (
@@ -275,19 +326,25 @@ const styles = StyleSheet.create({
     // marginBottom: normalize(0),
     padding: normalize(10),
   },
+  buttonContainer: {
+    backgroundColor: 'red',
+    // flexDirection: 'row',
+    flexWrap: 'wrap',
+  },
   input: {
-    height: normalize(50),
-    marginVertical: normalize(10),
-    margin: normalize(30),
+    height: normalize(48),
     padding: normalize(15),
     borderColor: colors.disable,
     borderWidth: 0.5,
     borderRadius: normalize(8),
     color: colors.fontBlack,
   },
-  buttonContainer: {
-    backgroundColor: 'red',
-    // flexDirection: 'row',
-    flexWrap: 'wrap',
+  inputConatiner: {
+    marginVertical: normalize(4),
+    marginHorizontal: normalize(24),
+  },
+  inputName: {
+    flexDirection: 'row',
+    marginVertical: normalize(12),
   },
 });
