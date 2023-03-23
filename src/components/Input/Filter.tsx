@@ -1,4 +1,4 @@
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import {Image, StyleSheet, Text, TextInput, View} from 'react-native';
 import {SheetManager} from 'react-native-actions-sheet';
 import {TouchableOpacity} from 'react-native-gesture-handler';
@@ -12,12 +12,15 @@ export const Filter: React.FC<any> = props => {
   const setCriteria = (criteria: any) =>
     useEventStore.getState().setCriteria(criteria);
 
-  const onChangeText = (field: string, value: string) =>
+  const onChangeText = (field: string, value: string) => {
     setCriteria({...criteria, [field]: value});
+  };
 
   const onSearch = () => {
     useEventStore.getState().getEvents(criteria);
   };
+
+  useEffect(() => {}, []);
 
   return (
     <View style={styles.main}>

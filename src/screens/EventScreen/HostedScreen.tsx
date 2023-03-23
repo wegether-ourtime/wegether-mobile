@@ -23,13 +23,16 @@ const HostedScreen: React.FC<Prop> = (props: Prop) => {
   const loading = useEventStore(state => state.loading);
   const criteria = useEventStore(state => state.criteria);
   const [userId, setUserId] = useState<string>('');
+  const setCriteria = (criteria: any) =>
+    useEventStore.getState().setCriteria(criteria);
   const getEvents = async () => {
     const userId = (await AsyncStorage.getItem('userId')) ?? '';
+    setCriteria({...criteria, eventType: EventType.HOSTED, userId});
     setUserId(userId);
     const event = await useEventStore.getState().getEvents({
+      ...criteria,
       eventType: EventType.HOSTED,
       userId,
-      ...criteria,
     });
   };
 

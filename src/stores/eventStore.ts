@@ -72,7 +72,6 @@ export const useEventStore = create<EventState>(set => ({
   updateEvent: async (eventId: string, payload: any) => {
     try {
       set({loading: true});
-      console.log('payload: ', payload)
       const {data} = await axios.post(`${BASE_URL}/event/${eventId}`, {
         ...payload,
       });

@@ -103,7 +103,7 @@ const ProfileScreen: React.FC<any> = ({navigation}) => {
           <Text style={[styles.name, {paddingVertical: normalize(1)}]}>
             {user?.fullName}
           </Text>
-          <Text style={[{paddingVertical: normalize(2)}]}>{user?.livingPlace.name}</Text>
+          <Text style={[{paddingVertical: normalize(2)}]}>{user?.livingPlace?.name}</Text>
         </View>
         <View style={styles.bio}>
           <Text style={styles.bioText}>{user?.gender}</Text>

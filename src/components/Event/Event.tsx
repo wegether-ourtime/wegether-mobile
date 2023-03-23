@@ -27,6 +27,7 @@ export const Event: React.FC<any> = props => {
     userId,
     joined,
     userEvents,
+    onPressJoin,
   } = props;
   let a = 1;
   const date = `${new Date(startDate).toLocaleDateString('th-TH', {
@@ -47,12 +48,12 @@ export const Event: React.FC<any> = props => {
     minute: 'numeric',
   })}`;
 
-  const onPressJoin = () => {
-    useUserEventStore.getState().createUserEvent({
-      eventId,
-      userId,
-    });
-  };
+  // const onPressJoin = () => {
+  //   useUserEventStore.getState().createUserEvent({
+  //     eventId,
+  //     userId,
+  //   });
+  // };
 
   return (
     <TouchableOpacity
@@ -86,7 +87,7 @@ export const Event: React.FC<any> = props => {
               {!isHost && !joined && (
                 <TouchableOpacity
                   style={{marginTop: normalize(5)}}
-                  onPress={onPressJoin}>
+                  onPress={() => onPressJoin(eventId, userId)}>
                   <View style={styles.joinButton}>
                     <Text
                       style={{

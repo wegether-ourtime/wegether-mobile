@@ -9,9 +9,9 @@ interface UserEventState {
   loading: boolean;
   getUserEvents: (criteria: any) => void;
   getUserEvent: (userEventId: string) => void;
-  createUserEvent: (createUserEvent: any) => void;
-  updateUserEvent: (userEventId: string) => void;
-  deleteUserEvent: (userEventId: any) => void;
+  createUserEvent: (createUserEvent: any) => any;
+  // updateUserEvent: (userEventId: string) => any;
+  deleteUserEvent: (userEventId: any) => any;
 }
 
 export const useUserEventStore = create<UserEventState>(set => ({
@@ -19,31 +19,55 @@ export const useUserEventStore = create<UserEventState>(set => ({
   userEvent: null,
   loading: false,
   getUserEvents: async (criteria: any) => {
-    const {data} = await axios.get(`${BASE_URL}/user-event`, {...criteria});
-    const userEvents = data;
+    try {
+      set({loading: true});
+      const {data} = await axios.get(`${BASE_URL}/user-event`, {...criteria});
+      const userEvents = data;
 
-    set({userEvents});
+      set({userEvents});
+      return userEvents;
+    } catch (err) {
+      console.log(err);
+    } finally {
+      set({loading: false});
+    }
   },
   getUserEvent: async (userEventId: string) => {
-    const {data} = await axios.get(`${BASE_URL}/user-event/${userEventId}`);
-    const userEvent = data;
+    try {
+      set({loading: true});
+      const {data} = await axios.get(`${BASE_URL}/user-event/${userEventId}`);
+      const userEvent = data;
 
-    set({userEvent});
+      set({userEvent});
+      return userEvent;
+    } catch (err) {
+      console.log(err);
+    } finally {
+      set({loading: false});
+    }
   },
   createUserEvent: async (createUserEvent: any) => {
-    const {data} = await axios.post(`${BASE_URL}/user-event`, {
-      ...createUserEvent,
-    });
-    const userEvent = data;
+    try {
+      set({loading: true});
+      const {data} = await axios.post(`${BASE_URL}/user-event`, {
+        ...createUserEvent,
+      });
+      const userEvent = data;
 
-    set({userEvent});
+      set({userEvent});
+      return userEvent;
+    } catch (err) {
+      console.log(err);
+    } finally {
+      set({loading: false});
+    }
   },
-  updateUserEvent: async (userEventId: string) => {
-    const {data} = await axios.post(`${BASE_URL}/user-event`, {});
-    const userEvent = data;
+  // updateUserEvent: async (userEventId: string) => {
+  //   const {data} = await axios.post(`${BASE_URL}/user-event`, {});
+  //   const userEvent = data;
 
-    set({userEvent});
-  },
+  //   set({userEvent});
+  // },
   deleteUserEvent: async (userEventId: string) => {
     await axios.delete(`${BASE_URL}/user-event/${userEventId}`);
     set({});

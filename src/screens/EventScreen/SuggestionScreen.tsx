@@ -19,6 +19,7 @@ import UserEvent from '../../models/UserEvent';
 // import {dataUpdateStatusEntity} from '../../entities/TaskScreenEntities';
 import * as RootNavigation from '../../navigations/RootNavigation';
 import {useEventStore} from '../../stores/eventStore';
+import {useUserEventStore} from '../../stores/userEventStore';
 
 interface Prop {}
 
@@ -27,15 +28,34 @@ const SuggestionScreen: React.FC<Prop> = (props: Prop) => {
   const loading = useEventStore(state => state.loading);
   const criteria = useEventStore(state => state.criteria);
   const [userId, setUserId] = useState<string>('');
+  const setCriteria = (criteria: any) =>
+    useEventStore.getState().setCriteria(criteria);
 
   const getEvents = async () => {
     const userId = (await AsyncStorage.getItem('userId')) ?? '';
+    setCriteria({...criteria, eventType: EventType.SUGGESTION, userId});
     setUserId(userId);
     const event = await useEventStore.getState().getEvents({
+      ...criteria,
       eventType: EventType.SUGGESTION,
       userId,
-      ...criteria,
     });
+  };
+
+  const onPressJoin = async (eventId: string, userId: string) => {
+    try {
+      await useUserEventStore.getState().createUserEvent({
+        eventId,
+        userId,
+      });
+
+      await getEvents();
+      Toast.show({
+        type: 'success',
+      });
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   useFocusEffect(
@@ -77,7 +97,9 @@ const SuggestionScreen: React.FC<Prop> = (props: Prop) => {
                 joined={false}
                 location={item.location}
                 userEvents={item.userEvents}
-                userId={userId}></Event>
+                userId={userId}
+                onPressJoin={onPressJoin}
+              />
             );
           }}
         />

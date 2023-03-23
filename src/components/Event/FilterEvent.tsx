@@ -135,7 +135,7 @@ export const FilterEventSheet = (props: SheetProps) => {
                 name={item.name}
                 icon={item.icon}
                 selected={
-                  criteria?.categoriesId.find((sc: string) => sc === item.id)
+                  criteria?.categoriesId?.find((sc: string) => sc === item.id)
                     ? true
                     : false
                 }
