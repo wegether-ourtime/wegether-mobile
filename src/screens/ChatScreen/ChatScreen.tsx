@@ -33,14 +33,49 @@ const ChatScreen: React.FC<any> = ({navigation, route}) => {
   const [userId, setUserId] = useState<string>('');
   const [message, setMessage] = useState<string>('');
   const [imgMessage, setImgMessage] = useState<any>();
+  const [messages, setMessages] = useState();
   const chats = useChatStore(state => state.chats);
   const getChats = async () => {
     const userId = (await AsyncStorage.getItem('userId')) ?? '';
     setUserId(userId);
     if (userFriendId) {
-      await useChatStore.getState().getDirectChats(userFriendId);
+      const chats = await useChatStore.getState().getDirectChats(userFriendId);
+      setMessages(
+        chats.map((chat: any) => {
+          const isMyMessage = chat?.senderId === userId;
+          return {
+            _id: chat.chatId,
+            text: chat.text,
+            createdAt: new Date(chat.createdAt),
+            user: {
+              _id: chat.senderId,
+              name: isMyMessage
+                ? chat?.userEvent?.user?.fullName
+                : chat?.userEvent?.friend?.fullName,
+            },
+          };
+        }),
+      );
     } else if (eventId) {
-      await useChatStore.getState().getEventChats(eventId);
+      const chats = await useChatStore.getState().getEventChats(eventId);
+      setMessages(
+        chats.map((chat: any) => {
+          const user = chat?.event?.userEvents?.find(
+            (userEvent: any) => userEvent?.userId === chat?.senderId,
+          ).user;
+
+          return {
+            _id: chat.chatId,
+            text: chat.text,
+            createdAt: new Date(chat.createdAt),
+            user: {
+              _id: chat.senderId,
+              name: user?.fullName,
+              avatar: user?.imgProfileUrl,
+            },
+          };
+        }),
+      );
     }
   };
 
@@ -57,7 +92,7 @@ const ChatScreen: React.FC<any> = ({navigation, route}) => {
     }, []),
   );
 
-  const onSend = async ({message, img}: {message?: string; img?: any}) => {
+  const onSend = async () => {
     const userId = (await AsyncStorage.getItem('userId')) ?? '';
     useChatStore
       .getState()
@@ -76,89 +111,34 @@ const ChatScreen: React.FC<any> = ({navigation, route}) => {
         showBackBtn
         onPressBack={() => navigation.goBack()}
       />
-      <KeyboardAvoidingView
-        behavior="height"
-        style={{height: '100%', backgroundColor: 'red'}}
-        enabled
-        keyboardVerticalOffset={100}>
-        <View style={[styles.container]}>
-          <FlatList
-            // inverted
-            data={chats}
-            keyExtractor={item => item.chatId}
-            renderItem={({item}) => {
-              return (
-                <View
-                  style={[
-                    styles.chatContainer,
-                    {
-                      justifyContent:
-                        item.senderId === userId ? 'flex-end' : 'flex-start',
-                    },
-                  ]}>
-                  <TouchableOpacity
-                    // style={styles.chatContainer}
-                    onPress={() => {
-                      // navigation.navigate('FriendProfileScreen')
-                      RootNavigation.navigate('Profile', {
-                        screen: 'FriendProfileScreen',
-                        params: {userId: item.senderId},
-                      });
-                    }}>
-                    {!(item.senderId === userId) && (
-                      <Avatar
-                        avatarStyle={styles.img}
-                        containerStyle={styles.imgContainer}
-                        size={normalize(40)}
-                        rounded
-                        source={
-                          item.senderImg
-                            ? {uri: item.senderImg}
-                            : images.wegether
-                        }
-                      />
-                    )}
-                  </TouchableOpacity>
-                  <View style={styles.messageContainer}>
-                    <Text style={styles.message}>{item.text}</Text>
-                  </View>
-                </View>
-              );
-            }}
-          />
-        </View>
-        <View style={styles.bottom}>
-          <View style={styles.inputTools}>
-            <TextInput
-              style={styles.textInput}
-              // underlineColorAndroid="transparent"
-              autoCapitalize="none"
-              placeholder="type"
-              onChangeText={text => onChangeMessage(text)}
-              value={message}
-            />
-            <TouchableOpacity
-              containerStyle={styles.sendButton}
-              onPress={() => {
-                onSend({message, img: imgMessage});
-              }}>
-              <Text>Send</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </KeyboardAvoidingView>
+      <GiftedChat
+        alignTop={false}
+        wrapInSafeArea={false}
+        listViewProps={{
+          contentContainerStyle: {flexGrow: 1, justifyContent: 'flex-end'},
+        }}
+        // quickReplyTextStyle={{backgroundColor: 'bue'}}
+        // bottomOffset={Platform.OS === 'ios' ? 10 : 0}
+        messagesContainerStyle={styles.container}
+        bottomOffset={33}
+        // renderInputToolbar={}
+        onInputTextChanged={value => {
+          onChangeMessage(value);
+        }}
+        // renderInputToolbar={props => customtInputToolbar(props)}
+        messages={messages}
+        onSend={() => onSend()}
+        user={{
+          _id: userId,
+        }}
+      />
     </SafeAreaView>
   );
 };
 
 export default ChatScreen;
 const styles = StyleSheet.create({
-  main: {
-    height: '100%',
-    backgroundColor: '#D6DDFF',
-  },
   container: {
-    height: '85%',
     backgroundColor: '#D6DDFF',
   },
   img: {

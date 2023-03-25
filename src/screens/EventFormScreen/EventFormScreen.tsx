@@ -25,6 +25,7 @@ import {useFocusEffect} from '@react-navigation/native';
 import UserEvent from '../../models/UserEvent';
 import {SheetManager} from 'react-native-actions-sheet';
 import Event from '../../models/Event';
+import {Toast} from 'react-native-toast-message/lib/src/Toast';
 
 const CreateEventScreen: React.FC<any> = ({navigation, route}) => {
   const [isEdit] = useState(route?.params?.isEdit);
@@ -40,33 +41,43 @@ const CreateEventScreen: React.FC<any> = ({navigation, route}) => {
     : null;
 
   const onSubmit = async () => {
-    const userId = await AsyncStorage.getItem('userId');
-    let event: Event;
-    let file: any;
-    if (form?.eventId) {
-      event = await useEventStore.getState().updateEvent(form?.eventId, {
-        ...form,
+    if (!validateField) {
+      Toast.show({
+        type: 'fail',
+        position: 'top',
+        // topOffset : 10,
+        text1: 'Error',
+        text2: 'Some field must not empyu!',
       });
     } else {
-      event = await useEventStore.getState().createEvent({
-        ...form,
-        userEvents: [{userId, isHost: true}],
-      });
-    }
+      const userId = await AsyncStorage.getItem('userId');
+      let event: Event;
+      let file: any;
+      if (form?.eventId) {
+        event = await useEventStore.getState().updateEvent(form?.eventId, {
+          ...form,
+        });
+      } else {
+        event = await useEventStore.getState().createEvent({
+          ...form,
+          userEvents: [{userId, isHost: true}],
+        });
+      }
 
-    if (eventImg?.assets) {
-      file = await useFileStore
-        .getState()
-        .uploadFile(eventImg, FileResource.EVENT, event.eventId);
-    }
+      if (eventImg?.assets) {
+        file = await useFileStore
+          .getState()
+          .uploadFile(eventImg, FileResource.EVENT, event.eventId);
+      }
 
-    if (event && eventImg?.assets && file) {
-      RootNavigation.navigate('Main', {
-        screen: 'EventDetailScreen',
-        params: {eventId: event.eventId},
-      });
-    } else {
-      // err message
+      if (event && eventImg?.assets && file) {
+        RootNavigation.navigate('Main', {
+          screen: 'EventDetailScreen',
+          params: {eventId: event.eventId},
+        });
+      } else {
+        // err message
+      }
     }
   };
 
@@ -77,11 +88,8 @@ const CreateEventScreen: React.FC<any> = ({navigation, route}) => {
         ...event,
       });
 
-      const eventImg = await event?.files?.find(
-        (f: any) => f.resource == FileResource.EVENT,
-      );
-      if (eventImg) {
-        setEventImg(eventImg.path);
+      if (event.imgUrl) {
+        setEventImg(event.path);
       }
 
       const isHost = event.userEvents.find(async (ue: UserEvent) => {
@@ -97,6 +105,19 @@ const CreateEventScreen: React.FC<any> = ({navigation, route}) => {
 
   const onChangeText = (field: string, value: string) =>
     useEventStore.getState().setForm({...form, [field]: value});
+
+  const onPressChangeImg = async () => {
+    await launchImageLibrary(
+      {
+        mediaType: 'photo',
+      },
+      async res => {
+        if (!res.didCancel) {
+          setEventImg(res);
+        }
+      },
+    );
+  };
 
   useEffect(() => {
     getEvent();
@@ -115,7 +136,7 @@ const CreateEventScreen: React.FC<any> = ({navigation, route}) => {
   return (
     <SafeAreaView style={[stylesApp.container]}>
       <CustomHeader
-        title={isEdit ? form?.eventName : 'Create Event'}
+        title={isEdit ? form?.eventName : 'Post Event'}
         showBackBtn={isEdit}
         onPressBack={() => navigation.goBack()}
       />
@@ -138,13 +159,22 @@ const CreateEventScreen: React.FC<any> = ({navigation, route}) => {
               },
             ]}>
             {eventImg ? (
-              <Image
-                source={eventImg?.assets ? eventImg.assets[0] : {uri: eventImg}}
-                style={{
-                  height: '100%',
-                  width: '100%',
-                }}
-              />
+              <>
+                <TouchableOpacity
+                  containerStyle={styles.changeImg}
+                  onPress={() => onPressChangeImg()}>
+                  <Image source={icons.changeImage}></Image>
+                </TouchableOpacity>
+                <Image
+                  source={
+                    eventImg?.assets ? eventImg.assets[0] : {uri: eventImg}
+                  }
+                  style={{
+                    height: '100%',
+                    width: '100%',
+                  }}
+                />
+              </>
             ) : (
               <TouchableOpacity
                 containerStyle={{
@@ -190,11 +220,11 @@ const CreateEventScreen: React.FC<any> = ({navigation, route}) => {
             style={{
               ...styles.inputConatiner,
               // marginHorizontal: normalize(24),
-              // marginVertical: normalize(8),
+              marginTop: normalize(8),
               flexDirection: 'row',
               alignItems: 'center',
             }}>
-            <Text style={{paddingHorizontal: normalize(10)}}>
+            <Text style={{paddingHorizontal: normalize(4)}}>
               How many People?
             </Text>
             <View style={{paddingHorizontal: normalize(10)}}>
@@ -303,11 +333,11 @@ export default CreateEventScreen;
 const styles = StyleSheet.create({
   main: {
     flexDirection: 'row',
-    alignSelf: 'flex-start'
+    alignSelf: 'flex-start',
   },
   button: {
     margin: normalize(24),
-    // marginBottom: normalize(0),
+    marginBottom: normalize(0),
     padding: normalize(10),
   },
   input: {
@@ -317,7 +347,6 @@ const styles = StyleSheet.create({
     borderWidth: 0.5,
     borderRadius: normalize(8),
     color: colors.fontBlack,
-
   },
   inputConatiner: {
     marginVertical: normalize(4),
@@ -326,5 +355,11 @@ const styles = StyleSheet.create({
   inputName: {
     flexDirection: 'row',
     marginVertical: normalize(12),
+  },
+  changeImg: {
+    position: 'absolute',
+    right: normalize(8),
+    top: normalize(8),
+    zIndex: 1,
   },
 });

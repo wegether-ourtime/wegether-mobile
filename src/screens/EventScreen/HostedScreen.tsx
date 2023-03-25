@@ -54,14 +54,6 @@ const HostedScreen: React.FC<Prop> = (props: Prop) => {
           data={events}
           extraData={events}
           renderItem={({index, item}: any) => {
-            const eventImg = item.files.find(
-              (f: any) => f.resource === FileResource.EVENT,
-            )?.path;
-            // const isHost = item.userEvents.find(async (ue: UserEvent) => {
-            //   const userId = await AsyncStorage.getItem('userId');
-            //   return ue.userId == userId;
-            // })?.isHost;
-
             return (
               <Event
                 eventId={item.eventId}
@@ -70,8 +62,8 @@ const HostedScreen: React.FC<Prop> = (props: Prop) => {
                 eventDetail={item.eventDetail}
                 startDate={item.startDate}
                 endDate={item.endDate}
-                eventImg={eventImg}
-                isHost={true}
+                eventImg={item.imgUrl}
+                isHost={item.hostId === userId}
                 joined={true}
                 location={item.location}
                 userEvents={item.userEvents}

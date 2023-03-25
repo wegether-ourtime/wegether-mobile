@@ -16,7 +16,7 @@ const HomeScreen: React.FC<any> = ({navigation}) => {
   return (
     <SafeAreaView style={stylesApp.container}>
       <View style={[{height: '100%'}, styles.main]}>
-        <View style={[{paddingTop: '50%'}]}>
+        <View style={[{paddingTop: '40%'}]}>
           <Image
             source={image.wegether}
             style={{height: imageHeight, width: imageWidth}}
@@ -34,7 +34,7 @@ const HomeScreen: React.FC<any> = ({navigation}) => {
             });
           }}></Touchable>
         <Touchable
-          label={'Login with Google Account'}
+          label={'Login with Email'}
           color={colors.primary}
           fontColor={colors.white}
           style={styles.button}
@@ -44,8 +44,8 @@ const HomeScreen: React.FC<any> = ({navigation}) => {
         <Touchable
           label={'Don’t have any account ? Sign Up'}
           fontColor={'#757575'}
-          style={[styles.button, {marginTop: normalize(50)}]}
-          fontSize={normalize(15)}
+          style={[styles.button, {marginTop: normalize(40)}]}
+          fontSize={normalize(16)}
           onPress={() => {
             navigation.navigate('RegisterScreen');
           }}></Touchable>
