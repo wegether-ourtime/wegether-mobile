@@ -1,8 +1,8 @@
 import {useCallback, useEffect, useState} from 'react';
-import {StyleSheet, Text, TextInput, View, Image} from 'react-native';
+import {StyleSheet, Text, TextInput, View, Image, FlatList} from 'react-native';
 import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {colors, icons} from '../../common/assets';
+import {colors, font, icons} from '../../common/assets';
 import images from '../../common/assets/images';
 import {height, normalize} from '../../common/function/normalize';
 import {stylesApp} from '../../common/styles/AppStyle';
@@ -26,6 +26,8 @@ import UserEvent from '../../models/UserEvent';
 import {SheetManager} from 'react-native-actions-sheet';
 import Event from '../../models/Event';
 import {Toast} from 'react-native-toast-message/lib/src/Toast';
+import {allCategories} from '../../common/function/utility';
+import {Category} from '../../components/Category/Category';
 
 const CreateEventScreen: React.FC<any> = ({navigation, route}) => {
   const [isEdit] = useState(route?.params?.isEdit);
@@ -37,7 +39,13 @@ const CreateEventScreen: React.FC<any> = ({navigation, route}) => {
   const [eventImg, setEventImg] = useState<any>();
   const [isHost, setIsHost] = useState(undefined);
   const validateField = form
-    ? !Object.values(form).some(x => x === null || x === '')
+    ? !Object.entries(form).some(x => {
+        if (['endDate', 'eventCategories'].includes(x[0])) {
+          return false;
+        }
+
+        return x[1] === null || x[1] === '';
+      })
     : null;
 
   const onSubmit = async () => {
@@ -71,6 +79,7 @@ const CreateEventScreen: React.FC<any> = ({navigation, route}) => {
       }
 
       if (event && eventImg?.assets && file) {
+        setEventImg(undefined);
         RootNavigation.navigate('Main', {
           screen: 'EventDetailScreen',
           params: {eventId: event.eventId},
@@ -89,7 +98,7 @@ const CreateEventScreen: React.FC<any> = ({navigation, route}) => {
       });
 
       if (event.imgUrl) {
-        setEventImg(event.path);
+        setEventImg(event.imgUrl);
       }
 
       const isHost = event.userEvents.find(async (ue: UserEvent) => {
@@ -117,6 +126,27 @@ const CreateEventScreen: React.FC<any> = ({navigation, route}) => {
         }
       },
     );
+  };
+
+  const onSelectCategory = (categoryId: string) => {
+    if (
+      !form?.eventCategories?.find((ec: any) => ec.categoryId === categoryId)
+    ) {
+      useEventStore.getState().setForm({
+        ...form,
+        eventCategories: [
+          ...(form?.eventCategories ? [...form?.eventCategories] : []),
+          {eventId, categoryId},
+        ],
+      });
+    } else {
+      useEventStore.getState().setForm({
+        ...form,
+        eventCategories: form?.eventCategories.filter(
+          (ec: any) => ec.categoryId !== categoryId,
+        ),
+      });
+    }
   };
 
   useEffect(() => {
@@ -203,9 +233,45 @@ const CreateEventScreen: React.FC<any> = ({navigation, route}) => {
               </TouchableOpacity>
             )}
           </View>
+          <FlatList
+            keyExtractor={item => item.id}
+            data={allCategories}
+            style={styles.categories}
+            horizontal
+            // pagingEnabled={false}
+            showsHorizontalScrollIndicator={false}
+            // extraData={events}
+            renderItem={({index, item}: any) => {
+              return (
+                <Category
+                  key={item.id}
+                  categoryId={item.id}
+                  name={item.name}
+                  icon={item.icon}
+                  selected={
+                    form?.eventCategories?.find(
+                      (ec: any) => ec.categoryId === item.id,
+                    )
+                      ? true
+                      : false
+                  }
+                  // backgroundColor={colors.transOrange}
+                  // textColor={colors.white}
+                  // disabled={
+                  //   criteria?.categoriesId.length === 3 &&
+                  //   !criteria?.categoriesId.find((sc: string) => sc === item.id)
+                  // }
+                  onSelect={(categoryId: string) =>
+                    onSelectCategory(categoryId)
+                  }
+                />
+              );
+            }}
+          />
+
           <View style={styles.inputConatiner}>
             <View style={styles.inputName}>
-              <Text style={{marginHorizontal: normalize(4)}}>Name</Text>
+              <Text style={styles.inputText}>Name</Text>
             </View>
             <TextInput
               value={form?.eventName}
@@ -224,9 +290,7 @@ const CreateEventScreen: React.FC<any> = ({navigation, route}) => {
               flexDirection: 'row',
               alignItems: 'center',
             }}>
-            <Text style={{paddingHorizontal: normalize(4)}}>
-              How many People?
-            </Text>
+            <Text style={styles.inputText}>How many People?</Text>
             <View style={{paddingHorizontal: normalize(10)}}>
               <Couter
               // disabled={view}
@@ -239,7 +303,7 @@ const CreateEventScreen: React.FC<any> = ({navigation, route}) => {
                 source={icons.calendar}
                 style={{marginHorizontal: normalize(4)}}
               />
-              <Text style={{marginHorizontal: normalize(4)}}>Days</Text>
+              <Text style={styles.inputText}>Days</Text>
             </View>
             <CalendarInput
               style={styles.input}
@@ -252,7 +316,7 @@ const CreateEventScreen: React.FC<any> = ({navigation, route}) => {
                 source={icons.time}
                 style={{marginHorizontal: normalize(4)}}
               />
-              <Text style={{marginHorizontal: normalize(4)}}>Times</Text>
+              <Text style={styles.inputText}>Times</Text>
             </View>
             <TimeInput
               style={styles.input}
@@ -265,7 +329,7 @@ const CreateEventScreen: React.FC<any> = ({navigation, route}) => {
                 source={icons.location}
                 style={{marginHorizontal: normalize(4)}}
               />
-              <Text style={{marginHorizontal: normalize(4)}}>Location</Text>
+              <Text style={styles.inputText}>Location</Text>
             </View>
             <TouchableOpacity
               style={styles.input}
@@ -290,7 +354,7 @@ const CreateEventScreen: React.FC<any> = ({navigation, route}) => {
                 source={icons.calendar}
                 style={{marginHorizontal: normalize(4)}}
               /> */}
-              <Text style={{marginHorizontal: normalize(4)}}>Detail</Text>
+              <Text style={styles.inputText}>Detail</Text>
             </View>
             <TextInput
               value={form?.eventDetail}
@@ -361,5 +425,17 @@ const styles = StyleSheet.create({
     right: normalize(8),
     top: normalize(8),
     zIndex: 1,
+  },
+  inputText: {
+    paddingHorizontal: normalize(4),
+    fontFamily: font.medium,
+    fontSize: normalize(14),
+  },
+  categories: {
+    marginTop: normalize(16),
+    marginVertical: normalize(4),
+    marginHorizontal: normalize(0),
+    // paddingHorizontal: normalize(16),
+    // backgroundColor: colors.disable,
   },
 });

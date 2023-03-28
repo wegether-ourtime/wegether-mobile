@@ -31,14 +31,17 @@ const DirectMessageScreen: React.FC<any> = ({navigation}) => {
         data={userFriendChats}
         keyExtractor={item => item.name}
         renderItem={({item}) => {
-          console.log(item)
           return (
             <TouchableOpacity
               style={styles.chatContainer}
               onPress={() => {
                 RootNavigation.navigate('Main', {
                   screen: 'ChatScreen',
-                  params: {eventId: item.eventId, chatName: item.eventName, userFriendId: item.userFriendId},
+                  params: {
+                    eventId: item.eventId,
+                    chatName: item.friend.fullName,
+                    userFriendId: item.userFriendId,
+                  },
                 });
               }}>
               <Avatar

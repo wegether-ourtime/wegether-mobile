@@ -67,8 +67,6 @@ export const useAuthStore = create<UserState>(set => ({
     } catch (e) {
       Toast.show({
         type: 'fail',
-        position: 'top',
-        // topOffset : 10,
         text1: 'Error',
         text2: 'Desc',
       });

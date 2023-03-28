@@ -4,6 +4,7 @@ import {Switch} from '@rneui/themed';
 import {useCallback, useEffect, useState} from 'react';
 import {
   Button,
+  FlatList,
   Image,
   ScrollView,
   StyleSheet,
@@ -30,6 +31,8 @@ import * as RootNavigation from '../../navigations/RootNavigation';
 import {CalendarInput} from '../../components/Input/Calendar';
 import TimeInput from '../../components/Input/Time';
 import {Couter} from '../../components/Input/Couter';
+import {allCategories} from '../../common/function/utility';
+import {Category} from '../../components/Category/Category';
 
 const EventDetailScreen: React.FC<any> = ({navigation, route}) => {
   const user = useAuthStore(state => state.user);
@@ -81,6 +84,7 @@ const EventDetailScreen: React.FC<any> = ({navigation, route}) => {
       setJoined(true);
       userEvent.isHost && setIsHost(true);
     }
+    console.log(event.eventCategories);
   };
 
   useEffect(() => {
@@ -126,6 +130,36 @@ const EventDetailScreen: React.FC<any> = ({navigation, route}) => {
               style={{height: '100%', width: '100%'}}
             />
           </View>
+          <FlatList
+            keyExtractor={item => item.categoryId}
+            data={event?.eventCategories}
+            style={styles.categories}
+            horizontal
+            // pagingEnabled={false}
+            showsHorizontalScrollIndicator={false}
+            // extraData={events}
+            renderItem={({index, item}: any) => {
+              const category = allCategories.find(
+                ac => ac.id == item.categoryId,
+              );
+              return (
+                <Category
+                  key={category?.id}
+                  categoryId={category?.id}
+                  name={category?.name}
+                  icon={category?.icon}
+                  disabled
+                  // selected={
+                  //   event?.eventCategories?.find(
+                  //     (ec: any) => ec.categoryId === item.id,
+                  //   )
+                  //     ? true
+                  //     : false
+                  // }
+                />
+              );
+            }}
+          />
           <View style={styles.inputConatiner}>
             <View style={styles.inputName}>
               <Text style={{marginHorizontal: normalize(4)}}>Name</Text>
@@ -215,7 +249,7 @@ const EventDetailScreen: React.FC<any> = ({navigation, route}) => {
               <Text style={{marginHorizontal: normalize(4)}}>Detail</Text>
             </View>
             <TextInput
-              value={eventId?.eventDetail}
+              value={event?.eventDetail}
               style={[
                 styles.input,
                 {
@@ -346,5 +380,12 @@ const styles = StyleSheet.create({
   inputName: {
     flexDirection: 'row',
     marginVertical: normalize(12),
+  },
+  categories: {
+    marginTop: normalize(16),
+    marginVertical: normalize(4),
+    marginHorizontal: normalize(0),
+    paddingHorizontal: normalize(16),
+    // backgroundColor: colors.disable,
   },
 });

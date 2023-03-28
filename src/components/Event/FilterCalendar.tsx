@@ -13,27 +13,27 @@ import moment from 'moment';
 import {Touchable} from '../Button/Touchable';
 import {useEventStore} from '../../stores/eventStore';
 
-export const CalendarInput: React.FC<any> = props => {
+export const FilterCalendarInput: React.FC<any> = props => {
   const {disabled, style, onChange} = props;
-  const form = useEventStore(state => state.form);
+  const criteria = useEventStore(state => state.criteria);
   const onPress = () => {
-    SheetManager.show('CalendarInputSheet');
+    SheetManager.show('FilterCalendarInputSheet');
   };
 
   return (
     <View>
       <TouchableOpacity disabled={disabled} style={style} onPress={onPress}>
-        {form?.startDate ? (
+        {criteria?.startDate ? (
           <Text>
-            {`${new Date(form?.startDate).toLocaleDateString('th-TH', {
+            {`${new Date(criteria?.startDate).toLocaleDateString('th-TH', {
               day: 'numeric',
               month: 'numeric',
               year: 'numeric',
             })}`}
-            {form?.endDate
+            {criteria?.endDate
               ? `${
                   ' - ' +
-                  `${new Date(form?.endDate).toLocaleDateString('th-TH', {
+                  `${new Date(criteria?.endDate).toLocaleDateString('th-TH', {
                     day: 'numeric',
                     month: 'numeric',
                     year: 'numeric',
@@ -50,17 +50,17 @@ export const CalendarInput: React.FC<any> = props => {
   );
 };
 
-export const CalendarSheet = (
+export const FilterCalendarSheet = (
   props: SheetProps<{startDate: Date; endDate: Date}>,
 ) => {
-  const form = useEventStore(state => state.form);
-  const onPressSave = () => {
-    SheetManager.hide('CalendarInputSheet');
+  const criteria = useEventStore(state => state.criteria);
+  const onPressSave = async  () => {
+    SheetManager.hide('FilterCalendarInputSheet');
   };
 
   const onChange = async (firstDate: any, secondDate: any) => {
-    await useEventStore.getState().setForm({
-      ...form,
+    await useEventStore.getState().setCriteria({
+      ...criteria,
       startDate: new Date(new Date(firstDate).setHours(8)),
       endDate: new Date(new Date(secondDate).setHours(8)),
     });

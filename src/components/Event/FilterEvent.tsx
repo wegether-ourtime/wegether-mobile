@@ -14,72 +14,15 @@ import {Touchable} from '../Button/Touchable';
 import * as RootNavigation from '../../navigations/RootNavigation';
 import {CalendarInput} from '../Input/Calendar';
 import TimeInput from '../Input/Time';
+import { allCategories } from '../../common/function/utility';
+import { FilterCalendarInput } from './FilterCalendar';
+import FilterTimeInput from './FilterTime';
 
 export const FilterEventSheet = (props: SheetProps) => {
+  const [categories] = useState<any>(allCategories);
   const criteria = useEventStore(state => state.criteria);
   const setCriteria = (criteria: any) =>
     useEventStore.getState().setCriteria(criteria);
-
-  const categories = [
-    // {
-    //   name: 'All',
-    // },
-    {
-      id: 'ae265f73-d52c-4bac-9924-6e54d5395b01',
-      name: 'Movies & Cinema',
-      icon: icons.movie,
-    },
-    {
-      id: '91702911-0267-4d50-97a1-ad920b477f91',
-      name: 'Sport',
-      icon: icons.sport,
-    },
-    {
-      id: '212e5213-5321-4e51-94cc-e420a9ef59f5',
-      name: 'Party and Night Life',
-      icon: icons.party,
-    },
-    {
-      id: 'b9e932a9-d0fe-4b49-9de1-e34928bc57f2',
-      name: 'Travel',
-      icon: icons.party,
-    },
-    {
-      id: '485edcab-c43d-4074-8092-b4a7652b69de',
-      name: 'Nature',
-      icon: icons.party,
-    },
-    {
-      id: 'b7af4749-90e4-4b75-b6f6-86f123d6d474',
-      name: 'Health &Wellness',
-      icon: icons.party,
-    },
-    {
-      id: 'cd924f7a-4bf8-4248-abd8-27728272ee38',
-      name: 'Culture',
-      icon: icons.party,
-    },
-    {
-      id: '747f05c0-0d6d-4879-9fbd-9ebd9c8623b8',
-      name: 'Food & Cooking',
-      icon: icons.party,
-    },
-    {
-      id: '5ba5d8ae-1e18-4abd-92b8-e705e8b8efbd',
-      name: 'Education',
-      icon: icons.party,
-    },
-    {
-      id: 'cc0d5bd1-168a-400b-b3d9-3c976dd217c9',
-      name: 'Gaming',
-      icon: icons.party,
-    },
-    {
-      id: '13bd27d4-2431-4c97-8d24-25ff301fd8c1',
-      name: 'Language Exchange',
-      icon: icons.party,
-    },
-  ];
 
   const onSelect = (categoryId: string) => {
     if (!criteria?.categoriesId) {
@@ -127,7 +70,7 @@ export const FilterEventSheet = (props: SheetProps) => {
           <Text style={styles.header}>Filters</Text>
         </View>
         <View style={styles.categories}>
-          {categories.map(item => {
+          {categories.map((item: any) => {
             return (
               <Category
                 key={item.id}
@@ -157,10 +100,10 @@ export const FilterEventSheet = (props: SheetProps) => {
             />
             <Text style={{marginHorizontal: normalize(4)}}>Days</Text>
           </View>
-          <CalendarInput
+          <FilterCalendarInput
             style={styles.input}
             // disabled={view}
-          ></CalendarInput>
+          ></FilterCalendarInput>
         </View>
         <View style={styles.inputConatiner}>
           <View style={styles.inputName}>
@@ -170,10 +113,10 @@ export const FilterEventSheet = (props: SheetProps) => {
             />
             <Text style={{marginHorizontal: normalize(4)}}>Times</Text>
           </View>
-          <TimeInput
+          <FilterTimeInput
             style={styles.input}
             // disabled={view}
-          ></TimeInput>
+          ></FilterTimeInput>
         </View>
         {/* <View style={styles.inputConatiner}>
           <View style={styles.inputName}>

@@ -13,29 +13,29 @@ import RNDateTimePicker, {
 import {Touchable} from '../Button/Touchable';
 import {useEventStore} from '../../stores/eventStore';
 
-export const TimeInput: React.FC<any> = props => {
+export const FilterTimeInput: React.FC<any> = props => {
   const {disabled, style} = props;
-  const form = useEventStore(state => state.form);
+  const criteria = useEventStore(state => state.criteria);
   const onPress = () => {
-    SheetManager.show('TimeInputSheet');
+    SheetManager.show('FilterTimeInputSheet');
   };
 
   return (
     <View>
       <TouchableOpacity
-        disabled={disabled || !form?.startDate}
+        disabled={disabled || !criteria?.startDate}
         style={style}
         onPress={onPress}>
-        {form?.startDate ? (
+        {criteria?.startDate ? (
           <Text>
-            {`${new Date(form?.startDate).toLocaleTimeString('th-TH', {
+            {`${new Date(criteria?.startDate).toLocaleTimeString('th-TH', {
               hour: 'numeric',
               minute: 'numeric',
             })}`}
-            {form?.endDate
+            {criteria?.endDate
               ? `${
                   ' - ' +
-                  `${new Date(form?.endDate).toLocaleTimeString('th-TH', {
+                  `${new Date(criteria?.endDate).toLocaleTimeString('th-TH', {
                     hour: 'numeric',
                     minute: 'numeric',
                   })}`
@@ -51,16 +51,16 @@ export const TimeInput: React.FC<any> = props => {
   );
 };
 
-export const TimeSheet = (props: SheetProps) => {
-  const form = useEventStore(state => state.form);
+export const FilterTimeSheet = (props: SheetProps) => {
+  const criteria = useEventStore(state => state.criteria);
   const onPressSave = () => {
-    SheetManager.hide('TimeInputSheet');
+    SheetManager.hide('FilterTimeInputSheet');
   };
   const onChange = (field: 'startDate' | 'endDate', value: any) => {
     const time = new Date(value);
-    const datetime = new Date(form?.[field] ?? new Date());
-    useEventStore.getState().setForm({
-      ...form,
+    const datetime = new Date(criteria?.[field] ?? new Date());
+    useEventStore.getState().setCriteria({
+      ...criteria,
       [field]: new Date(
         new Date(datetime.setHours(time.getHours())).setMinutes(
           time.getMinutes(),
@@ -84,7 +84,7 @@ export const TimeSheet = (props: SheetProps) => {
             <Text>Start with</Text>
             <RNDateTimePicker
               mode="time"
-              value={new Date(form?.startDate ?? new Date())}
+              value={new Date(criteria?.startDate ?? new Date())}
               is24Hour={false}
               display="spinner"
               textColor={colors.primary}
@@ -95,12 +95,12 @@ export const TimeSheet = (props: SheetProps) => {
             <Text>End with</Text>
             <RNDateTimePicker
               mode="time"
-              value={new Date(form?.endDate ?? new Date())}
+              value={new Date(criteria?.endDate ?? new Date())}
               is24Hour={false}
               display="spinner"
               textColor={colors.primary}
               onChange={(event, value) => onChange('endDate', value)}
-              minimumDate={new Date(form?.startDate ?? new Date())}
+              minimumDate={new Date(criteria?.startDate ?? new Date())}
             />
           </View>
           {/* <Touchable
@@ -115,7 +115,7 @@ export const TimeSheet = (props: SheetProps) => {
   );
 };
 
-export default TimeInput;
+export default FilterTimeInput;
 
 const styles = StyleSheet.create({
   container: {

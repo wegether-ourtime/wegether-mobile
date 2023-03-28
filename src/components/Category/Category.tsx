@@ -5,7 +5,7 @@ import {TouchableOpacity} from 'react-native-gesture-handler';
 import {colors, font} from '../../common/assets';
 
 interface Props {
-  onSelect: (categoryId: string) => void;
+  onSelect?: (categoryId: string) => void;
   disabled?: boolean;
   categoryId?: string;
   name?: string;
@@ -26,7 +26,7 @@ export const Category: React.FC<Props> = props => {
     icon,
     backgroundColor,
     textColor,
-    selected
+    selected,
     // selectedTextColor,
     // selectedBackgroundColor,
   } = props;
@@ -37,7 +37,7 @@ export const Category: React.FC<Props> = props => {
       disabled={disabled}
       onPress={() => {
         // setSelected(!selected);
-        onSelect(categoryId ?? '');
+        onSelect ? onSelect(categoryId ?? '') : null;
       }}>
       <View
         style={[

@@ -19,10 +19,10 @@ export interface EventForm {
   isHost: boolean;
   startDate: Date | null;
   endDate: Date | null;
-  eventCategories: any | null;
   location: any | null;
   maxParticipant: number | string;
   userEvents: UserEvent[] | [];
+  eventCategories: any[] | [];
 }
 
 export const initialEventForm = {
@@ -31,8 +31,8 @@ export const initialEventForm = {
   isHost: false,
   startDate: null,
   endDate: null,
-  eventCategories: null,
   location: null,
   maxParticipant: 2,
+  eventCategories: [],
   userEvents: [],
 } as EventForm;
