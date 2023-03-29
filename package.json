@@ -53,6 +53,7 @@
     "react-native-tab-view": "^3.3.4",
     "react-native-toast-message": "^2.1.5",
     "react-native-video": "^5.2.1",
+    "react-native-virtual-keyboard": "^1.2.2",
     "react-native-vision-camera": "^2.15.4",
     "rn-select-date-range": "^5.0.0",
     "socket.io-client": "^4.6.0",

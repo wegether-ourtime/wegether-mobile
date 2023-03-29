@@ -84,7 +84,6 @@ const EventDetailScreen: React.FC<any> = ({navigation, route}) => {
       setJoined(true);
       userEvent.isHost && setIsHost(true);
     }
-    console.log(event.eventCategories);
   };
 
   useEffect(() => {

@@ -28,6 +28,7 @@ import ScanScreen from '../../screens/ScanScreen/ScanScreen';
 import EventFormScreen from '../../screens/EventFormScreen/EventFormScreen';
 import ChatListScreen from '../../screens/ChatListScreen/ChatListScreen';
 import {ProfileNavigator} from '../ProfileNavigator';
+import CodeScreen from '../../screens/ScanScreen/CodeScreen';
 
 const Tab = createBottomTabNavigator();
 
@@ -48,7 +49,7 @@ const MainTapNavigator: React.FC<any> = ({navigation}) => {
     {
       name: 'Scan',
       title: 'หน้าสแกน qr code',
-      component: ScanScreen,
+      component: CodeScreen,
       activeIcon: icons.qrActive,
       inactiveIcon: icons.qrInactive,
     },

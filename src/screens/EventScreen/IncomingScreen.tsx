@@ -63,7 +63,9 @@ const IncomingScreen: React.FC<Prop> = (props: Prop) => {
                 joined={true}
                 location={item.location}
                 userEvents={item.userEvents}
-                userId={userId}></Event>
+                userId={userId}
+                maxParticipant={item.maxParticipant}
+              />
             );
           }}
         />

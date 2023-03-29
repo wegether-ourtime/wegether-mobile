@@ -23,6 +23,7 @@ export const Event: React.FC<any> = props => {
     startDate,
     endDate,
     eventImg,
+    maxParticipant,
     location,
     userId,
     joined,
@@ -55,6 +56,7 @@ export const Event: React.FC<any> = props => {
   //   });
   // };
 
+  const host = userEvents.find((ue: any) => ue.isHost)?.user;
   return (
     <TouchableOpacity
       onPress={() =>
@@ -74,14 +76,15 @@ export const Event: React.FC<any> = props => {
               style={{
                 width: '60%',
                 flexDirection: 'row',
+                alignSelf: 'center',
               }}>
-              <Avatar
+              {/* <Avatar
                 avatarStyle={styles.profile}
                 containerStyle={styles.profileContainer}
                 size={normalize(40)}
                 rounded
-                source={images.profile}
-              />
+                source={{uri: host.imgProfileUrl}}
+              /> */}
             </View>
             <View style={{width: '40%', alignItems: 'flex-end'}}>
               {!isHost && !joined && (
@@ -102,11 +105,50 @@ export const Event: React.FC<any> = props => {
               )}
             </View>
           </View>
-          <Text style={styles.eventName}>{eventName}</Text>
-          <Text style={[styles.eventDatetime]}>{date}</Text>
-          <Text style={[styles.eventDatetime]}>{time}</Text>
-          <Text style={[styles.eventDescription]}>{eventDetail}</Text>
-          <Text style={[styles.eventDescription]}>{location?.name}</Text>
+          <View style={styles.rowContainer}>
+            <Text style={styles.eventName}>{eventName}</Text>
+          </View>
+          <View style={styles.rowContainer}>
+            <Image
+              source={icons.calendar}
+              style={styles.detailIcon}
+              resizeMode="contain"
+            />
+            <Text style={[styles.eventDescription]}>{date}</Text>
+          </View>
+          <View style={styles.rowContainer}>
+            <Image
+              source={icons.time}
+              style={styles.detailIcon}
+              resizeMode="contain"
+            />
+            <Text style={[styles.eventDescription]}>{time}</Text>
+          </View>
+          <View style={styles.rowContainer}>
+            <Image
+              source={icons.location}
+              style={styles.detailIcon}
+              resizeMode="contain"
+            />
+            <Text style={[styles.eventDescription]}>
+              {location?.name?.length < 20
+                ? `${location?.name}`
+                : `${location?.name.substring(0, 20)}...`}
+            </Text>
+          </View>
+          <View style={styles.rowContainer}>
+            <Image
+              source={icons.peoples}
+              style={styles.detailIcon}
+              resizeMode="contain"
+            />
+            <Text style={[styles.eventDescription]}>
+              {maxParticipant} peoples ({userEvents.length} joined)
+            </Text>
+          </View>
+          {/* <View style={styles.rowContainer}>
+            <Text style={[styles.eventDescription]}>{eventDetail}</Text>
+          </View> */}
         </View>
       </View>
     </TouchableOpacity>
@@ -163,11 +205,7 @@ const styles = StyleSheet.create({
     width: '100%',
     fontFamily: font.medium,
     fontSize: normalize(12),
-  },
-  eventDatetime: {
-    width: '100%',
-    fontFamily: font.medium,
-    fontSize: normalize(12),
+    marginLeft: normalize(8),
   },
   joinButton: {
     height: normalize(30),
@@ -176,5 +214,14 @@ const styles = StyleSheet.create({
     borderRadius: normalize(8),
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  rowContainer: {
+    flexDirection: 'row',
+    alignSelf: 'center',
+    marginVertical: normalize(4),
+  },
+  detailIcon: {
+    width: normalize(16),
+    height: normalize(16),
   },
 });

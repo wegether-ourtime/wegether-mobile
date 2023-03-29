@@ -16,6 +16,7 @@ import LocationScreen from '../screens/LocationScreen/LocationScreen';
 import FriendProfileScreen from '../screens/ProfileScreen/FriendProfileScreen';
 import EditProfileScreen from '../screens/EditProfileScreen/EditProfileScreen';
 import LivingPlaceScreen from '../screens/LocationScreen/LivingPlaceScreen';
+import CodeScreen from '../screens/ScanScreen/CodeScreen';
 
 export type StackParamList = {
   // DeleteProfileScreen: {
@@ -51,7 +52,8 @@ const MainNavigator: React.FC = () => {
       />
       <Stack.Screen name="EventScreen" component={EventScreen} />
       <Stack.Screen name="EventDetailScreen" component={EventDetailScreen} />
-      <Stack.Screen name="ScanScreen" component={ScanScreen} />
+      {/* <Stack.Screen name="ScanScreen" component={ScanScreen} /> */}
+      <Stack.Screen name="ScanScreen" component={CodeScreen} />
       <Stack.Screen name="EventFormScreen" component={EventFormScreen} />
       <Stack.Screen name="ChatListScreen" component={ChatListScreen} />
       <Stack.Screen name="ChatScreen" component={ChatScreen} />

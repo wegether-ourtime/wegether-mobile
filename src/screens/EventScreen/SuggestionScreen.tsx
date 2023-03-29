@@ -91,6 +91,7 @@ const SuggestionScreen: React.FC<Prop> = (props: Prop) => {
                 userEvents={item.userEvents}
                 userId={userId}
                 onPressJoin={onPressJoin}
+                maxParticipant={item.maxParticipant}
               />
             );
           }}
