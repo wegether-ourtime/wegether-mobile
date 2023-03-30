@@ -56,7 +56,7 @@ const LocationScreen: React.FC<any> = ({navigation}) => {
         <FlatList
           style={{margin: normalize(10)}}
           data={locations}
-          keyExtractor={item => item.name}
+          keyExtractor={(item, index) => index.toString()}
           renderItem={({item}) => (
             <TouchableOpacity onPress={() => onSelect(item)}>
               <View style={styles.option}>
@@ -101,7 +101,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    
   },
   option: {
     marginVertical: normalize(8),

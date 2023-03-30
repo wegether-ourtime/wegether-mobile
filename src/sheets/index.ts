@@ -6,6 +6,7 @@ import { FilterCalendarSheet } from '../components/Event/FilterCalendar';
 import {PickerSheet} from '../components/Input/Picker';
 import {TimeSheet} from '../components/Input/Time';
 import { FilterTimeSheet } from '../components/Event/FilterTime';
+import { ParticipantSheet } from '../components/Event/ParticipantList';
 
 /**
  * Registering the sheets here because otherwise sheet closes on
@@ -18,5 +19,6 @@ registerSheet('CancelEventSheet', CancelEventSheet);
 registerSheet('PickerSheet', PickerSheet);
 registerSheet('FilterCalendarInputSheet', FilterCalendarSheet);
 registerSheet('FilterTimeInputSheet', FilterTimeSheet);
+registerSheet('ParticipantSheet', ParticipantSheet);
 
 export {};

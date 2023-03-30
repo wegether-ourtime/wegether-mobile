@@ -1,0 +1,98 @@
+import {useEffect} from 'react';
+import {FlatList, StyleSheet, Text, View} from 'react-native';
+import ActionSheet, {SheetManager, SheetProps} from 'react-native-actions-sheet';
+import {TouchableOpacity} from 'react-native-gesture-handler';
+import {normalize} from '../../common/function/normalize';
+import {Avatar} from '@rneui/base';
+import * as RootNavigation from '../../navigations/RootNavigation';
+import images from '../../common/assets/images';
+import {colors} from '../../common/assets';
+import fonts from '../../common/assets/fonts';
+import {useUserEventStore} from '../../stores/userEventStore';
+
+export const ParticipantSheet = (props: SheetProps) => {
+  const userEvents = useUserEventStore(state => state.userEvents);
+  const getUserEvents = async () => {
+    useUserEventStore.getState().getUserEvents({
+      eventId: props?.payload?.eventId,
+    });
+  };
+
+  useEffect(() => {
+    getUserEvents();
+  }, []);
+
+  return (
+    <ActionSheet
+      containerStyle={{
+        height: normalize(110 * userEvents.length),
+      }}
+      id={props.sheetId}
+      useBottomSafeAreaPadding
+      gestureEnabled={true}>
+      <FlatList
+        data={userEvents}
+        keyExtractor={item => item.userEventId}
+        renderItem={({item}) => {
+          return (
+            <TouchableOpacity
+              style={styles.chatContainer}
+              onPress={async () => {
+                await SheetManager.hide(props.sheetId)
+                RootNavigation.navigate('Profile', {
+                  screen: 'FriendProfileScreen',
+                  params: {
+                    userId: item.userId,
+                  },
+                });
+              }}>
+              <Avatar
+                avatarStyle={styles.img}
+                containerStyle={styles.imgContainer}
+                size={normalize(56)}
+                rounded
+                source={
+                  item?.user?.imgProfileUrl
+                    ? {uri: item?.user?.imgProfileUrl}
+                    : images.cover
+                }
+              />
+              {/* <Image source={item.icon} style={{marginTop: normalize(2)}}></Image> */}
+              <View style={styles.chatDetail}>
+                <Text style={styles.chatName}>{item?.user?.fullName}</Text>
+              </View>
+            </TouchableOpacity>
+          );
+        }}
+      />
+    </ActionSheet>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    height: '100%',
+  },
+  chatContainer: {
+    height: normalize(72),
+    marginVertical: normalize(2),
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+  },
+  img: {
+    borderRadius: normalize(2),
+    borderColor: colors.white,
+  },
+  imgContainer: {
+    alignSelf: 'center',
+    // padding: normalize(5),
+    margin: normalize(16),
+  },
+  chatDetail: {
+    alignSelf: 'center',
+  },
+  chatName: {
+    fontFamily: fonts.medium,
+    fontSize: normalize(14),
+  },
+});

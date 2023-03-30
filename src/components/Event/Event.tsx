@@ -12,6 +12,7 @@ import * as RootNavigation from '../../navigations/RootNavigation';
 import {useAuthStore} from '../../stores/authStore';
 import {useUserEventStore} from '../../stores/userEventStore';
 import {Touchable} from '../Button/Touchable';
+import {StatusBar} from './StatusBar';
 
 export const Event: React.FC<any> = props => {
   // const user = useAuthStore(state => state.user);
@@ -29,6 +30,7 @@ export const Event: React.FC<any> = props => {
     joined,
     userEvents,
     onPressJoin,
+    incomingTab,
   } = props;
   let a = 1;
   const date = `${new Date(startDate).toLocaleDateString('th-TH', {
@@ -74,19 +76,19 @@ export const Event: React.FC<any> = props => {
           <View style={styles.eventHost}>
             <View
               style={{
-                width: '60%',
+                width: '40%',
                 flexDirection: 'row',
                 alignSelf: 'center',
               }}>
-              {/* <Avatar
+              <Avatar
                 avatarStyle={styles.profile}
                 containerStyle={styles.profileContainer}
                 size={normalize(40)}
                 rounded
                 source={{uri: host.imgProfileUrl}}
-              /> */}
+              />
             </View>
-            <View style={{width: '40%', alignItems: 'flex-end'}}>
+            <View style={{width: '60%', alignItems: 'flex-end'}}>
               {!isHost && !joined && (
                 <TouchableOpacity
                   style={{marginTop: normalize(5)}}
@@ -103,6 +105,7 @@ export const Event: React.FC<any> = props => {
                   </View>
                 </TouchableOpacity>
               )}
+              {incomingTab && <StatusBar />}
             </View>
           </View>
           <View style={styles.rowContainer}>

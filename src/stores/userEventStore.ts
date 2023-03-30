@@ -2,14 +2,16 @@ import {create} from 'zustand';
 import axios from 'axios';
 import {BASE_URL} from '../config';
 import Event from '../models/Event';
+import UserEvent from '../models/UserEvent';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 interface UserEventState {
-  userEvents: Event[];
-  userEvent: Event | null;
+  userEvents: UserEvent[];
+  userEvent: UserEvent | null;
   loading: boolean;
   getUserEvents: (criteria: any) => void;
   getUserEvent: (userEventId: string) => void;
-  createUserEvent: (createUserEvent: any) => any;
+  createUserEvent: (payload: any) => any;
   // updateUserEvent: (userEventId: string) => any;
   deleteUserEvent: (userEventId: any) => any;
 }
@@ -21,7 +23,10 @@ export const useUserEventStore = create<UserEventState>(set => ({
   getUserEvents: async (criteria: any) => {
     try {
       set({loading: true});
-      const {data} = await axios.get(`${BASE_URL}/user-event`, {...criteria});
+      // const userId = (await AsyncStorage.getItem('userId')) ?? '';
+      const {data} = await axios.get(`${BASE_URL}/user-event`, {
+        params: {...criteria},
+      });
       const userEvents = data;
 
       set({userEvents});
@@ -46,11 +51,11 @@ export const useUserEventStore = create<UserEventState>(set => ({
       set({loading: false});
     }
   },
-  createUserEvent: async (createUserEvent: any) => {
+  createUserEvent: async (payload: any) => {
     try {
       set({loading: true});
       const {data} = await axios.post(`${BASE_URL}/user-event`, {
-        ...createUserEvent,
+        ...payload,
       });
       const userEvent = data;
 

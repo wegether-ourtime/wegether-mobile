@@ -40,53 +40,72 @@ const CreateEventScreen: React.FC<any> = ({navigation, route}) => {
   const [isHost, setIsHost] = useState(undefined);
   const validateField = form
     ? !Object.entries(form).some(x => {
-        if (['endDate', 'eventCategories'].includes(x[0])) {
+        if (
+          ['cancelEventReason', 'endDate', 'eventCategories'].includes(x[0])
+        ) {
           return false;
         }
 
         return x[1] === null || x[1] === '';
       })
     : null;
+  const validateCategories = form ? form.eventCategories.length >= 1 : null;
 
   const onSubmit = async () => {
-    if (!validateField) {
+    try {
+      if (!validateField) {
+        Toast.show({
+          type: 'fail',
+          text1: 'Error',
+          text2: 'Some field must not empty!',
+        });
+      } else if (!validateCategories) {
+        Toast.show({
+          type: 'fail',
+          text1: 'Error',
+          text2: 'Please select category!',
+        });
+      } else {
+        const userId = await AsyncStorage.getItem('userId');
+        let event: Event;
+        let file: any;
+        if (form?.eventId) {
+          event = await useEventStore.getState().updateEvent(form?.eventId, {
+            ...form,
+          });
+        } else {
+          event = await useEventStore.getState().createEvent({
+            ...form,
+            userEvents: [{userId, isHost: true}],
+          });
+        }
+
+        if (eventImg?.assets) {
+          file = await useFileStore
+            .getState()
+            .uploadFile(eventImg, FileResource.EVENT, event.eventId);
+        }
+
+        if (event && eventImg?.assets && file) {
+          setEventImg(undefined);
+          RootNavigation.navigate('Main', {
+            screen: 'EventDetailScreen',
+            params: {eventId: event.eventId},
+          });
+        }
+
+        Toast.show({
+          type: 'success',
+          text1: 'Success',
+          text2: 'Event detail updated.',
+        });
+      }
+    } catch {
       Toast.show({
         type: 'fail',
-        position: 'top',
-        // topOffset : 10,
         text1: 'Error',
-        text2: 'Some field must not empyu!',
+        text2: 'Internal server error.',
       });
-    } else {
-      const userId = await AsyncStorage.getItem('userId');
-      let event: Event;
-      let file: any;
-      if (form?.eventId) {
-        event = await useEventStore.getState().updateEvent(form?.eventId, {
-          ...form,
-        });
-      } else {
-        event = await useEventStore.getState().createEvent({
-          ...form,
-          userEvents: [{userId, isHost: true}],
-        });
-      }
-
-      if (eventImg?.assets) {
-        file = await useFileStore
-          .getState()
-          .uploadFile(eventImg, FileResource.EVENT, event.eventId);
-      }
-
-      if (event && eventImg?.assets && file) {
-        setEventImg(undefined);
-        RootNavigation.navigate('Main', {
-          screen: 'EventDetailScreen',
-          params: {eventId: event.eventId},
-        });
-      } else {
-        // err message
-      }
     }
   };
 
@@ -157,11 +176,11 @@ const CreateEventScreen: React.FC<any> = ({navigation, route}) => {
     useEventStore.getState().clearForm();
   }, []);
 
-  useFocusEffect(
-    useCallback(() => {
-      getEvent();
-    }, []),
-  );
+  // useFocusEffect(
+  //   useCallback(() => {
+  //     getEvent();
+  //   }, []),
+  // );
 
   return (
     <SafeAreaView style={[stylesApp.container]}>

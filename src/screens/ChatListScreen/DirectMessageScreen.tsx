@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {Avatar} from '@rneui/base';
-import {useEffect} from 'react';
+import {useCallback, useEffect} from 'react';
 import {FlatList, StyleSheet, Text, View} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import Spinner from 'react-native-loading-spinner-overlay/lib';
@@ -13,6 +13,7 @@ import {useChatStore} from '../../stores/chatStore';
 import * as RootNavigation from '../../navigations/RootNavigation';
 import {ChannelList} from 'stream-chat-react-native';
 import fonts from '../../common/assets/fonts';
+import {useFocusEffect} from '@react-navigation/native';
 
 const DirectMessageScreen: React.FC<any> = ({navigation}) => {
   const userFriendChats = useChatStore(state => state.userFriendList);
@@ -24,6 +25,12 @@ const DirectMessageScreen: React.FC<any> = ({navigation}) => {
   useEffect(() => {
     getUserFriendChats();
   }, []);
+
+  useFocusEffect(
+    useCallback(() => {
+      getUserFriendChats();
+    }, []),
+  );
 
   return (
     <View style={styles.container}>

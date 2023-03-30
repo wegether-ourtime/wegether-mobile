@@ -1,6 +1,7 @@
-import {Avatar} from '@rneui/themed';
+import {Avatar, Icon} from '@rneui/themed';
 import {
   FlatList,
+  Image,
   KeyboardAvoidingView,
   Platform,
   SafeAreaView,
@@ -10,7 +11,7 @@ import {
   View,
 } from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
-import {colors} from '../../common/assets';
+import {colors, icons} from '../../common/assets';
 import images from '../../common/assets/images';
 import {FileResource} from '../../common/enums/fileResource';
 import {normalize} from '../../common/function/normalize';
@@ -24,6 +25,7 @@ import fonts from '../../common/assets/fonts';
 import * as RootNavigation from '../../navigations/RootNavigation';
 import {useFocusEffect} from '@react-navigation/native';
 import {socket} from '../../common/function/utility';
+import {SheetManager} from 'react-native-actions-sheet';
 
 const ChatScreen: React.FC<any> = ({navigation, route}) => {
   const [userFriendId] = useState(route?.params?.userFriendId);
@@ -110,6 +112,49 @@ const ChatScreen: React.FC<any> = ({navigation, route}) => {
         title={chatName}
         showBackBtn
         onPressBack={() => navigation.goBack()}
+        headerRight={() => {
+          if (eventId) {
+            return (
+              <View
+                style={{
+                  paddingVertical: 16,
+                  paddingHorizontal: 10,
+                  flexDirection: 'row',
+                }}>
+                <TouchableOpacity
+                  style={{marginHorizontal: 8}}
+                  onPress={() => {
+                    SheetManager.show('ParticipantSheet', {
+                      payload: {
+                        eventId,
+                      },
+                    });
+                  }}>
+                  <Image
+                    source={icons.peoples}
+                    style={{width: normalize(20), height: normalize(20)}}
+                    resizeMode="contain"
+                  />
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={{marginHorizontal: 8}}
+                  onPress={() => {
+                    RootNavigation.navigate('Main', {
+                      screen: 'EventDetailScreen',
+                      params: {eventId},
+                    });
+                  }}>
+                  <Image
+                    source={icons.calendar}
+                    style={{width: normalize(20), height: normalize(20)}}
+                    resizeMode="contain"
+                  />
+                </TouchableOpacity>
+              </View>
+            );
+          }
+          return <></>;
+        }}
       />
       <GiftedChat
         alignTop={false}
@@ -126,6 +171,14 @@ const ChatScreen: React.FC<any> = ({navigation, route}) => {
           onChangeMessage(value);
         }}
         // renderInputToolbar={props => customtInputToolbar(props)}
+        onPressAvatar={(user) => {
+          RootNavigation.navigate('Profile', {
+            screen: 'FriendProfileScreen',
+            params: {
+              userId: user._id,
+            },
+          });
+        }}
         messages={messages}
         onSend={() => onSend()}
         user={{

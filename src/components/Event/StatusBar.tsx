@@ -13,25 +13,30 @@ import {useAuthStore} from '../../stores/authStore';
 import {useUserEventStore} from '../../stores/userEventStore';
 import {Touchable} from '../Button/Touchable';
 
-export const Event: React.FC<any> = props => {
+export const StatusBar: React.FC<any> = props => {
+  const {style} = props;
   // const user = useAuthStore(state => state.user);
   const {status} = props;
 
   return (
-    <View style={styles.main}>
-      <Text></Text>
+    <View style={[styles.main, style]}>
+      <Text style={styles.text}>Incoming</Text>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   main: {
-    height: normalize(100),
-    backgroundColor: colors.white,
-    padding: normalize(8),
-    marginVertical: normalize(5),
+    backgroundColor: colors.green,
     borderRadius: normalize(8),
-    flexDirection: 'row',
-    alignItems: 'center',
+    padding: normalize(6),
+    paddingHorizontal: normalize(10),
+    marginVertical: normalize(5),
+    // borderRadius: normalize(8),
+  },
+  text: {
+    color: colors.white,
+    fontFamily: font.medium,
+    fontSize: normalize(14),
   },
 });

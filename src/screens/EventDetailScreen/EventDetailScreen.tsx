@@ -43,7 +43,6 @@ const EventDetailScreen: React.FC<any> = ({navigation, route}) => {
   const getUserId = async () => setUserId(await AsyncStorage.getItem('userId'));
   const [joined, setJoined] = useState<boolean | undefined>(undefined);
   const [isHost, setIsHost] = useState<boolean | undefined>(undefined);
-
   const [eventImgUri, setEventImgUri] = useState<string | undefined>(undefined);
 
   useEffect(() => {
@@ -141,6 +140,7 @@ const EventDetailScreen: React.FC<any> = ({navigation, route}) => {
               const category = allCategories.find(
                 ac => ac.id == item.categoryId,
               );
+
               return (
                 <Category
                   key={category?.id}

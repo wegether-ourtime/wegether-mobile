@@ -11,6 +11,7 @@ export default interface User {
   gender: string;
   bio: string;
   livingPlace: any;
+  imgProfileUrl: string;
 }
 
 export interface UserProfileForm {
