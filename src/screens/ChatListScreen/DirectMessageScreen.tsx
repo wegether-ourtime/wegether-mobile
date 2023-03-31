@@ -95,10 +95,11 @@ const styles = StyleSheet.create({
     margin: normalize(16),
   },
   chatDetail: {
+    marginHorizontal: normalize(8),
     alignSelf: 'center',
   },
   chatName: {
-    fontFamily: fonts.medium,
-    fontSize: normalize(14),
+    fontFamily: font.medium,
+    fontSize: normalize(16),
   },
 });

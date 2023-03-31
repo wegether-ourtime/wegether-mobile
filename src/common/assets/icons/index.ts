@@ -27,4 +27,6 @@ export default {
   peoples: require('./peoples.png'),
   time: require('./time.png'),
   calendar: require('./calendar.png'),
+  tick: require('./tick.png'),
+  cross: require('./cross.png'),
 };

@@ -79,6 +79,7 @@ export const Event: React.FC<any> = props => {
                 width: '40%',
                 flexDirection: 'row',
                 alignSelf: 'center',
+                justifyContent: 'center',
               }}>
               <Avatar
                 avatarStyle={styles.profile}
@@ -88,21 +89,24 @@ export const Event: React.FC<any> = props => {
                 source={{uri: host.imgProfileUrl}}
               />
             </View>
-            <View style={{width: '60%', alignItems: 'flex-end'}}>
+            <View
+              style={{
+                width: '60%',
+                alignItems: 'flex-end',
+                justifyContent: 'center',
+              }}>
               {!isHost && !joined && (
                 <TouchableOpacity
-                  style={{marginTop: normalize(5)}}
+                  containerStyle={styles.joinButton}
                   onPress={() => onPressJoin(eventId, userId)}>
-                  <View style={styles.joinButton}>
-                    <Text
-                      style={{
-                        color: colors.white,
-                        fontFamily: font.medium,
-                        fontSize: normalize(14),
-                      }}>
-                      Join
-                    </Text>
-                  </View>
+                  <Text
+                    style={{
+                      color: colors.white,
+                      fontFamily: font.medium,
+                      fontSize: normalize(14),
+                    }}>
+                    Join
+                  </Text>
                 </TouchableOpacity>
               )}
               {incomingTab && <StatusBar />}
@@ -211,8 +215,8 @@ const styles = StyleSheet.create({
     marginLeft: normalize(8),
   },
   joinButton: {
-    height: normalize(30),
-    width: normalize(60),
+    height: normalize(32),
+    width: '90%',
     backgroundColor: colors.primary,
     borderRadius: normalize(8),
     alignItems: 'center',

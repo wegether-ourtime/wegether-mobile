@@ -2,7 +2,14 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useFocusEffect} from '@react-navigation/native';
 import {Avatar} from '@rneui/base';
 import {useCallback, useEffect, useState} from 'react';
-import {View, Image, StyleSheet, Text, SafeAreaView} from 'react-native';
+import {
+  View,
+  Image,
+  StyleSheet,
+  Text,
+  SafeAreaView,
+  FlatList,
+} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {launchImageLibrary} from 'react-native-image-picker';
 import Spinner from 'react-native-loading-spinner-overlay/lib';
@@ -19,13 +26,17 @@ import {ProfileOption} from '../../components/Option/ProfileOption';
 import MyEventNavigator from '../../navigations/topTabs/MyEventNavigator';
 import {useAuthStore} from '../../stores/authStore';
 import {useFileStore} from '../../stores/fileStore';
+import {useUserFriendStore} from '../../stores/userFriendStore';
 import {useUserStore} from '../../stores/userStore';
+import * as RootNavigation from '../../navigations/RootNavigation';
 
 const ProfileScreen: React.FC<any> = ({navigation}) => {
   const user = useUserStore(state => state.user);
+  const userFriends = useUserFriendStore(state => state.userFriends);
   const loading = useUserStore(state => state.loading);
   const [coverImg, setCoverImg] = useState();
   const [profileImg, setProfileImg] = useState();
+  const [toggleNotification, setToggleNotification] = useState<boolean>(false);
   // const [userId, setUserId] = useState<any>();
   // const getUserId = async () => setUserId(await AsyncStorage.getItem('userId'));
   const getUser = async () => {
@@ -37,6 +48,12 @@ const ProfileScreen: React.FC<any> = ({navigation}) => {
     // useUserStore.getState().setLoading(false)
   };
   const [toggleOption, setToggleOption] = useState<boolean>(false);
+  const getFriendRequest = async () => {
+    const userId = await AsyncStorage.getItem('userId');
+    const res = await useUserFriendStore
+      .getState()
+      .getFriendRequest(userId ?? '');
+  };
 
   useEffect(() => {
     getUser();
@@ -76,6 +93,19 @@ const ProfileScreen: React.FC<any> = ({navigation}) => {
     );
   };
 
+  const onAcceptFriendRequest = async (userFriendId: string) => {
+    await useUserFriendStore.getState().updateUserFriend(userFriendId, {
+      userFriendId,
+      status: 'SUCCESS',
+    });
+    await getFriendRequest();
+  };
+
+  const onRejectFriendRequest = async (userFriendId: string) => {
+    await useUserFriendStore.getState().deleteUserFriend(userFriendId);
+    await getFriendRequest();
+  };
+
   return (
     <View style={[stylesCentral.container]}>
       <View style={styles.userDetail}>
@@ -103,17 +133,101 @@ const ProfileScreen: React.FC<any> = ({navigation}) => {
           <Text style={[styles.name, {paddingVertical: normalize(1)}]}>
             {user?.fullName}
           </Text>
-          <Text style={[{paddingVertical: normalize(2)}]}>{user?.livingPlace?.name}</Text>
+          <Text style={[{paddingVertical: normalize(2)}]}>
+            {user?.livingPlace?.name}
+          </Text>
         </View>
         <View style={styles.bio}>
-          <Text style={styles.bioText}>{user?.gender}</Text>
-          <Text style={styles.bioText}>{user?.bio}</Text>
+          <View
+            style={{
+              width: '60%',
+              paddingHorizontal: normalize(24),
+            }}>
+            <Text style={styles.bioText}>{user?.gender}</Text>
+            <Text style={styles.bioText}>{user?.bio}</Text>
+          </View>
+          <View
+            style={{
+              width: '40%',
+              justifyContent: 'center',
+            }}>
+            <TouchableOpacity
+              onPress={async () => {
+                await getFriendRequest();
+                setToggleNotification(!toggleNotification);
+              }}
+              style={styles.input}>
+              <Text style={styles.inputText}>Notification</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
       <View style={{flex: 10}}>
         <MyEventNavigator />
       </View>
       <ProfileOption style={[styles.option]}></ProfileOption>
+      {toggleNotification && (
+        <View style={styles.notification}>
+          <FlatList
+            data={userFriends}
+            keyExtractor={item => item.userFriendId}
+            renderItem={({item, index}) => {
+              return (
+                <TouchableOpacity
+                  style={styles.userFriendContainer}
+                  onPress={() => {
+                    RootNavigation.navigate('Profile', {
+                      screen: 'FriendProfileScreen',
+                      params: {
+                        userId: item.userId,
+                      },
+                    });
+                  }}>
+                  <Avatar
+                    avatarStyle={styles.img}
+                    containerStyle={styles.imgContainer}
+                    size={normalize(48)}
+                    rounded
+                    source={{uri: item?.user?.imgProfileUrl}}
+                  />
+                  {/* <Image source={item.icon} style={{marginTop: normalize(2)}}></Image> */}
+                  <View style={styles.friendDetail}>
+                    <Text style={styles.friendName}>
+                      {item?.user?.fullName}
+                    </Text>
+                  </View>
+                  <View
+                    style={{
+                      // width: normalize(120),
+                      marginHorizontal: normalize(4),
+                      alignSelf: 'center',
+                      flexDirection: 'row',
+                    }}>
+                    <TouchableOpacity style={{marginHorizontal: normalize(8)}}>
+                      <Image
+                        source={icons.tick}
+                        style={{width: normalize(20), height: normalize(20)}}
+                        // resizeMode="contain"
+                      />
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      style={{
+                        marginHorizontal: normalize(8),
+                        marginTop: normalize(2),
+                      }}>
+                      <Image
+                        source={icons.cross}
+                        style={{width: normalize(20), height: normalize(20)}}
+                        // resizeMode="contain"
+                      />
+                    </TouchableOpacity>
+                  </View>
+                </TouchableOpacity>
+              );
+            }}
+          />
+        </View>
+      )}
       <Spinner
         visible={loading}
         textContent={'Loading...'}
@@ -176,16 +290,78 @@ const styles = StyleSheet.create({
     position: 'absolute',
     width: '100%',
     paddingVertical: normalize(0),
-    paddingHorizontal: normalize(24),
+    // paddingHorizontal: normalize(24),
     height: normalize(50),
     left: normalize(0),
     bottom: normalize(0),
-    // backgroundColor: 'blue',
+    flexDirection: 'row',
   },
   bioText: {
     color: '#969696',
     fontFamily: fonts.bold,
     fontSize: normalize(14),
     paddingVertical: normalize(1),
+  },
+  input: {
+    height: normalize(40),
+    margin: normalize(8),
+    // padding: normalize(15),
+    borderColor: colors.primary,
+    borderWidth: 0.5,
+    borderRadius: normalize(8),
+    color: colors.fontBlack,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  inputText: {
+    color: colors.primary,
+    fontFamily: font.medium,
+    fontSize: normalize(14),
+    // backgroundColor: 'red'
+  },
+  notification: {
+    position: 'absolute',
+    top: normalize(316),
+    left: normalize(3),
+    width: '98%',
+    // height: normalize(90),
+    // alignSelf: 'flex-start',
+    // flexDirection: 'row',
+    paddingHorizontal: normalize(8),
+    borderRadius: normalize(16),
+    backgroundColor: colors.white,
+    // Shadow only works on iOS.
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 8,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 5,
+    elevation: 15,
+  },
+  userFriendContainer: {
+    height: normalize(72),
+    marginVertical: normalize(1),
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+  },
+  img: {
+    borderRadius: normalize(2),
+    borderColor: colors.white,
+  },
+  imgContainer: {
+    alignSelf: 'center',
+    // padding: normalize(5),
+    margin: normalize(16),
+  },
+  friendDetail: {
+    width: normalize(172),
+    marginHorizontal: normalize(8),
+    alignSelf: 'center',
+  },
+  friendName: {
+    fontFamily: fonts.medium,
+    fontSize: normalize(16),
   },
 });
