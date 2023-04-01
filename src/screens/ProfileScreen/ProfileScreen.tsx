@@ -57,11 +57,19 @@ const ProfileScreen: React.FC<any> = ({navigation}) => {
 
   useEffect(() => {
     getUser();
+    return () => {
+      setToggleOption(false);
+      setToggleNotification(false);
+    };
   }, []);
 
   useFocusEffect(
     useCallback(() => {
       getUser();
+      return () => {
+        setToggleOption(false);
+        setToggleNotification(false);
+      };
     }, []),
   );
 
@@ -165,7 +173,11 @@ const ProfileScreen: React.FC<any> = ({navigation}) => {
       <View style={{flex: 10}}>
         <MyEventNavigator />
       </View>
-      <ProfileOption style={[styles.option]}></ProfileOption>
+      <ProfileOption
+        style={[styles.option]}
+        toggleOption={toggleOption}
+        setToggleOption={setToggleOption}
+      />
       {toggleNotification && (
         <View style={styles.notification}>
           <FlatList
@@ -179,7 +191,7 @@ const ProfileScreen: React.FC<any> = ({navigation}) => {
                     RootNavigation.navigate('Profile', {
                       screen: 'FriendProfileScreen',
                       params: {
-                        userId: item.userId,
+                        friendId: item.userId,
                       },
                     });
                   }}>

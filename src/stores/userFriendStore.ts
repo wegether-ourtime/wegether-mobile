@@ -13,6 +13,7 @@ interface UserFriendState {
   updateUserFriend: (userFriendId: string, payload: any) => any;
   deleteUserFriend: (userFriendId: any) => any;
   getFriendRequest: (userId: string) => any;
+  getRelations: (userId: string, friendId: string) => any;
 }
 
 export const useUserFriendStore = create<UserFriendState>(set => ({
@@ -101,6 +102,22 @@ export const useUserFriendStore = create<UserFriendState>(set => ({
 
       set({userFriends});
       return userFriends;
+    } catch (err) {
+      console.log(err);
+    } finally {
+      set({loading: false});
+    }
+  },
+  getRelations: async (userId: string, friendId: string) => {
+    try {
+      set({loading: true});
+      const {data} = await axios.get(`${BASE_URL}/user-friend/get-relations`, {
+        params: {userId, friendId},
+      });
+      const userFriend = data;
+
+      set({userFriend});
+      return userFriend;
     } catch (err) {
       console.log(err);
     } finally {

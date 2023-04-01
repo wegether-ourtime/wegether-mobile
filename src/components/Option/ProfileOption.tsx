@@ -23,7 +23,8 @@ import {useUserFriendStore} from '../../stores/userFriendStore';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export const ProfileOption: React.FC<any> = props => {
-  const [toggleOption, setToggleOption] = useState<boolean>(false);
+  // const [toggleOption, setToggleOption] = useState<boolean>(false);
+  const {toggleOption, setToggleOption} = props
   const {style, isFriend, friendId} = props;
   const logout = async () => {
     useAuthStore.getState().logout();
@@ -60,21 +61,6 @@ export const ProfileOption: React.FC<any> = props => {
     },
   ];
 
-  const friendProfileOption = [
-    {
-      id: 1,
-      name: 'Add Friend',
-      icon: icons.peoples,
-      onSelect: async () => {
-        const userId = (await AsyncStorage.getItem('userId')) ?? '';
-        useUserFriendStore.getState().createUserFriend({
-          userId,
-          friendId,
-        });
-      },
-    },
-  ];
-
   return (
     <View style={[styles.main, style]}>
       <TouchableOpacity
@@ -86,7 +72,7 @@ export const ProfileOption: React.FC<any> = props => {
       {toggleOption && (
         <View style={styles.options}>
           <FlatList
-            data={isFriend ? friendProfileOption : myProfileOption}
+            data={myProfileOption}
             keyExtractor={item => item.name}
             renderItem={({item, index}) => {
               return (

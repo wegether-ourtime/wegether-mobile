@@ -19,21 +19,55 @@ import {ProfileOption} from '../../components/Option/ProfileOption';
 import MyEventNavigator from '../../navigations/topTabs/MyEventNavigator';
 import {useAuthStore} from '../../stores/authStore';
 import {useFileStore} from '../../stores/fileStore';
+import {useUserFriendStore} from '../../stores/userFriendStore';
 import {useUserStore} from '../../stores/userStore';
 
 const FriendProfileScreen: React.FC<any> = ({navigation, route}) => {
-  const [userId] = useState(route?.params?.userId);
+  const [friendId] = useState(route?.params?.friendId);
   const user = useUserStore(state => state.user);
+  const userFriend = useUserFriendStore(state => state.userFriend);
   const loading = useUserStore(state => state.loading);
   const [coverImg, setCoverImg] = useState();
   const [profileImg, setProfileImg] = useState();
   const getUser = async () => {
-    const user = await useUserStore.getState().getUser(userId ?? '');
-    setCoverImg(user?.imgCoverUrl);
-    setProfileImg(user?.imgProfileUrl);
+    const friend = await useUserStore.getState().getUser(friendId ?? '');
+    setCoverImg(friend?.imgCoverUrl);
+    setProfileImg(friend?.imgProfileUrl);
     // useUserStore.getState().setLoading(false)
+
+    await getRelations();
   };
-  const [toggleOption, setToggleOption] = useState<boolean>(false);
+
+  const getRelations = async () => {
+    const userId = await AsyncStorage.getItem('userId');
+    await useUserFriendStore.getState().getRelations(userId ?? '', friendId);
+  };
+
+  const updateRalation = async (
+    action: 'addFriend' | 'acceptFriend' | 'deleteFriend',
+  ) => {
+    const userId = await AsyncStorage.getItem('userId');
+
+    if (action == 'addFriend') {
+      await useUserFriendStore.getState().createUserFriend({
+        userId,
+        friendId,
+      });
+    } else if (action == 'acceptFriend') {
+      await useUserFriendStore
+        .getState()
+        .updateUserFriend(userFriend?.userFriendId ?? '', {
+          userFriendId: userFriend?.userFriendId,
+          status: 'SUCCESS',
+        });
+    } else if (action == 'deleteFriend') {
+      await useUserFriendStore
+        .getState()
+        .deleteUserFriend(userFriend?.userFriendId);
+    }
+
+    await getRelations();
+  };
 
   useEffect(() => {
     getUser();
@@ -44,34 +78,6 @@ const FriendProfileScreen: React.FC<any> = ({navigation, route}) => {
       getUser();
     }, []),
   );
-
-  const onPressChangeImg = async (imgType: 'profile' | 'cover') => {
-    await launchImageLibrary(
-      {
-        mediaType: 'photo',
-      },
-      async res => {
-        if (!res.didCancel) {
-          const userId = (await AsyncStorage.getItem('userId')) ?? '';
-          const file = await useFileStore
-            .getState()
-            .uploadFile(
-              res,
-              imgType === 'profile'
-                ? FileResource.USER_PROFILE
-                : FileResource.USER_COVER,
-              userId,
-            );
-
-          if (imgType === 'profile') {
-            setProfileImg(file?.path);
-          } else {
-            setCoverImg(file?.path);
-          }
-        }
-      },
-    );
-  };
 
   return (
     <View style={[stylesCentral.container]}>
@@ -100,23 +106,64 @@ const FriendProfileScreen: React.FC<any> = ({navigation, route}) => {
           <Text style={[styles.name, {paddingVertical: normalize(1)}]}>
             {user?.fullName}
           </Text>
-          <Text style={[{paddingVertical: normalize(2)}]}>{user?.bio}</Text>
+          <Text style={[{paddingVertical: normalize(2)}]}>
+            {user?.livingPlace?.name}
+          </Text>
         </View>
         <View style={styles.bio}>
-          <Text style={styles.bioText}>{user?.gender}</Text>
-          <Text style={styles.bioText}>{user?.bio}</Text>
+          <View
+            style={{
+              width: '60%',
+              paddingHorizontal: normalize(24),
+            }}>
+            <Text style={styles.bioText}>{user?.gender}</Text>
+            <Text style={styles.bioText}>{user?.bio}</Text>
+          </View>
+          <View
+            style={{
+              width: '40%',
+              justifyContent: 'center',
+            }}>
+            {!userFriend && (
+              <TouchableOpacity
+                onPress={async () => updateRalation('addFriend')}
+                style={styles.input}>
+                <Text style={styles.inputText}>Add Friend</Text>
+              </TouchableOpacity>
+            )}
+            {userFriend?.status === 'PENDING' && (
+              <>
+                {userFriend.friendId == friendId ? (
+                  <TouchableOpacity
+                    onPress={async () => updateRalation('deleteFriend')}
+                    style={styles.input}>
+                    <Text style={styles.inputText}>Cancel Request</Text>
+                  </TouchableOpacity>
+                ) : (
+                  <TouchableOpacity
+                    onPress={async () => updateRalation('acceptFriend')}
+                    style={styles.input}>
+                    <Text style={styles.inputText}>Accept Request</Text>
+                  </TouchableOpacity>
+                )}
+              </>
+            )}
+            {userFriend?.status === 'SUCCESS' && (
+              <TouchableOpacity
+                // onPress={async () => {
+                //   await getFriendRequest();
+                //   setToggleNotification(!toggleNotification);
+                // }}
+                style={styles.input}>
+                <Text style={styles.inputText}>Friend</Text>
+              </TouchableOpacity>
+            )}
+          </View>
         </View>
       </View>
       <View style={{flex: 10}}>
         <MyEventNavigator />
       </View>
-      {/* <TouchableOpacity containerStyle={styles.option}>
-        <Text>Add Friend</Text>
-      </TouchableOpacity> */}
-      <ProfileOption
-        isFriend
-        friendId={userId}
-        style={[styles.option]}></ProfileOption>
       <Spinner
         visible={loading}
         textContent={'Loading...'}
@@ -179,16 +226,32 @@ const styles = StyleSheet.create({
     position: 'absolute',
     width: '100%',
     paddingVertical: normalize(0),
-    paddingHorizontal: normalize(24),
     height: normalize(50),
     left: normalize(0),
     bottom: normalize(0),
-    // backgroundColor: 'blue',
+    flexDirection: 'row',
   },
   bioText: {
     color: '#969696',
     fontFamily: fonts.bold,
     fontSize: normalize(14),
     paddingVertical: normalize(1),
+  },
+  input: {
+    height: normalize(40),
+    margin: normalize(8),
+    // padding: normalize(15),
+    borderColor: colors.primary,
+    borderWidth: 0.5,
+    borderRadius: normalize(8),
+    color: colors.fontBlack,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  inputText: {
+    color: colors.primary,
+    fontFamily: font.medium,
+    fontSize: normalize(14),
+    // backgroundColor: 'red'
   },
 });

@@ -1,6 +1,9 @@
-import {useEffect} from 'react';
+import {useEffect, useState} from 'react';
 import {FlatList, StyleSheet, Text, View} from 'react-native';
-import ActionSheet, {SheetManager, SheetProps} from 'react-native-actions-sheet';
+import ActionSheet, {
+  SheetManager,
+  SheetProps,
+} from 'react-native-actions-sheet';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {normalize} from '../../common/function/normalize';
 import {Avatar} from '@rneui/base';
@@ -9,17 +12,25 @@ import images from '../../common/assets/images';
 import {colors} from '../../common/assets';
 import fonts from '../../common/assets/fonts';
 import {useUserEventStore} from '../../stores/userEventStore';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export const ParticipantSheet = (props: SheetProps) => {
   const userEvents = useUserEventStore(state => state.userEvents);
+  const [userId, setUserId] = useState<string>('');
   const getUserEvents = async () => {
     useUserEventStore.getState().getUserEvents({
       eventId: props?.payload?.eventId,
     });
   };
 
+  const getUserId = async () => {
+    const userId = await AsyncStorage.getItem('userId');
+    setUserId(userId ?? '')
+  };
+
   useEffect(() => {
     getUserEvents();
+    getUserId()
   }, []);
 
   return (
@@ -37,12 +48,13 @@ export const ParticipantSheet = (props: SheetProps) => {
           return (
             <TouchableOpacity
               style={styles.chatContainer}
+              disabled={item.userId === userId}
               onPress={async () => {
-                await SheetManager.hide(props.sheetId)
+                await SheetManager.hide(props.sheetId);
                 RootNavigation.navigate('Profile', {
                   screen: 'FriendProfileScreen',
                   params: {
-                    userId: item.userId,
+                    friendId: item.userId,
                   },
                 });
               }}>

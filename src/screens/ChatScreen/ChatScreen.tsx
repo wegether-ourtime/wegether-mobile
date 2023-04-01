@@ -45,6 +45,7 @@ const ChatScreen: React.FC<any> = ({navigation, route}) => {
       setMessages(
         chats.map((chat: any) => {
           const isMyMessage = chat?.senderId === userId;
+
           return {
             _id: chat.chatId,
             text: chat.text,
@@ -52,8 +53,11 @@ const ChatScreen: React.FC<any> = ({navigation, route}) => {
             user: {
               _id: chat.senderId,
               name: isMyMessage
-                ? chat?.userEvent?.user?.fullName
-                : chat?.userEvent?.friend?.fullName,
+                ? chat?.userFriend?.user?.fullName
+                : chat?.userFriend?.friend?.fullName,
+              avatar: isMyMessage
+                ? chat?.userFriend?.user?.imgProfileUrl
+                : chat?.userFriend?.friend?.imgProfileUrl,
             },
           };
         }),
@@ -171,11 +175,11 @@ const ChatScreen: React.FC<any> = ({navigation, route}) => {
           onChangeMessage(value);
         }}
         // renderInputToolbar={props => customtInputToolbar(props)}
-        onPressAvatar={(user) => {
+        onPressAvatar={user => {
           RootNavigation.navigate('Profile', {
             screen: 'FriendProfileScreen',
             params: {
-              userId: user._id,
+              friendId: user._id,
             },
           });
         }}

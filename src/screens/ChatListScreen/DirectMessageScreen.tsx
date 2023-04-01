@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {Avatar} from '@rneui/base';
-import {useCallback, useEffect} from 'react';
+import {useCallback, useEffect, useState} from 'react';
 import {FlatList, StyleSheet, Text, View} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import Spinner from 'react-native-loading-spinner-overlay/lib';
@@ -17,6 +17,7 @@ import {useFocusEffect} from '@react-navigation/native';
 
 const DirectMessageScreen: React.FC<any> = ({navigation}) => {
   const userFriendChats = useChatStore(state => state.userFriendList);
+  const [userId, setUserId] = useState<string>('');
   const getUserFriendChats = async () => {
     const userId = await AsyncStorage.getItem('userId');
     await useChatStore.getState().getUserFriendList(userId ?? '');
@@ -57,14 +58,22 @@ const DirectMessageScreen: React.FC<any> = ({navigation}) => {
                 size={normalize(56)}
                 rounded
                 source={
-                  item?.friend?.imgProfileUrl
-                    ? {uri: item?.friend?.imgProfileUrl}
-                    : images.cover
+                  item?.userId === userId
+                    ? item?.friend?.imgProfileUrl
+                      ? {uri: item?.friend?.imgProfileUrl}
+                      : {}
+                    : item?.user?.imgProfileUrl
+                    ? {uri: item?.user?.imgProfileUrl}
+                    : {}
                 }
               />
               {/* <Image source={item.icon} style={{marginTop: normalize(2)}}></Image> */}
               <View style={styles.chatDetail}>
-                <Text style={styles.chatName}>{item?.friend?.fullName}</Text>
+                <Text style={styles.chatName}>
+                  {item?.userId === userId
+                    ? item?.friend?.fullName
+                    : item?.user?.fullName}
+                </Text>
               </View>
             </TouchableOpacity>
           );
