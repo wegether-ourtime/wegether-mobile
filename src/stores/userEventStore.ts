@@ -12,7 +12,7 @@ interface UserEventState {
   getUserEvents: (criteria: any) => void;
   getUserEvent: (userEventId: string) => void;
   createUserEvent: (payload: any) => any;
-  // updateUserEvent: (userEventId: string) => any;
+  updateUserEvent: (userEventId: string, payload: any) => any;
   deleteUserEvent: (userEventId: any) => any;
 }
 
@@ -67,12 +67,25 @@ export const useUserEventStore = create<UserEventState>(set => ({
       set({loading: false});
     }
   },
-  // updateUserEvent: async (userEventId: string) => {
-  //   const {data} = await axios.post(`${BASE_URL}/user-event`, {});
-  //   const userEvent = data;
+  updateUserEvent: async (userEventId: string, payload: any) => {
+    try {
+      set({loading: true});
+      const {data} = await axios.patch(
+        `${BASE_URL}/user-event/${userEventId}`,
+        {
+          ...payload,
+        },
+      );
+      const userEvent = data;
 
-  //   set({userEvent});
-  // },
+      set({userEvent});
+      return userEvent;
+    } catch (err) {
+      console.log(err);
+    } finally {
+      set({loading: false});
+    }
+  },
   deleteUserEvent: async (userEventId: string) => {
     await axios.delete(`${BASE_URL}/user-event/${userEventId}`);
     set({});

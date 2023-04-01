@@ -19,7 +19,10 @@ import {colors, font} from '../../common/assets';
 import {stylesCentral} from '../../common/styles/StylesCentral';
 import icons from '../../common/assets/icons';
 import {TouchableOpacity} from 'react-native-gesture-handler';
-import { Toast } from 'react-native-toast-message/lib/src/Toast';
+import {Toast} from 'react-native-toast-message/lib/src/Toast';
+import {useUserEventStore} from '../../stores/userEventStore';
+import {useEventStore} from '../../stores/eventStore';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const CodeScreen: React.FC<any> = ({navigation}) => {
   const [value, setValue] = useState<string>('');
@@ -27,12 +30,32 @@ const CodeScreen: React.FC<any> = ({navigation}) => {
   const [code, setCode] = useState<string>('');
 
   const onChangeCode = (value: string) => setCode(value);
-  const onSubmit = () => {
-    Toast.show({
-      type: 'fail',
-      text1: 'Error',
-      text2: `Can't find event with this code.`,
-    });
+  const onSubmit = async () => {
+    const userId = await AsyncStorage.getItem('userId');
+    try {
+      const join = await useEventStore.getState().joinEvent(userId ?? '', code);
+      if (join) {
+        Toast.show({
+          type: 'success',
+          text1: 'Error',
+          text2: `Success`,
+        });
+      } else {
+        Toast.show({
+          type: 'fail',
+          text1: 'Error',
+          text2: `Not found Event Code.`,
+        });
+      }
+      console.log(join)
+    } catch (err) {
+      console.log(err)
+      Toast.show({
+        type: 'fail',
+        text1: 'Error',
+        text2: `Internal Server Error`,
+      });
+    }
   };
 
   return (
@@ -132,6 +155,6 @@ const styles = StyleSheet.create({
     borderWidth: 1.5,
     borderRadius: normalize(8),
     color: colors.fontBlack,
-    backgroundColor: colors.white
+    backgroundColor: colors.white,
   },
 });

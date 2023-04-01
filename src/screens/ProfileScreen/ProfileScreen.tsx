@@ -180,6 +180,16 @@ const ProfileScreen: React.FC<any> = ({navigation}) => {
       />
       {toggleNotification && (
         <View style={styles.notification}>
+          {userFriends.length == 0 && (
+            <View
+              style={{
+                height: normalize(100),
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
+              <Text style={{color: colors.primary}}>Not have now.</Text>
+            </View>
+          )}
           <FlatList
             data={userFriends}
             keyExtractor={item => item.userFriendId}

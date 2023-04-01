@@ -14,6 +14,7 @@ interface EventState {
   createEvent: (payload: any) => any;
   updateEvent: (eventId: string, payload: any) => any;
   deleteEvent: (eventId: string) => void;
+  joinEvent: (uesrId: string, code: string) => any;
   setForm: (form: any) => any;
   clearForm: () => void;
   setCriteria: (criteria: any) => any;
@@ -72,7 +73,7 @@ export const useEventStore = create<EventState>(set => ({
   updateEvent: async (eventId: string, payload: any) => {
     try {
       set({loading: true});
-      const {data} = await axios.post(`${BASE_URL}/event/${eventId}`, {
+      const {data} = await axios.patch(`${BASE_URL}/event/${eventId}`, {
         ...payload,
       });
       const event = data;
@@ -89,6 +90,23 @@ export const useEventStore = create<EventState>(set => ({
     try {
       set({loading: true});
       await axios.delete(`${BASE_URL}/event/${eventId}`);
+    } catch (err) {
+      console.log(err);
+    } finally {
+      set({loading: false});
+    }
+  },
+  joinEvent: async (userId: string, code: string) => {
+    try {
+      set({loading: true});
+      const {data} = await axios.post(`${BASE_URL}/event/join-event`, {
+        userId,
+        code,
+      });
+      const event = data;
+
+      set({event});
+      return event;
     } catch (err) {
       console.log(err);
     } finally {

@@ -1,6 +1,6 @@
 // import {Button} from '@rneui/themed';
 import {Avatar} from '@rneui/base';
-import React from 'react';
+import React, {useState} from 'react';
 import {FlatList, Image, StyleSheet, Text, View, ViewStyle} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {colors, font, icons, image} from '../../common/assets';
@@ -14,13 +14,34 @@ import {useUserEventStore} from '../../stores/userEventStore';
 import {Touchable} from '../Button/Touchable';
 
 export const StatusBar: React.FC<any> = props => {
-  const {style} = props;
+  const {style, status, startDate, endDate} = props;
+  const [now] = useState(new Date().toISOString());
   // const user = useAuthStore(state => state.user);
-  const {status} = props;
 
   return (
-    <View style={[styles.main, style]}>
-      <Text style={styles.text}>Incoming</Text>
+    <View
+      style={[
+        styles.main,
+        style,
+        {
+          ...(status == 'CANCEL'
+            ? {backgroundColor: 'red', paddingHorizontal: normalize(18)}
+            : {}),
+          ...(status == 'OPEN' && (now > startDate || now > endDate)
+            ? {
+                backgroundColor: colors.grayPlaceholder,
+                paddingHorizontal: normalize(18),
+              }
+            : {}),
+        },
+      ]}>
+      {status == 'OPEN' && (now <= startDate || now <= endDate) && (
+        <Text style={styles.text}>Incoming</Text>
+      )}
+      {status == 'OPEN' && (now > startDate || now > endDate) && (
+        <Text style={styles.text}>Done</Text>
+      )}
+      {status == 'CANCEL' && <Text style={[styles.text]}>Cancel</Text>}
     </View>
   );
 };

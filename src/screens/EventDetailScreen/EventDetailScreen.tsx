@@ -33,9 +33,11 @@ import TimeInput from '../../components/Input/Time';
 import {Couter} from '../../components/Input/Couter';
 import {allCategories} from '../../common/function/utility';
 import {Category} from '../../components/Category/Category';
+import Spinner from 'react-native-loading-spinner-overlay/lib';
 
 const EventDetailScreen: React.FC<any> = ({navigation, route}) => {
   const user = useAuthStore(state => state.user);
+  const loading = useEventStore(state => state.loading);
   const insets = useSafeAreaInsets();
   const {eventId} = route.params;
   const event = useEventStore(state => state.event);
@@ -44,11 +46,7 @@ const EventDetailScreen: React.FC<any> = ({navigation, route}) => {
   const [joined, setJoined] = useState<boolean | undefined>(undefined);
   const [isHost, setIsHost] = useState<boolean | undefined>(undefined);
   const [eventImgUri, setEventImgUri] = useState<string | undefined>(undefined);
-
-  useEffect(() => {
-    getUserId();
-    getEvent();
-  }, [!userId]);
+  const [toggleEventCode, setToggleEventCode] = useState<boolean>(false);
 
   const onPressJoin = () => {
     useUserEventStore.getState().createUserEvent({
@@ -58,7 +56,11 @@ const EventDetailScreen: React.FC<any> = ({navigation, route}) => {
   };
 
   const onPressCancel = () => {
-    SheetManager.show('CancelEventSheet');
+    SheetManager.show('CancelEventSheet', {
+      payload: {
+        eventId,
+      },
+    });
   };
 
   const getEvent = async () => {
@@ -84,6 +86,11 @@ const EventDetailScreen: React.FC<any> = ({navigation, route}) => {
       userEvent.isHost && setIsHost(true);
     }
   };
+
+  useEffect(() => {
+    getUserId();
+    getEvent();
+  }, [!userId]);
 
   useEffect(() => {
     getEvent();
@@ -264,6 +271,21 @@ const EventDetailScreen: React.FC<any> = ({navigation, route}) => {
               maxLength={133}
             />
           </View>
+          {event?.status == 'OPEN' && (
+            <TouchableOpacity
+              onPress={async () => {
+                // setToggleEventCode(!toggleEventCode);
+                SheetManager.show('EventCodeSheet', {
+                  payload: {
+                    eventCode: event?.code,
+                  },
+                });
+              }}
+              style={styles.eventCodeButton}>
+              <Text style={styles.eventCodeText}>Open Event Code</Text>
+            </TouchableOpacity>
+          )}
+
           {isHost ? (
             <View
               style={{
@@ -337,13 +359,18 @@ const EventDetailScreen: React.FC<any> = ({navigation, route}) => {
                   label={'Join'}
                   color={colors.primary}
                   fontColor={colors.white}
-                  style={[styles.button, {marginTop: normalize(30)}]}
+                  style={[styles.button]}
                   onPress={onPressJoin}></Touchable>
               )}
             </>
           )}
         </ScrollView>
       </View>
+      <Spinner
+        visible={loading}
+        textContent={'Loading...'}
+        textStyle={{color: '#FFF'}}
+      />
     </SafeAreaView>
   );
 };
@@ -386,5 +413,48 @@ const styles = StyleSheet.create({
     marginHorizontal: normalize(0),
     paddingHorizontal: normalize(16),
     // backgroundColor: colors.disable,
+  },
+  eventCodeButton: {
+    height: normalize(40),
+    marginVertical: normalize(16),
+    marginHorizontal: normalize(80),
+    borderColor: colors.primary,
+    borderWidth: 0.5,
+    borderRadius: normalize(8),
+    color: colors.fontBlack,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  eventCodeText: {
+    color: colors.primary,
+    fontFamily: font.medium,
+    fontSize: normalize(14),
+    // backgroundColor: 'red'
+  },
+  eventCode: {
+    position: 'absolute',
+    top: normalize(316),
+    left: normalize(3),
+    width: '98%',
+    padding: normalize(50),
+    // marginHorizontal: normalize(8),
+    paddingHorizontal: normalize(8),
+    borderRadius: normalize(16),
+    backgroundColor: colors.white,
+
+    // Shadow only works on iOS.
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 8,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 5,
+    elevation: 15,
+  },
+  inputText: {
+    paddingHorizontal: normalize(8),
+    fontFamily: font.medium,
+    fontSize: normalize(16),
   },
 });

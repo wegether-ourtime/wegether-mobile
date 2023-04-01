@@ -30,7 +30,8 @@ export const Event: React.FC<any> = props => {
     joined,
     userEvents,
     onPressJoin,
-    incomingTab,
+    suggestionTab,
+    status,
   } = props;
   let a = 1;
   const date = `${new Date(startDate).toLocaleDateString('th-TH', {
@@ -109,7 +110,13 @@ export const Event: React.FC<any> = props => {
                   </Text>
                 </TouchableOpacity>
               )}
-              {incomingTab && <StatusBar />}
+              {!suggestionTab && (
+                <StatusBar
+                  status={status}
+                  startDate={startDate}
+                  endDate={endDate}
+                />
+              )}
             </View>
           </View>
           <View style={styles.rowContainer}>

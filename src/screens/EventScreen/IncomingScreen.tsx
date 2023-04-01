@@ -65,6 +65,7 @@ const IncomingScreen: React.FC<Prop> = (props: Prop) => {
                 userEvents={item.userEvents}
                 userId={userId}
                 maxParticipant={item.maxParticipant}
+                status={item.status}
                 incomingTab
               />
             );

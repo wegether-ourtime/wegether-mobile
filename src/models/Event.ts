@@ -10,6 +10,8 @@ export default interface Event {
   userEvents: UserEvent[];
   files: any[];
   location: any;
+  code: string;
+  status: string;
 }
 
 export interface EventForm {

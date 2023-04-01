@@ -7,10 +7,34 @@ import ActionSheet, {
 } from 'react-native-actions-sheet';
 import {colors} from '../../common/assets';
 import {Touchable} from '../Button/Touchable';
+import icons from '../../common/assets/icons';
+import {useEventStore} from '../../stores/eventStore';
+import {Toast} from 'react-native-toast-message/lib/src/Toast';
 
-export const CancelEventSheet = (props: SheetProps<{}>) => {
-  const onPressSave = () => {
-    SheetManager.hide('CancelEventSheet');
+export const CancelEventSheet = (props: SheetProps) => {
+  const [reason, setReason] = useState<string>('');
+  const [eventId] = useState<string>(props?.payload?.eventId);
+  const onPressSave = async () => {
+    try {
+      await useEventStore.getState().updateEvent(eventId, {
+        eventId,
+        status: 'CANCEL',
+        cancelEventReason: reason,
+      });
+      await SheetManager.hide('CancelEventSheet');
+
+      Toast.show({
+        type: 'success',
+        text1: 'Error',
+        text2: `Success`,
+      });
+    } catch (e) {
+      Toast.show({
+        type: 'fail',
+        text1: 'Error',
+        text2: `Internal Server Error`,
+      });
+    }
   };
 
   return (
@@ -25,20 +49,123 @@ export const CancelEventSheet = (props: SheetProps<{}>) => {
         <View style={styles.title}>
           <Text>สาเหตุที่ยกเลิก</Text>
         </View>
-        <TouchableOpacity style={styles.checkboxContainer}>
-          <Text>ต้องการเปลี่ยนกิจกรรม</Text>
+        <TouchableOpacity
+          onPress={() => setReason('ต้องการเปลี่ยนกิจกรรม')}
+          style={[
+            styles.checkboxContainer,
+            {
+              ...(reason == 'ต้องการเปลี่ยนกิจกรรม'
+                ? {backgroundColor: colors.primary}
+                : {}),
+            },
+          ]}>
+          {/* <Image
+            source={icons.sport}
+            style={{marginHorizontal: normalize(8)}}
+          /> */}
+          <Text
+            style={{
+              marginHorizontal: normalize(8),
+              ...(reason == 'ต้องการเปลี่ยนกิจกรรม'
+                ? {color: colors.white}
+                : {color: colors.fontBlack}),
+            }}>
+            ต้องการเปลี่ยนกิจกรรม
+          </Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.checkboxContainer}>
-          <Text>ติดธุระด่วน</Text>
+        <TouchableOpacity
+          onPress={() => setReason('ติดธุระด่วน')}
+          style={[
+            styles.checkboxContainer,
+            {
+              ...(reason == 'ติดธุระด่วน'
+                ? {backgroundColor: colors.primary}
+                : {}),
+            },
+          ]}>
+          {/* <Image
+            source={icons.sport}
+            style={{marginHorizontal: normalize(8)}}
+          /> */}
+          <Text
+            style={{
+              marginHorizontal: normalize(8),
+              ...(reason == 'ติดธุระด่วน'
+                ? {color: colors.white}
+                : {color: colors.fontBlack}),
+            }}>
+            ติดธุระด่วน
+          </Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.checkboxContainer}>
-          <Text>มีเพื่อนทำกิจกรรมแล้ว</Text>
+        <TouchableOpacity
+          onPress={() => setReason('มีเพื่อนทำกิจกรรมแล้ว')}
+          style={[
+            styles.checkboxContainer,
+            {
+              ...(reason == 'มีเพื่อนทำกิจกรรมแล้ว'
+                ? {backgroundColor: colors.primary}
+                : {}),
+            },
+          ]}>
+          {/* <Image
+            source={icons.sport}
+            style={{marginHorizontal: normalize(8)}}
+          /> */}
+          <Text
+            style={{
+              marginHorizontal: normalize(8),
+              ...(reason == 'มีเพื่อนทำกิจกรรมแล้ว'
+                ? {color: colors.white}
+                : {color: colors.fontBlack}),
+            }}>
+            มีเพื่อนทำกิจกรรมแล้ว
+          </Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.checkboxContainer}>
-          <Text>ไม่อยากเข้าร่วมกิจกรรมนี้แล้ว</Text>
+        <TouchableOpacity
+          onPress={() => setReason('ไม่อยากเข้าร่วมกิจกรรมนี้แล้ว')}
+          style={[
+            styles.checkboxContainer,
+            {
+              ...(reason == 'ไม่อยากเข้าร่วมกิจกรรมนี้แล้ว'
+                ? {backgroundColor: colors.primary}
+                : {}),
+            },
+          ]}>
+          {/* <Image
+            source={icons.sport}
+            style={{marginHorizontal: normalize(8)}}
+          /> */}
+          <Text
+            style={{
+              marginHorizontal: normalize(8),
+              ...(reason == 'ไม่อยากเข้าร่วมกิจกรรมนี้แล้ว'
+                ? {color: colors.white}
+                : {color: colors.fontBlack}),
+            }}>
+            ไม่อยากเข้าร่วมกิจกรรมนี้แล้ว
+          </Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.checkboxContainer}>
-          <Text>อื่นๆ</Text>
+        <TouchableOpacity
+          onPress={() => setReason('อื่นๆ')}
+          style={[
+            styles.checkboxContainer,
+            {
+              ...(reason == 'อื่นๆ' ? {backgroundColor: colors.primary} : {}),
+            },
+          ]}>
+          {/* <Image
+            source={icons.sport}
+            style={{marginHorizontal: normalize(8)}}
+          /> */}
+          <Text
+            style={{
+              marginHorizontal: normalize(8),
+              ...(reason == 'อื่นๆ'
+                ? {color: colors.white}
+                : {color: colors.fontBlack}),
+            }}>
+            อื่นๆ
+          </Text>
         </TouchableOpacity>
         <Touchable
           label={'Save'}
@@ -69,6 +196,8 @@ const styles = StyleSheet.create({
     borderWidth: 0.5,
     borderRadius: normalize(8),
     color: colors.fontBlack,
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   button: {
     margin: normalize(20),
