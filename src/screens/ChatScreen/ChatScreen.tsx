@@ -92,27 +92,36 @@ const ChatScreen: React.FC<any> = ({navigation, route}) => {
     }
   };
 
-  // useEffect(() => {
-  //   getChats();
-  // }, []);
+  const updateChatsMessage = () => {
+
+  }
 
   useFocusEffect(
     useCallback(() => {
       getChats();
-      useChatStore.getState().socket().receiveMessage({userFriendId, eventId});
+      useChatStore
+        .getState()
+        .socket()
+        .receiveMessage({userFriendId, eventId});
       return () =>
         useChatStore.getState().socket().disconnect({userFriendId, eventId});
     }, []),
   );
 
+  useEffect(() => {
+    getChats();
+  }, [chats]);
+
   const onSend = async () => {
-    const userId = (await AsyncStorage.getItem('userId')) ?? '';
-    useChatStore
-      .getState()
-      .socket()
-      .sendMessage({userId, userFriendId, eventId, userFriend, message});
-    await getChats();
-    setMessage('');
+    if (message.length > 0) {
+      const userId = (await AsyncStorage.getItem('userId')) ?? '';
+      useChatStore
+        .getState()
+        .socket()
+        .sendMessage({userId, userFriendId, eventId, userFriend, message});
+      await getChats();
+      setMessage('');
+    }
   };
 
   const onChangeMessage = (text: string) => setMessage(text);

@@ -131,13 +131,16 @@ export const useChatStore = create<ChatState>(set => ({
     };
 
     const receiveMessage = async ({userFriendId, eventId}: any) => {
+      // const chats = useChatStore.getState().chats;
       if (userFriendId) {
-        socket.on(`receive-direct-message-${userFriendId}`, chat => {
-          console.log(chat);
+        socket.on(`receive-direct-message-${userFriendId}`, (chat: Chat) => {
+          // chats.push(chat);
+          set({chats: []});
         });
       } else if (eventId) {
-        socket.on(`receive-event-message-${eventId}`, chat => {
-          console.log(chat);
+        socket.on(`receive-event-message-${eventId}`, (chat: Chat) => {
+          // chats.push(chat);
+          set({chats: []});
         });
       }
     };

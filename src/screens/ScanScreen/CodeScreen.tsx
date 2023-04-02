@@ -22,7 +22,6 @@ const CodeScreen: React.FC<any> = ({navigation}) => {
     try {
       const join = await useEventStore.getState().joinEvent(userId ?? '', code);
       if (join) {
-        console.log(join)
         // RootNavigation.navigate('Main', {
         //   screen: 'EventDetailScreen',
         //   params: {eventId},
