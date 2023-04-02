@@ -1,29 +1,15 @@
-import {
-  View,
-  Text,
-  StyleSheet,
-  TextInput,
-  TouchableWithoutFeedback,
-  Keyboard,
-  KeyboardAvoidingView,
-  Platform,
-  Button,
-  Animated,
-  Image,
-} from 'react-native';
+import {View, Text, StyleSheet, TextInput, Image} from 'react-native';
 import React, {useState} from 'react';
-import {SafeAreaView, useSafeAreaInsets} from 'react-native-safe-area-context';
-import VirtualKeyboard from '../../components/VirtualKeyboard/Virtualkeyboard';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {normalize} from '../../common/function/normalize';
 import {colors, font} from '../../common/assets';
 import {stylesCentral} from '../../common/styles/StylesCentral';
 import icons from '../../common/assets/icons';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {Toast} from 'react-native-toast-message/lib/src/Toast';
-import {useUserEventStore} from '../../stores/userEventStore';
 import {useEventStore} from '../../stores/eventStore';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import FastImage from 'react-native-fast-image';
+import * as RootNavigation from '../../navigations/RootNavigation';
 
 const CodeScreen: React.FC<any> = ({navigation}) => {
   const [value, setValue] = useState<string>('');
@@ -36,6 +22,11 @@ const CodeScreen: React.FC<any> = ({navigation}) => {
     try {
       const join = await useEventStore.getState().joinEvent(userId ?? '', code);
       if (join) {
+        console.log(join)
+        // RootNavigation.navigate('Main', {
+        //   screen: 'EventDetailScreen',
+        //   params: {eventId},
+        // });
         Toast.show({
           type: 'success',
           text1: 'Error',
@@ -48,9 +39,7 @@ const CodeScreen: React.FC<any> = ({navigation}) => {
           text2: `Not found Event Code.`,
         });
       }
-      console.log(join);
     } catch (err) {
-      console.log(err);
       Toast.show({
         type: 'fail',
         text1: 'Error',
@@ -101,7 +90,7 @@ const CodeScreen: React.FC<any> = ({navigation}) => {
                 margin: normalize(16),
                 justifyContent: 'center',
               }}>
-              <Image source={icons.search}/>
+              <Image source={icons.search} />
             </TouchableOpacity>
           </View>
         </View>
@@ -157,5 +146,7 @@ const styles = StyleSheet.create({
     borderRadius: normalize(8),
     color: colors.fontBlack,
     backgroundColor: colors.white,
+    fontFamily: font.medium,
+    fontSize: normalize(16),
   },
 });

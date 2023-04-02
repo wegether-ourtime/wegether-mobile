@@ -1,18 +1,14 @@
-import {useCallback, useEffect, useState} from 'react';
+import {useEffect, useState} from 'react';
 import {StyleSheet, Text, TextInput, View, Image, FlatList} from 'react-native';
 import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {colors, font, icons} from '../../common/assets';
-import images from '../../common/assets/images';
-import {height, normalize} from '../../common/function/normalize';
+import {normalize} from '../../common/function/normalize';
 import {stylesApp} from '../../common/styles/AppStyle';
-import {stylesCentral} from '../../common/styles/StylesCentral';
 import {Touchable} from '../../components/Button/Touchable';
 import {CalendarInput} from '../../components/Input/Calendar';
-import TextInputArea from '../../components/Input/TextArea';
 import TimeInput from '../../components/Input/Time';
 import CustomHeader from '../../components/Text/CustomHeader';
-import {useAuthStore} from '../../stores/authStore';
 import {useEventStore} from '../../stores/eventStore';
 import * as RootNavigation from '../../navigations/RootNavigation';
 import {launchImageLibrary} from 'react-native-image-picker';
@@ -21,9 +17,7 @@ import {useFileStore} from '../../stores/fileStore';
 import {FileResource} from '../../common/enums/fileResource';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Spinner from 'react-native-loading-spinner-overlay/lib';
-import {useFocusEffect} from '@react-navigation/native';
 import UserEvent from '../../models/UserEvent';
-import {SheetManager} from 'react-native-actions-sheet';
 import Event from '../../models/Event';
 import {Toast} from 'react-native-toast-message/lib/src/Toast';
 import {allCategories} from '../../common/function/utility';
@@ -36,7 +30,7 @@ const CreateEventScreen: React.FC<any> = ({navigation, route}) => {
   const form = useEventStore(state => state.form);
   const loading = useEventStore(state => state.loading);
   // const user = useAuthStore(state => state.user);
-  const [toggleModalUpload, setToggleModalUpload] = useState<boolean>(false);
+  // const [toggleModalUpload, setToggleModalUpload] = useState<boolean>(false);
   const [eventImg, setEventImg] = useState<any>();
   const [isHost, setIsHost] = useState(undefined);
   const validateField = form
@@ -332,7 +326,7 @@ const CreateEventScreen: React.FC<any> = ({navigation, route}) => {
           </View>
           <View style={styles.inputConatiner}>
             <View style={styles.inputName}>
-              <FastImage
+              <Image
                 source={icons.time}
                 style={{marginHorizontal: normalize(4)}}
               />

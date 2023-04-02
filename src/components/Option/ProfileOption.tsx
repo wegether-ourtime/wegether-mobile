@@ -22,6 +22,7 @@ import {useState} from 'react';
 import {useUserFriendStore} from '../../stores/userFriendStore';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import FastImage from 'react-native-fast-image';
+import fonts from '../../common/assets/fonts';
 
 export const ProfileOption: React.FC<any> = props => {
   // const [toggleOption, setToggleOption] = useState<boolean>(false);
@@ -78,11 +79,11 @@ export const ProfileOption: React.FC<any> = props => {
             renderItem={({item, index}) => {
               return (
                 <TouchableOpacity style={styles.option} onPress={item.onSelect}>
-                  <FastImage
+                  <Image
                     source={item.icon}
                     style={{marginTop: normalize(2)}}
                   />
-                  <Text style={{marginLeft: normalize(16)}}>{item.name}</Text>
+                  <Text style={{marginLeft: normalize(16), fontFamily: fonts.medium}}>{item.name}</Text>
                 </TouchableOpacity>
               );
             }}

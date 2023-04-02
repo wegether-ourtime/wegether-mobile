@@ -26,8 +26,8 @@ const MyEventNavigator: React.FC = () => {
   const layout = useWindowDimensions();
   const [index, setIndex] = useState(0);
   const [routes] = useState([
-    {key: 'joined', title: 'กิจกรรมที่เคยเข้าร่วม'},
-    {key: 'hosted', title: 'กิจกรรมที่เป็นผู้สร้าง'},
+    {key: 'joined', title: 'Joined'},
+    {key: 'hosted', title: 'Hosted'},
   ]);
 
   const renderScene = ({route}: any) => {

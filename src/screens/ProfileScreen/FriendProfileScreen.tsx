@@ -85,7 +85,7 @@ const FriendProfileScreen: React.FC<any> = ({navigation, route}) => {
       <View style={styles.userDetail}>
         <FastImage
           style={styles.cover}
-          source={coverImg ? {uri: coverImg} : {}}
+          source={{uri: coverImg}}
         />
         {/* <TouchableOpacity
           containerStyle={styles.changeCoverImg}
@@ -97,7 +97,8 @@ const FriendProfileScreen: React.FC<any> = ({navigation, route}) => {
           containerStyle={styles.profileContainer}
           size={normalize(100)}
           rounded
-          source={profileImg ? {uri: profileImg} : icons.profileActive}
+          source={{uri: profileImg}}
+          // icon={icons.profile}
         />
         {/* <TouchableOpacity
           containerStyle={styles.changeProfileImg}

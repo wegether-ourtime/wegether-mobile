@@ -169,7 +169,7 @@ const EventDetailScreen: React.FC<any> = ({navigation, route}) => {
           />
           <View style={styles.inputConatiner}>
             <View style={styles.inputName}>
-              <Text style={{marginHorizontal: normalize(4)}}>Name</Text>
+              <Text style={styles.inputText}>Name</Text>
             </View>
             <TextInput
               value={event?.eventName}
@@ -199,7 +199,7 @@ const EventDetailScreen: React.FC<any> = ({navigation, route}) => {
                 source={icons.calendar}
                 style={{marginHorizontal: normalize(4)}}
               />
-              <Text style={{marginHorizontal: normalize(4)}}>Days</Text>
+              <Text style={styles.inputText}>Days</Text>
             </View>
             <CalendarInput
               style={styles.input}
@@ -213,7 +213,7 @@ const EventDetailScreen: React.FC<any> = ({navigation, route}) => {
                 source={icons.time}
                 style={{marginHorizontal: normalize(4)}}
               />
-              <Text style={{marginHorizontal: normalize(4)}}>Times</Text>
+              <Text style={styles.inputText}>Times</Text>
             </View>
             <TimeInput
               style={styles.input}
@@ -227,7 +227,7 @@ const EventDetailScreen: React.FC<any> = ({navigation, route}) => {
                 source={icons.location}
                 style={{marginHorizontal: normalize(4)}}
               />
-              <Text style={{marginHorizontal: normalize(4)}}>Location</Text>
+              <Text style={styles.inputText}>Location</Text>
             </View>
             <TouchableOpacity
               style={styles.input}
@@ -253,7 +253,7 @@ const EventDetailScreen: React.FC<any> = ({navigation, route}) => {
                 source={icons.calendar}
                 style={{marginHorizontal: normalize(4)}}
               /> */}
-              <Text style={{marginHorizontal: normalize(4)}}>Detail</Text>
+              <Text style={styles.inputText}>Detail</Text>
             </View>
             <TextInput
               value={event?.eventDetail}
@@ -454,8 +454,8 @@ const styles = StyleSheet.create({
     elevation: 15,
   },
   inputText: {
-    paddingHorizontal: normalize(8),
+    paddingHorizontal: normalize(4),
     fontFamily: font.medium,
-    fontSize: normalize(16),
+    fontSize: normalize(14),
   },
 });

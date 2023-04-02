@@ -132,8 +132,8 @@ const ProfileScreen: React.FC<any> = ({navigation}) => {
           containerStyle={styles.profileContainer}
           size={normalize(100)}
           rounded
-          source={profileImg ? {uri: profileImg} : icons.profile}
-          icon={icons.profile}
+          source={{uri: profileImg}}
+          // icon={icons.profile}
         />
         <TouchableOpacity
           containerStyle={styles.changeProfileImg}

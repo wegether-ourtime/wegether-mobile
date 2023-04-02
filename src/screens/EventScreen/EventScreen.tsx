@@ -1,9 +1,6 @@
-import {Switch} from '@rneui/themed';
-import {useEffect} from 'react';
-import {Button, Image, ScrollView, StyleSheet, Text, View} from 'react-native';
-import {TouchableOpacity} from 'react-native-gesture-handler';
+import {StyleSheet, Text, View} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {colors, font, icons} from '../../common/assets';
+import {colors, font} from '../../common/assets';
 import {normalize} from '../../common/function/normalize';
 import {stylesCentral} from '../../common/styles/StylesCentral';
 import {Filter} from '../../components/Input/Filter';

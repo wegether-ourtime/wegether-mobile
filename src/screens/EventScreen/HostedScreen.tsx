@@ -1,18 +1,12 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useFocusEffect} from '@react-navigation/native';
-import {normalize} from '@rneui/themed';
 import React, {useCallback, useEffect, useState} from 'react';
-import {Image, Text, View} from 'react-native';
+import {View} from 'react-native';
 import {FlatList} from 'react-native-gesture-handler';
 import Spinner from 'react-native-loading-spinner-overlay';
-import Toast from 'react-native-toast-message';
-import {colors, image, icons} from '../../common/assets';
-import fonts from '../../common/assets/fonts';
+import {colors} from '../../common/assets';
 import {EventType} from '../../common/enums/eventStatus';
-import {FileResource} from '../../common/enums/fileResource';
-import {stylesCentral} from '../../common/styles/StylesCentral';
 import {Event} from '../../components/Event/Event';
-import UserEvent from '../../models/UserEvent';
 import * as RootNavigation from '../../navigations/RootNavigation';
 import {useEventStore} from '../../stores/eventStore';
 

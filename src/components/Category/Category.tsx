@@ -51,7 +51,7 @@ export const Category: React.FC<Props> = props => {
         ]}>
         {icon && (
           <View style={styles.icon}>
-            <FastImage source={icon} style={styles.icon} />
+            <Image source={icon} style={styles.icon} />
           </View>
         )}
         <Text
