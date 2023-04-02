@@ -50,15 +50,28 @@ export const FilterEventSheet = (props: SheetProps) => {
   };
 
   const onChangeDate = (type: 'startDate' | 'endDate', date: Date) =>
-  useEventStore.getState().setCriteria({
+    useEventStore.getState().setCriteria({
       ...criteria,
       ...(type == 'startDate' ? {startDate: date} : {endDate: date}),
     });
 
   const onSubmit = async () => {
     try {
-      console.log(criteria);
       useEventStore.getState().getEvents(criteria);
+      SheetManager.hide('FilterEventSheet');
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  const onClear = async () => {
+    try {
+      const c = criteria
+      delete c['categoriesId']
+      delete c['startDate']
+      delete c['endDate']
+      useEventStore.getState().setCriteria({...c});
+      await useEventStore.getState().getEvents({...c});
       SheetManager.hide('FilterEventSheet');
     } catch (e) {
       console.log(e);
@@ -104,13 +117,6 @@ export const FilterEventSheet = (props: SheetProps) => {
         <View style={styles.inputConatiner}>
           <View style={styles.inputName}>
             <Text style={styles.inputText}>Start</Text>
-            <Text
-              style={[
-                styles.inputText,
-                {paddingHorizontal: normalize(2), color: 'red'},
-              ]}>
-              *
-            </Text>
           </View>
           <View style={{flexDirection: 'row', alignItems: 'center'}}>
             <RNDateTimePicker
@@ -149,13 +155,6 @@ export const FilterEventSheet = (props: SheetProps) => {
         <View style={styles.inputConatiner}>
           <View style={styles.inputName}>
             <Text style={styles.inputText}>End</Text>
-            <Text
-              style={[
-                styles.inputText,
-                {paddingHorizontal: normalize(2), color: 'red'},
-              ]}>
-              *
-            </Text>
           </View>
           <View style={{flexDirection: 'row', alignItems: 'center'}}>
             <RNDateTimePicker
@@ -221,6 +220,15 @@ export const FilterEventSheet = (props: SheetProps) => {
             )}
           </TouchableOpacity>
         </View> */}
+        <Touchable
+          label={'Clear'}
+          // disable={validateField}
+          // color={!validateField ? colors.disable : colors.primary}
+          color={colors.white}
+          fontColor={colors.primary}
+          borderColor={colors.primary}
+          style={[styles.button]}
+          onPress={() => onClear()}></Touchable>
         <Touchable
           label={'Save'}
           // disable={validateField}

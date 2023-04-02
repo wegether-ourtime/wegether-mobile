@@ -28,7 +28,7 @@ const CodeScreen: React.FC<any> = ({navigation}) => {
         // });
         Toast.show({
           type: 'success',
-          text1: 'Error',
+          text1: 'Success',
           text2: `Success`,
         });
       } else {

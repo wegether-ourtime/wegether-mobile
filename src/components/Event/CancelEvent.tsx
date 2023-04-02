@@ -48,15 +48,15 @@ export const CancelEventSheet = (props: SheetProps) => {
       <View style={styles.container}>
         <View style={styles.title}>
           <Text style={{fontFamily: font.medium, fontSize: normalize(16)}}>
-            สาเหตุที่ยกเลิก
+            Cancellation reason
           </Text>
         </View>
         <TouchableOpacity
-          onPress={() => setReason('ต้องการเปลี่ยนกิจกรรม')}
+          onPress={() => setReason('want to change activities')}
           style={[
             styles.checkboxContainer,
             {
-              ...(reason == 'ต้องการเปลี่ยนกิจกรรม'
+              ...(reason == 'want to change activities'
                 ? {backgroundColor: colors.primary}
                 : {}),
             },
@@ -69,19 +69,19 @@ export const CancelEventSheet = (props: SheetProps) => {
             style={{
               fontFamily: font.medium,
               marginHorizontal: normalize(8),
-              ...(reason == 'ต้องการเปลี่ยนกิจกรรม'
+              ...(reason == 'want to change activities'
                 ? {color: colors.white}
                 : {color: colors.fontBlack}),
             }}>
-            ต้องการเปลี่ยนกิจกรรม
+            want to change activities
           </Text>
         </TouchableOpacity>
         <TouchableOpacity
-          onPress={() => setReason('ติดธุระด่วน')}
+          onPress={() => setReason('busy with errands')}
           style={[
             styles.checkboxContainer,
             {
-              ...(reason == 'ติดธุระด่วน'
+              ...(reason == 'busy with errands'
                 ? {backgroundColor: colors.primary}
                 : {}),
             },
@@ -94,19 +94,19 @@ export const CancelEventSheet = (props: SheetProps) => {
             style={{
               fontFamily: font.medium,
               marginHorizontal: normalize(8),
-              ...(reason == 'ติดธุระด่วน'
+              ...(reason == 'busy with errands'
                 ? {color: colors.white}
                 : {color: colors.fontBlack}),
             }}>
-            ติดธุระด่วน
+            busy with errands
           </Text>
         </TouchableOpacity>
         <TouchableOpacity
-          onPress={() => setReason('มีเพื่อนทำกิจกรรมแล้ว')}
+          onPress={() => setReason('Have friends doing activities')}
           style={[
             styles.checkboxContainer,
             {
-              ...(reason == 'มีเพื่อนทำกิจกรรมแล้ว'
+              ...(reason == 'Have friends doing activities'
                 ? {backgroundColor: colors.primary}
                 : {}),
             },
@@ -119,19 +119,19 @@ export const CancelEventSheet = (props: SheetProps) => {
             style={{
               fontFamily: font.medium,
               marginHorizontal: normalize(8),
-              ...(reason == 'มีเพื่อนทำกิจกรรมแล้ว'
+              ...(reason == 'Have friends doing activities'
                 ? {color: colors.white}
                 : {color: colors.fontBlack}),
             }}>
-            มีเพื่อนทำกิจกรรมแล้ว
+            Have friends doing activities
           </Text>
         </TouchableOpacity>
         <TouchableOpacity
-          onPress={() => setReason('ไม่อยากเข้าร่วมกิจกรรมนี้แล้ว')}
+          onPress={() => setReason('Do not want to join activity')}
           style={[
             styles.checkboxContainer,
             {
-              ...(reason == 'ไม่อยากเข้าร่วมกิจกรรมนี้แล้ว'
+              ...(reason == 'Do not want to join activity'
                 ? {backgroundColor: colors.primary}
                 : {}),
             },
@@ -144,19 +144,19 @@ export const CancelEventSheet = (props: SheetProps) => {
             style={{
               fontFamily: font.medium,
               marginHorizontal: normalize(8),
-              ...(reason == 'ไม่อยากเข้าร่วมกิจกรรมนี้แล้ว'
+              ...(reason == 'Do not want to join activity'
                 ? {color: colors.white}
                 : {color: colors.fontBlack}),
             }}>
-            ไม่อยากเข้าร่วมกิจกรรมนี้แล้ว
+            Do not want to join activity
           </Text>
         </TouchableOpacity>
         <TouchableOpacity
-          onPress={() => setReason('อื่นๆ')}
+          onPress={() => setReason('Other')}
           style={[
             styles.checkboxContainer,
             {
-              ...(reason == 'อื่นๆ' ? {backgroundColor: colors.primary} : {}),
+              ...(reason == 'Other' ? {backgroundColor: colors.primary} : {}),
             },
           ]}>
           {/* <Image
@@ -167,11 +167,11 @@ export const CancelEventSheet = (props: SheetProps) => {
             style={{
               fontFamily: font.medium,
               marginHorizontal: normalize(8),
-              ...(reason == 'อื่นๆ'
+              ...(reason == 'Other'
                 ? {color: colors.white}
                 : {color: colors.fontBlack}),
             }}>
-            อื่นๆ
+            Other
           </Text>
         </TouchableOpacity>
         <Touchable

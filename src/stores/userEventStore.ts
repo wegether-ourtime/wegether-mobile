@@ -87,8 +87,15 @@ export const useUserEventStore = create<UserEventState>(set => ({
     }
   },
   deleteUserEvent: async (userEventId: string) => {
-    await axios.delete(`${BASE_URL}/user-event/${userEventId}`);
-    set({});
+    try {
+      set({loading: true});
+      await axios.delete(`${BASE_URL}/user-event/${userEventId}`);
+      set({});
+    } catch (err) {
+      console.log(err);
+    } finally {
+      set({loading: false});
+    }
   },
   setEvent: (userEvent: any) => set({userEvent}),
   //   setLoading: loading => set({loading}),

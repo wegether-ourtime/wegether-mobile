@@ -96,9 +96,14 @@ const EventDetailScreen: React.FC<any> = ({navigation, route}) => {
       setEventImgUri(eventImg.path);
     }
 
-    if (userEvent) {
-      setJoined(true);
-      userEvent.isHost && setIsHost(true);
+    if (userId) {
+      if (userEvent) {
+        setJoined(true);
+        userEvent.isHost && setIsHost(true);
+      } else {
+        setJoined(false);
+        setIsHost(false);
+      }
     }
   };
 
@@ -210,13 +215,6 @@ const EventDetailScreen: React.FC<any> = ({navigation, route}) => {
           <View style={styles.inputConatiner}>
             <View style={styles.inputName}>
               <Text style={styles.inputText}>Start</Text>
-              <Text
-                style={[
-                  styles.inputText,
-                  {paddingHorizontal: normalize(2), color: 'red'},
-                ]}>
-                *
-              </Text>
             </View>
             <View style={{flexDirection: 'row', alignItems: 'center'}}>
               <RNDateTimePicker
@@ -231,6 +229,7 @@ const EventDetailScreen: React.FC<any> = ({navigation, route}) => {
                 is24Hour
                 locale="en-US"
                 dateFormat="day month year"
+                disabled={true}
               />
               <RNDateTimePicker
                 style={{
@@ -241,6 +240,7 @@ const EventDetailScreen: React.FC<any> = ({navigation, route}) => {
                   event?.startDate ? new Date(event?.startDate) : new Date()
                 }
                 is24Hour
+                disabled={true}
                 locale="en-US"
               />
             </View>
@@ -248,13 +248,6 @@ const EventDetailScreen: React.FC<any> = ({navigation, route}) => {
           <View style={styles.inputConatiner}>
             <View style={styles.inputName}>
               <Text style={styles.inputText}>End</Text>
-              <Text
-                style={[
-                  styles.inputText,
-                  {paddingHorizontal: normalize(2), color: 'red'},
-                ]}>
-                *
-              </Text>
             </View>
             <View style={{flexDirection: 'row', alignItems: 'center'}}>
               <RNDateTimePicker
@@ -262,23 +255,21 @@ const EventDetailScreen: React.FC<any> = ({navigation, route}) => {
                   marginHorizontal: normalize(2),
                 }}
                 mode="date"
-                value={
-                  event?.endDate ? new Date(event?.endDate) : new Date()
-                }
+                value={event?.endDate ? new Date(event?.endDate) : new Date()}
                 is24Hour
                 locale="en-US"
                 dateFormat="day month year"
+                disabled={true}
               />
               <RNDateTimePicker
                 style={{
                   marginHorizontal: normalize(2),
                 }}
                 mode="time"
-                value={
-                  event?.endDate ? new Date(event?.endDate) : new Date()
-                }
+                value={event?.endDate ? new Date(event?.endDate) : new Date()}
                 is24Hour
                 locale="en-US"
+                disabled={true}
               />
             </View>
           </View>
@@ -351,9 +342,10 @@ const EventDetailScreen: React.FC<any> = ({navigation, route}) => {
           <View
             style={{
               marginVertical: normalize(8),
+              marginHorizontal: normalize(32),
               flexDirection: 'row',
               alignContent: 'center',
-              justifyContent: 'center',
+              // justifyContent: 'center',
               flexWrap: 'wrap',
             }}>
             {isHost && event?.status == 'OPEN' && (
@@ -374,6 +366,7 @@ const EventDetailScreen: React.FC<any> = ({navigation, route}) => {
                   label={'Cancel'}
                   color={colors.white}
                   fontColor={colors.primary}
+                  borderColor={colors.primary}
                   style={[styles.button]}
                   onPress={onPressCancel}></Touchable>
               </>
@@ -385,7 +378,7 @@ const EventDetailScreen: React.FC<any> = ({navigation, route}) => {
                 fontColor={colors.primary}
                 borderColor={colors.primary}
                 style={[styles.button]}
-                onPress={() => onPressCancelJoin}
+                onPress={() => onPressCancelJoin()}
               />
             )}
             {!joined && !isHost && event?.status == 'OPEN' && (

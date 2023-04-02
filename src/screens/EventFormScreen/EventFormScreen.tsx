@@ -51,7 +51,7 @@ const CreateEventScreen: React.FC<any> = ({navigation, route}) => {
         return x[1] === null || x[1] === '';
       })
     : null;
-  const validateCategories = form ? form.eventCategories.length >= 1 : null;
+  const validateCategories = form ? form?.eventCategories?.length >= 1 : null;
 
   const onSubmit = async () => {
     try {
@@ -324,7 +324,7 @@ const CreateEventScreen: React.FC<any> = ({navigation, route}) => {
                   marginHorizontal: normalize(2),
                 }}
                 mode="date"
-                value={form?.startDate ?? new Date()}
+                value={form?.startDate ? new Date(form?.startDate): new Date()}
                 minimumDate={new Date()}
                 is24Hour
                 locale="en-US"
@@ -338,7 +338,7 @@ const CreateEventScreen: React.FC<any> = ({navigation, route}) => {
                   marginHorizontal: normalize(2),
                 }}
                 mode="time"
-                value={form?.startDate ?? new Date()}
+                value={form?.startDate ? new Date(form?.startDate): new Date()}
                 is24Hour
                 locale="en-US"
                 onChange={(event, date) => {
@@ -371,7 +371,7 @@ const CreateEventScreen: React.FC<any> = ({navigation, route}) => {
                   marginHorizontal: normalize(2),
                 }}
                 mode="date"
-                value={form?.endDate ?? new Date()}
+                value={form?.endDate ? new Date(form?.endDate): new Date()}
                 is24Hour
                 locale="en-US"
                 dateFormat="day month year"
@@ -384,7 +384,7 @@ const CreateEventScreen: React.FC<any> = ({navigation, route}) => {
                   marginHorizontal: normalize(2),
                 }}
                 mode="time"
-                value={form?.endDate ?? new Date()}
+                value={form?.endDate ? new Date(form?.endDate): new Date()}
                 // minimumDate={form?.startDate ?? new Date()}
                 is24Hour
                 locale="en-US"
