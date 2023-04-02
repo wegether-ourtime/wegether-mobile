@@ -8,6 +8,7 @@ import {colors, font, image} from '../../common/assets';
 import * as RootNavigation from '../../navigations/RootNavigation';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {Touchable} from '../../components/Button/Touchable';
+import FastImage from 'react-native-fast-image';
 
 const HomeScreen: React.FC<any> = ({navigation}) => {
   const screen = Dimensions.get('window');
@@ -17,7 +18,7 @@ const HomeScreen: React.FC<any> = ({navigation}) => {
     <SafeAreaView style={stylesApp.container}>
       <View style={[{height: '100%'}, styles.main]}>
         <View style={[{paddingTop: '40%'}]}>
-          <Image
+        <FastImage
             source={image.wegether}
             style={{height: imageHeight, width: imageWidth}}
             resizeMode={'contain'}

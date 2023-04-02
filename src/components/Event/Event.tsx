@@ -13,6 +13,7 @@ import {useAuthStore} from '../../stores/authStore';
 import {useUserEventStore} from '../../stores/userEventStore';
 import {Touchable} from '../Button/Touchable';
 import {StatusBar} from './StatusBar';
+import FastImage from 'react-native-fast-image'
 
 export const Event: React.FC<any> = props => {
   // const user = useAuthStore(state => state.user);
@@ -69,7 +70,7 @@ export const Event: React.FC<any> = props => {
         })
       }>
       <View style={styles.main}>
-        <Image
+        <FastImage
           source={eventImg ? {uri: eventImg} : images.cover}
           style={styles.eventImage}
         />

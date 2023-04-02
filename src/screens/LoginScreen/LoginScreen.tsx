@@ -24,6 +24,7 @@ import {useAuthStore} from '../../stores/authStore';
 import {validateEmail} from '../../common/function/validate';
 import images from '../../common/assets/images';
 import {Toast} from 'react-native-toast-message/lib/src/Toast';
+import FastImage from 'react-native-fast-image';
 
 const LoginScreen: React.FC<any> = ({navigation}) => {
   const [form, setForm] = useState<any>({
@@ -83,7 +84,7 @@ const LoginScreen: React.FC<any> = ({navigation}) => {
             onPressBack={() => navigation.goBack()}
           />
           <View style={[{height: '100%'}, styles.main]}>
-            <Image
+            <FastImage
               source={image.together}
               style={{height: normalize(200), width: imageWidth}}
               // resizeMode={'contain'}

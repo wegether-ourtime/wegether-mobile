@@ -14,9 +14,10 @@ import {Touchable} from '../Button/Touchable';
 import * as RootNavigation from '../../navigations/RootNavigation';
 import {CalendarInput} from '../Input/Calendar';
 import TimeInput from '../Input/Time';
-import { allCategories } from '../../common/function/utility';
-import { FilterCalendarInput } from './FilterCalendar';
+import {allCategories} from '../../common/function/utility';
+import {FilterCalendarInput} from './FilterCalendar';
 import FilterTimeInput from './FilterTime';
+import FastImage from 'react-native-fast-image';
 
 export const FilterEventSheet = (props: SheetProps) => {
   const [categories] = useState<any>(allCategories);

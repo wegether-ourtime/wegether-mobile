@@ -21,10 +21,11 @@ import * as RootNavigation from '../../navigations/RootNavigation';
 import {useState} from 'react';
 import {useUserFriendStore} from '../../stores/userFriendStore';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import FastImage from 'react-native-fast-image';
 
 export const ProfileOption: React.FC<any> = props => {
   // const [toggleOption, setToggleOption] = useState<boolean>(false);
-  const {toggleOption, setToggleOption} = props
+  const {toggleOption, setToggleOption} = props;
   const {style, isFriend, friendId} = props;
   const logout = async () => {
     useAuthStore.getState().logout();
@@ -67,7 +68,7 @@ export const ProfileOption: React.FC<any> = props => {
         onPress={() => {
           setToggleOption(!toggleOption);
         }}>
-        <Image source={icons.option}></Image>
+        <Image source={icons.option} />
       </TouchableOpacity>
       {toggleOption && (
         <View style={styles.options}>
@@ -77,9 +78,10 @@ export const ProfileOption: React.FC<any> = props => {
             renderItem={({item, index}) => {
               return (
                 <TouchableOpacity style={styles.option} onPress={item.onSelect}>
-                  <Image
+                  <FastImage
                     source={item.icon}
-                    style={{marginTop: normalize(2)}}></Image>
+                    style={{marginTop: normalize(2)}}
+                  />
                   <Text style={{marginLeft: normalize(16)}}>{item.name}</Text>
                 </TouchableOpacity>
               );
@@ -100,7 +102,7 @@ export const ProfileOption: React.FC<any> = props => {
               keyExtractor={item => item.name}
               renderItem={({item}) => (
                 <MenuOption style={styles.option} onSelect={item.onSelect}>
-                  <Image
+                  <FastImage
                     source={item.icon}
                     style={{marginTop: normalize(2)}}></Image>
                   <Text style={{marginLeft: normalize(20)}}>{item.name}</Text>

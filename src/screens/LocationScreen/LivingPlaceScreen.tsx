@@ -1,5 +1,6 @@
 import {useEffect, useState} from 'react';
 import {StyleSheet, Text, TextInput, View, Image, FlatList} from 'react-native';
+import FastImage from 'react-native-fast-image';
 import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {colors, font, icons} from '../../common/assets';

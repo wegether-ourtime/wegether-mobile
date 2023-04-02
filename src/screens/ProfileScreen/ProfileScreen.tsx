@@ -29,6 +29,7 @@ import {useFileStore} from '../../stores/fileStore';
 import {useUserFriendStore} from '../../stores/userFriendStore';
 import {useUserStore} from '../../stores/userStore';
 import * as RootNavigation from '../../navigations/RootNavigation';
+import FastImage from 'react-native-fast-image';
 
 const ProfileScreen: React.FC<any> = ({navigation}) => {
   const user = useUserStore(state => state.user);
@@ -117,25 +118,27 @@ const ProfileScreen: React.FC<any> = ({navigation}) => {
   return (
     <View style={[stylesCentral.container]}>
       <View style={styles.userDetail}>
-        <Image
+        <FastImage
           style={styles.cover}
-          source={coverImg ? {uri: coverImg} : images.cover}></Image>
+          source={coverImg ? {uri: coverImg} : images.cover}
+        />
         <TouchableOpacity
           containerStyle={styles.changeCoverImg}
           onPress={() => onPressChangeImg('cover')}>
-          <Image source={icons.changeImage}></Image>
+          <Image source={icons.changeImage} />
         </TouchableOpacity>
         <Avatar
           avatarStyle={styles.profile}
           containerStyle={styles.profileContainer}
           size={normalize(100)}
           rounded
-          source={profileImg ? {uri: profileImg} : icons.profileActive}
+          source={profileImg ? {uri: profileImg} : icons.profile}
+          icon={icons.profile}
         />
         <TouchableOpacity
           containerStyle={styles.changeProfileImg}
           onPress={() => onPressChangeImg('profile')}>
-          <Image source={icons.changeImage}></Image>
+          <Image source={icons.changeImage} />
         </TouchableOpacity>
         <View style={styles.user}>
           <Text style={[styles.name, {paddingVertical: normalize(1)}]}>
@@ -212,7 +215,7 @@ const ProfileScreen: React.FC<any> = ({navigation}) => {
                     rounded
                     source={{uri: item?.user?.imgProfileUrl}}
                   />
-                  {/* <Image source={item.icon} style={{marginTop: normalize(2)}}></Image> */}
+                  {/* <FastImage source={item.icon} style={{marginTop: normalize(2)}}></Image> */}
                   <View style={styles.friendDetail}>
                     <Text style={styles.friendName}>
                       {item?.user?.fullName}

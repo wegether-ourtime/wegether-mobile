@@ -23,6 +23,7 @@ import {Toast} from 'react-native-toast-message/lib/src/Toast';
 import {useUserEventStore} from '../../stores/userEventStore';
 import {useEventStore} from '../../stores/eventStore';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import FastImage from 'react-native-fast-image';
 
 const CodeScreen: React.FC<any> = ({navigation}) => {
   const [value, setValue] = useState<string>('');
@@ -47,9 +48,9 @@ const CodeScreen: React.FC<any> = ({navigation}) => {
           text2: `Not found Event Code.`,
         });
       }
-      console.log(join)
+      console.log(join);
     } catch (err) {
-      console.log(err)
+      console.log(err);
       Toast.show({
         type: 'fail',
         text1: 'Error',
@@ -100,7 +101,7 @@ const CodeScreen: React.FC<any> = ({navigation}) => {
                 margin: normalize(16),
                 justifyContent: 'center',
               }}>
-              <Image source={icons.search} />
+              <Image source={icons.search}/>
             </TouchableOpacity>
           </View>
         </View>

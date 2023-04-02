@@ -69,7 +69,7 @@ export const ParticipantSheet = (props: SheetProps) => {
                     : images.cover
                 }
               />
-              {/* <Image source={item.icon} style={{marginTop: normalize(2)}}></Image> */}
+              {/* <FastImage source={item.icon} style={{marginTop: normalize(2)}}></Image> */}
               <View style={styles.chatDetail}>
                 <Text style={styles.chatName}>{item?.user?.fullName}</Text>
               </View>

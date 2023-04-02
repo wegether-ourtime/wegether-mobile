@@ -28,6 +28,7 @@ import Event from '../../models/Event';
 import {Toast} from 'react-native-toast-message/lib/src/Toast';
 import {allCategories} from '../../common/function/utility';
 import {Category} from '../../components/Category/Category';
+import FastImage from 'react-native-fast-image';
 
 const CreateEventScreen: React.FC<any> = ({navigation, route}) => {
   const [isEdit] = useState(route?.params?.isEdit);
@@ -212,9 +213,9 @@ const CreateEventScreen: React.FC<any> = ({navigation, route}) => {
                 <TouchableOpacity
                   containerStyle={styles.changeImg}
                   onPress={() => onPressChangeImg()}>
-                  <Image source={icons.changeImage}></Image>
+                  <Image source={icons.changeImage} />
                 </TouchableOpacity>
-                <Image
+                <FastImage
                   source={
                     eventImg?.assets ? eventImg.assets[0] : {uri: eventImg}
                   }
@@ -331,7 +332,7 @@ const CreateEventScreen: React.FC<any> = ({navigation, route}) => {
           </View>
           <View style={styles.inputConatiner}>
             <View style={styles.inputName}>
-              <Image
+              <FastImage
                 source={icons.time}
                 style={{marginHorizontal: normalize(4)}}
               />

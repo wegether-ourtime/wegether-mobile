@@ -26,6 +26,7 @@ import * as RootNavigation from '../../navigations/RootNavigation';
 import {useFocusEffect} from '@react-navigation/native';
 import {socket} from '../../common/function/utility';
 import {SheetManager} from 'react-native-actions-sheet';
+import FastImage from 'react-native-fast-image';
 
 const ChatScreen: React.FC<any> = ({navigation, route}) => {
   const [userFriendId] = useState(route?.params?.userFriendId);
@@ -40,11 +41,12 @@ const ChatScreen: React.FC<any> = ({navigation, route}) => {
   const getChats = async () => {
     const userId = (await AsyncStorage.getItem('userId')) ?? '';
     setUserId(userId);
+
     if (userFriendId) {
       const chats = await useChatStore.getState().getDirectChats(userFriendId);
       setMessages(
         chats.map((chat: any) => {
-          const isMyMessage = chat?.senderId === userId;
+          // const isMyMessage = chat?.senderId === userId;
 
           return {
             _id: chat.chatId,
@@ -52,12 +54,17 @@ const ChatScreen: React.FC<any> = ({navigation, route}) => {
             createdAt: new Date(chat.createdAt),
             user: {
               _id: chat.senderId,
-              name: isMyMessage
-                ? chat?.userFriend?.user?.fullName
-                : chat?.userFriend?.friend?.fullName,
-              avatar: isMyMessage
-                ? chat?.userFriend?.user?.imgProfileUrl
-                : chat?.userFriend?.friend?.imgProfileUrl,
+              name:
+                chat.senderId == chat?.userFriend.userId
+                  ? chat?.userFriend.user.fullName
+                  : chat?.userFriend.friend.fullName,
+              avatar:
+                chat.senderId == chat?.userFriend.userId
+                  ? chat?.userFriend.user.imgProfileUrl
+                  : chat?.userFriend.friend.imgProfileUrl,
+              // isMyMessage
+              //   ? chat?.userFriend?.user?.imgProfileUrl
+              //   : chat?.userFriend?.friend?.imgProfileUrl,
             },
           };
         }),

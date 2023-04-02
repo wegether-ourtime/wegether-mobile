@@ -3,6 +3,7 @@ import {useFocusEffect} from '@react-navigation/native';
 import {Avatar} from '@rneui/base';
 import {useCallback, useEffect, useState} from 'react';
 import {View, Image, StyleSheet, Text, SafeAreaView} from 'react-native';
+import FastImage from 'react-native-fast-image';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {launchImageLibrary} from 'react-native-image-picker';
 import Spinner from 'react-native-loading-spinner-overlay/lib';
@@ -82,9 +83,10 @@ const FriendProfileScreen: React.FC<any> = ({navigation, route}) => {
   return (
     <View style={[stylesCentral.container]}>
       <View style={styles.userDetail}>
-        <Image
+        <FastImage
           style={styles.cover}
-          source={coverImg ? {uri: coverImg} : images.cover}></Image>
+          source={coverImg ? {uri: coverImg} : {}}
+        />
         {/* <TouchableOpacity
           containerStyle={styles.changeCoverImg}
           onPress={() => onPressChangeImg('cover')}>

@@ -1,6 +1,7 @@
 import {Icon, normalize} from '@rneui/themed';
 import React, {useState} from 'react';
 import {Image, StyleSheet, Text, View} from 'react-native';
+import FastImage from 'react-native-fast-image';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {colors, font} from '../../common/assets';
 
@@ -50,7 +51,7 @@ export const Category: React.FC<Props> = props => {
         ]}>
         {icon && (
           <View style={styles.icon}>
-            <Image source={icon} style={styles.icon} />
+            <FastImage source={icon} style={styles.icon} />
           </View>
         )}
         <Text

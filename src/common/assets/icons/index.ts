@@ -5,8 +5,8 @@ export default {
 
   homeActive: require('./navbar/home-active.png'),
   homeInactive: require('./navbar/home-inactive.png'),
-  qrActive: require('./navbar/qr-inactive.png'),
-  qrInactive: require('./navbar/qr-inactive.png'),
+  codeActive: require('./navbar/code-active.png'),
+  codeInactive: require('./navbar/code-inactive.png'),
   createEventActive: require('./navbar/add-active.png'),
   createEventInactive: require('./navbar/add-inactive.png'),
   chatActive: require('./navbar/chat-active.png'),
@@ -29,4 +29,5 @@ export default {
   calendar: require('./calendar.png'),
   tick: require('./tick.png'),
   cross: require('./cross.png'),
+  profile: require('./profile.png'),
 };

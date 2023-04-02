@@ -1,5 +1,6 @@
 import React, {Component, useState} from 'react';
 import {Text, View, TouchableOpacity, Image, StyleSheet} from 'react-native';
+import FastImage from 'react-native-fast-image';
 import icons from '../../common/assets/icons';
 import {normalize} from '../../common/function/normalize';
 
@@ -50,7 +51,7 @@ const VirtualKeyboard: React.FC<props> = ({value, onChange}) => {
           // source={icons.deleteIcon}
           source={icons.chatActive}
           resizeMode="contain"
-          style={{tintColor: 'gray'}}
+          // style={{tintColor: 'gray'}}
         />
       </TouchableOpacity>
     );

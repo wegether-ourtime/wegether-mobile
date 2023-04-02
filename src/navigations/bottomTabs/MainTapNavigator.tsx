@@ -29,6 +29,7 @@ import EventFormScreen from '../../screens/EventFormScreen/EventFormScreen';
 import ChatListScreen from '../../screens/ChatListScreen/ChatListScreen';
 import {ProfileNavigator} from '../ProfileNavigator';
 import CodeScreen from '../../screens/ScanScreen/CodeScreen';
+import FastImage from 'react-native-fast-image';
 
 const Tab = createBottomTabNavigator();
 
@@ -50,8 +51,8 @@ const MainTapNavigator: React.FC<any> = ({navigation}) => {
       name: 'Scan',
       title: 'หน้าสแกน qr code',
       component: CodeScreen,
-      activeIcon: icons.qrActive,
-      inactiveIcon: icons.qrInactive,
+      activeIcon: icons.codeActive,
+      inactiveIcon: icons.codeInactive,
     },
     {
       name: 'CreateEvent',
@@ -116,7 +117,7 @@ const MainTapNavigator: React.FC<any> = ({navigation}) => {
                           justifyContent: 'center',
                           alignItems: 'center',
                         }}>
-                        <Image
+                        <FastImage
                           source={
                             isFocused ? item.activeIcon : item.inactiveIcon
                           }
@@ -125,6 +126,7 @@ const MainTapNavigator: React.FC<any> = ({navigation}) => {
                               ? {width: 16, height: 20, marginTop: 3.5}
                               : {width: 25, height: 25}
                           }
+                          resizeMode="contain"
                         />
                       </View>
                     </TouchableOpacity>

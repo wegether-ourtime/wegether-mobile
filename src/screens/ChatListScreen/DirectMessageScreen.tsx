@@ -20,6 +20,7 @@ const DirectMessageScreen: React.FC<any> = ({navigation}) => {
   const [userId, setUserId] = useState<string>('');
   const getUserFriendChats = async () => {
     const userId = await AsyncStorage.getItem('userId');
+    setUserId(userId ?? '')
     await useChatStore.getState().getUserFriendList(userId ?? '');
   };
 
@@ -37,7 +38,7 @@ const DirectMessageScreen: React.FC<any> = ({navigation}) => {
     <View style={styles.container}>
       <FlatList
         data={userFriendChats}
-        keyExtractor={item => item.name}
+        keyExtractor={item => item.userFriendId}
         renderItem={({item}) => {
           return (
             <TouchableOpacity
@@ -47,7 +48,10 @@ const DirectMessageScreen: React.FC<any> = ({navigation}) => {
                   screen: 'ChatScreen',
                   params: {
                     eventId: item.eventId,
-                    chatName: item.friend.fullName,
+                    chatName:
+                      userId == item.userId
+                        ? item.friend.fullName
+                        : item.user.fullName,
                     userFriendId: item.userFriendId,
                   },
                 });
@@ -67,7 +71,7 @@ const DirectMessageScreen: React.FC<any> = ({navigation}) => {
                     : {}
                 }
               />
-              {/* <Image source={item.icon} style={{marginTop: normalize(2)}}></Image> */}
+              {/* FastImage source={item.icon} style={{marginTop: normalize(2)}}></Image> */}
               <View style={styles.chatDetail}>
                 <Text style={styles.chatName}>
                   {item?.userId === userId

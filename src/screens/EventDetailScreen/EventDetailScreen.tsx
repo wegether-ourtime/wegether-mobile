@@ -34,6 +34,7 @@ import {Couter} from '../../components/Input/Couter';
 import {allCategories} from '../../common/function/utility';
 import {Category} from '../../components/Category/Category';
 import Spinner from 'react-native-loading-spinner-overlay/lib';
+import FastImage from 'react-native-fast-image';
 
 const EventDetailScreen: React.FC<any> = ({navigation, route}) => {
   const user = useAuthStore(state => state.user);
@@ -130,7 +131,7 @@ const EventDetailScreen: React.FC<any> = ({navigation, route}) => {
                 justifyContent: 'center',
               },
             ]}>
-            <Image
+            <FastImage
               source={eventImgUri ? {uri: eventImgUri} : images.cover}
               style={{height: '100%', width: '100%'}}
             />
