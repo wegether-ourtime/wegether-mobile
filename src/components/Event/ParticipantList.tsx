@@ -55,6 +55,9 @@ export const ParticipantSheet = (props: SheetProps) => {
                   screen: 'FriendProfileScreen',
                   params: {
                     friendId: item.userId,
+                    previousScreen: 'ChatScreen',
+                    eventId: item?.eventId,
+                    chatName: item?.event?.eventName,
                   },
                 });
               }}>

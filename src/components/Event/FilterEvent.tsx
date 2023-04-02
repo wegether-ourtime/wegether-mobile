@@ -18,6 +18,7 @@ import {allCategories} from '../../common/function/utility';
 import {FilterCalendarInput} from './FilterCalendar';
 import FilterTimeInput from './FilterTime';
 import FastImage from 'react-native-fast-image';
+import RNDateTimePicker from '@react-native-community/datetimepicker';
 
 export const FilterEventSheet = (props: SheetProps) => {
   const [categories] = useState<any>(allCategories);
@@ -48,8 +49,15 @@ export const FilterEventSheet = (props: SheetProps) => {
     }
   };
 
+  const onChangeDate = (type: 'startDate' | 'endDate', date: Date) =>
+  useEventStore.getState().setCriteria({
+      ...criteria,
+      ...(type == 'startDate' ? {startDate: date} : {endDate: date}),
+    });
+
   const onSubmit = async () => {
     try {
+      console.log(criteria);
       useEventStore.getState().getEvents(criteria);
       SheetManager.hide('FilterEventSheet');
     } catch (e) {
@@ -60,7 +68,7 @@ export const FilterEventSheet = (props: SheetProps) => {
   return (
     <ActionSheet
       containerStyle={{
-        height: normalize(630),
+        height: normalize(700),
       }}
       // snapPoints={[50]}
       id={props.sheetId}
@@ -95,29 +103,98 @@ export const FilterEventSheet = (props: SheetProps) => {
         </View>
         <View style={styles.inputConatiner}>
           <View style={styles.inputName}>
-            <Image
-              source={icons.calendar}
-              style={{marginHorizontal: normalize(4)}}
-            />
-            <Text style={{marginHorizontal: normalize(4)}}>Days</Text>
+            <Text style={styles.inputText}>Start</Text>
+            <Text
+              style={[
+                styles.inputText,
+                {paddingHorizontal: normalize(2), color: 'red'},
+              ]}>
+              *
+            </Text>
           </View>
-          <FilterCalendarInput
-            style={styles.input}
-            // disabled={view}
-          ></FilterCalendarInput>
+          <View style={{flexDirection: 'row', alignItems: 'center'}}>
+            <RNDateTimePicker
+              style={{
+                marginHorizontal: normalize(2),
+              }}
+              mode="date"
+              value={criteria?.startDate ?? new Date()}
+              minimumDate={new Date()}
+              is24Hour
+              locale="en-US"
+              dateFormat="day month year"
+              onChange={async (event, date) => {
+                onChangeDate('startDate', date ?? new Date());
+              }}
+            />
+            <RNDateTimePicker
+              style={{
+                marginHorizontal: normalize(2),
+              }}
+              mode="time"
+              value={criteria?.startDate ?? new Date()}
+              is24Hour
+              locale="en-US"
+              onChange={async (event, date) =>
+                onChangeDate(
+                  'startDate',
+                  new Date(
+                    new Date(criteria?.startDate).setTime(date?.getTime() ?? 0),
+                  ),
+                )
+              }
+            />
+          </View>
         </View>
         <View style={styles.inputConatiner}>
           <View style={styles.inputName}>
-            <Image
-              source={icons.time}
-              style={{marginHorizontal: normalize(4)}}
-            />
-            <Text style={{marginHorizontal: normalize(4)}}>Times</Text>
+            <Text style={styles.inputText}>End</Text>
+            <Text
+              style={[
+                styles.inputText,
+                {paddingHorizontal: normalize(2), color: 'red'},
+              ]}>
+              *
+            </Text>
           </View>
-          <FilterTimeInput
-            style={styles.input}
-            // disabled={view}
-          ></FilterTimeInput>
+          <View style={{flexDirection: 'row', alignItems: 'center'}}>
+            <RNDateTimePicker
+              style={{
+                marginHorizontal: normalize(2),
+              }}
+              mode="date"
+              value={criteria?.endDate ?? new Date()}
+              is24Hour
+              locale="en-US"
+              dateFormat="day month year"
+              onChange={(event, date) =>
+                onChangeDate('endDate', date ?? new Date())
+              }
+            />
+            <RNDateTimePicker
+              style={{
+                marginHorizontal: normalize(2),
+              }}
+              mode="time"
+              value={criteria?.endDate ?? new Date()}
+              // minimumDate={form?.startDate ?? new Date()}
+              is24Hour
+              locale="en-US"
+              onChange={(event, date) => {
+                // console.log(
+                //   new Date(
+                //     new Date(criteria?.endDate).setTime(date?.getTime() ?? 0),
+                //   ),
+                // );
+                onChangeDate(
+                  'endDate',
+                  new Date(
+                    new Date(criteria?.endDate).setTime(date?.getTime() ?? 0),
+                  ),
+                );
+              }}
+            />
+          </View>
         </View>
         {/* <View style={styles.inputConatiner}>
           <View style={styles.inputName}>
@@ -199,5 +276,10 @@ const styles = StyleSheet.create({
   inputName: {
     flexDirection: 'row',
     marginVertical: normalize(12),
+  },
+  inputText: {
+    paddingHorizontal: normalize(4),
+    fontFamily: font.medium,
+    fontSize: normalize(14),
   },
 });

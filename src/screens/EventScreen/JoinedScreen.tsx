@@ -16,10 +16,14 @@ import UserEvent from '../../models/UserEvent';
 import * as RootNavigation from '../../navigations/RootNavigation';
 import {useAuthStore} from '../../stores/authStore';
 import {useEventStore} from '../../stores/eventStore';
+import {useUserStore} from '../../stores/userStore';
 
-interface Prop {}
+interface Prop {
+  friendId: string;
+}
 
 const JoinedScreen: React.FC<Prop> = (props: Prop) => {
+  const friendId = props.friendId;
   const events = useEventStore(state => state.events);
   const loading = useEventStore(state => state.loading);
   const criteria = useEventStore(state => state.criteria);
@@ -27,7 +31,7 @@ const JoinedScreen: React.FC<Prop> = (props: Prop) => {
   const setCriteria = (criteria: any) =>
     useEventStore.getState().setCriteria(criteria);
   const getEvents = async () => {
-    const userId = await AsyncStorage.getItem('userId');
+    const userId = friendId ? friendId : await AsyncStorage.getItem('userId');
     setCriteria({...criteria, eventType: EventType.JOINED, userId});
     setUserId(userId);
     const event = await useEventStore.getState().getEvents({

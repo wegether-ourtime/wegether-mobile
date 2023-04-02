@@ -23,6 +23,8 @@ import {Toast} from 'react-native-toast-message/lib/src/Toast';
 import {allCategories} from '../../common/function/utility';
 import {Category} from '../../components/Category/Category';
 import FastImage from 'react-native-fast-image';
+import RNDateTimePicker from '@react-native-community/datetimepicker';
+import {onChange} from 'react-native-reanimated';
 
 const CreateEventScreen: React.FC<any> = ({navigation, route}) => {
   const [isEdit] = useState(route?.params?.isEdit);
@@ -36,7 +38,12 @@ const CreateEventScreen: React.FC<any> = ({navigation, route}) => {
   const validateField = form
     ? !Object.entries(form).some(x => {
         if (
-          ['cancelEventReason', 'endDate', 'eventCategories'].includes(x[0])
+          [
+            'eventDetail',
+            'cancelEventReason',
+            'endDate',
+            'eventCategories',
+          ].includes(x[0])
         ) {
           return false;
         }
@@ -81,14 +88,6 @@ const CreateEventScreen: React.FC<any> = ({navigation, route}) => {
             .uploadFile(eventImg, FileResource.EVENT, event.eventId);
         }
 
-        if (event && eventImg?.assets && file) {
-          setEventImg(undefined);
-          RootNavigation.navigate('Main', {
-            screen: 'EventDetailScreen',
-            params: {eventId: event.eventId},
-          });
-        }
-
         Toast.show({
           type: 'success',
           text1: 'Success',
@@ -105,6 +104,7 @@ const CreateEventScreen: React.FC<any> = ({navigation, route}) => {
   };
 
   const getEvent = async () => {
+    const userId = await AsyncStorage.getItem('userId');
     if (isEdit) {
       const event = await useEventStore.getState().getEvent(eventId);
       useEventStore.getState().setForm({
@@ -116,14 +116,15 @@ const CreateEventScreen: React.FC<any> = ({navigation, route}) => {
       }
 
       const isHost = event.userEvents.find(async (ue: UserEvent) => {
-        const userId = await AsyncStorage.getItem('userId');
         return ue.userId == userId;
       })?.isHost;
       isHost && setIsHost(isHost);
+    } else {
+      useEventStore.getState().setForm({
+        ...form,
+        hostId: userId,
+      });
     }
-    // else {
-    //   useEventStore.getState().clearForm();
-    // }
   };
 
   const onChangeText = (field: string, value: string) =>
@@ -267,6 +268,13 @@ const CreateEventScreen: React.FC<any> = ({navigation, route}) => {
           <View style={styles.inputConatiner}>
             <View style={styles.inputName}>
               <Text style={styles.inputText}>Name</Text>
+              <Text
+                style={[
+                  styles.inputText,
+                  {paddingHorizontal: normalize(2), color: 'red'},
+                ]}>
+                *
+              </Text>
             </View>
             <TextInput
               value={form?.eventName}
@@ -286,6 +294,13 @@ const CreateEventScreen: React.FC<any> = ({navigation, route}) => {
               alignItems: 'center',
             }}>
             <Text style={styles.inputText}>How many People?</Text>
+            <Text
+              style={[
+                styles.inputText,
+                {paddingHorizontal: normalize(2), color: 'red'},
+              ]}>
+              *
+            </Text>
             <View style={{paddingHorizontal: normalize(10)}}>
               <Couter
               // disabled={view}
@@ -294,29 +309,97 @@ const CreateEventScreen: React.FC<any> = ({navigation, route}) => {
           </View>
           <View style={styles.inputConatiner}>
             <View style={styles.inputName}>
-              <Image
-                source={icons.calendar}
-                style={{marginHorizontal: normalize(4)}}
-              />
-              <Text style={styles.inputText}>Days</Text>
+              <Text style={styles.inputText}>Start</Text>
+              <Text
+                style={[
+                  styles.inputText,
+                  {paddingHorizontal: normalize(2), color: 'red'},
+                ]}>
+                *
+              </Text>
             </View>
-            <CalendarInput
-              style={styles.input}
-              // disabled={view}
-            ></CalendarInput>
+            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+              <RNDateTimePicker
+                style={{
+                  marginHorizontal: normalize(2),
+                }}
+                mode="date"
+                value={form?.startDate ?? new Date()}
+                minimumDate={new Date()}
+                is24Hour
+                locale="en-US"
+                dateFormat="day month year"
+                onChange={(event, date) => {
+                  useEventStore.getState().setForm({...form, startDate: date});
+                }}
+              />
+              <RNDateTimePicker
+                style={{
+                  marginHorizontal: normalize(2),
+                }}
+                mode="time"
+                value={form?.startDate ?? new Date()}
+                is24Hour
+                locale="en-US"
+                onChange={(event, date) => {
+                  useEventStore.getState().setForm({
+                    ...form,
+                    startDate: new Date(
+                      new Date(form?.startDate ?? '').setTime(
+                        date?.getTime() ?? 0,
+                      ),
+                    ),
+                  });
+                }}
+              />
+            </View>
           </View>
           <View style={styles.inputConatiner}>
             <View style={styles.inputName}>
-              <Image
-                source={icons.time}
-                style={{marginHorizontal: normalize(4)}}
-              />
-              <Text style={styles.inputText}>Times</Text>
+              <Text style={styles.inputText}>End</Text>
+              <Text
+                style={[
+                  styles.inputText,
+                  {paddingHorizontal: normalize(2), color: 'red'},
+                ]}>
+                *
+              </Text>
             </View>
-            <TimeInput
-              style={styles.input}
-              // disabled={view}
-            ></TimeInput>
+            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+              <RNDateTimePicker
+                style={{
+                  marginHorizontal: normalize(2),
+                }}
+                mode="date"
+                value={form?.endDate ?? new Date()}
+                is24Hour
+                locale="en-US"
+                dateFormat="day month year"
+                onChange={(event, date) => {
+                  useEventStore.getState().setForm({...form, endDate: date});
+                }}
+              />
+              <RNDateTimePicker
+                style={{
+                  marginHorizontal: normalize(2),
+                }}
+                mode="time"
+                value={form?.endDate ?? new Date()}
+                // minimumDate={form?.startDate ?? new Date()}
+                is24Hour
+                locale="en-US"
+                onChange={(event, date) => {
+                  useEventStore.getState().setForm({
+                    ...form,
+                    endDate: new Date(
+                      new Date(form?.endDate ?? '').setTime(
+                        date?.getTime() ?? 0,
+                      ),
+                    ),
+                  });
+                }}
+              />
+            </View>
           </View>
           <View style={styles.inputConatiner}>
             <View style={styles.inputName}>
@@ -325,6 +408,13 @@ const CreateEventScreen: React.FC<any> = ({navigation, route}) => {
                 style={{marginHorizontal: normalize(4)}}
               />
               <Text style={styles.inputText}>Location</Text>
+              <Text
+                style={[
+                  styles.inputText,
+                  {paddingHorizontal: normalize(2), color: 'red'},
+                ]}>
+                *
+              </Text>
             </View>
             <TouchableOpacity
               style={styles.input}

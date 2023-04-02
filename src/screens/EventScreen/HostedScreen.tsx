@@ -10,9 +10,12 @@ import {Event} from '../../components/Event/Event';
 import * as RootNavigation from '../../navigations/RootNavigation';
 import {useEventStore} from '../../stores/eventStore';
 
-interface Prop {}
+interface Prop {
+  friendId: string;
+}
 
 const HostedScreen: React.FC<Prop> = (props: Prop) => {
+  const friendId = props.friendId;
   const events = useEventStore(state => state.events);
   const loading = useEventStore(state => state.loading);
   const criteria = useEventStore(state => state.criteria);
@@ -20,7 +23,9 @@ const HostedScreen: React.FC<Prop> = (props: Prop) => {
   const setCriteria = (criteria: any) =>
     useEventStore.getState().setCriteria(criteria);
   const getEvents = async () => {
-    const userId = (await AsyncStorage.getItem('userId')) ?? '';
+    const userId = friendId
+      ? friendId
+      : (await AsyncStorage.getItem('userId')) ?? '';
     setCriteria({...criteria, eventType: EventType.HOSTED, userId});
     setUserId(userId);
     const event = await useEventStore.getState().getEvents({

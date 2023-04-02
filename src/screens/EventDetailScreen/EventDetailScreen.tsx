@@ -35,6 +35,7 @@ import {allCategories} from '../../common/function/utility';
 import {Category} from '../../components/Category/Category';
 import Spinner from 'react-native-loading-spinner-overlay/lib';
 import FastImage from 'react-native-fast-image';
+import RNDateTimePicker from '@react-native-community/datetimepicker';
 
 const EventDetailScreen: React.FC<any> = ({navigation, route}) => {
   const user = useAuthStore(state => state.user);
@@ -48,12 +49,25 @@ const EventDetailScreen: React.FC<any> = ({navigation, route}) => {
   const [isHost, setIsHost] = useState<boolean | undefined>(undefined);
   const [eventImgUri, setEventImgUri] = useState<string | undefined>(undefined);
   const [toggleEventCode, setToggleEventCode] = useState<boolean>(false);
+  const [userEvent, setUserEvent] = useState<any>();
 
-  const onPressJoin = () => {
-    useUserEventStore.getState().createUserEvent({
+  const onPressJoin = async () => {
+    const userEvent = await useUserEventStore.getState().createUserEvent({
       eventId,
       userId: user?.userId,
     });
+    setUserEvent(userEvent);
+    await getEvent();
+  };
+
+  const onPressCancelJoin = async () => {
+    const userId = await AsyncStorage.getItem('userId');
+    await useUserEventStore
+      .getState()
+      .deleteUserEvent(
+        event?.userEvents.find(ue => ue.userId == userId)?.userEventId,
+      );
+    await getEvent();
   };
 
   const onPressCancel = () => {
@@ -195,31 +209,78 @@ const EventDetailScreen: React.FC<any> = ({navigation, route}) => {
           </View> */}
           <View style={styles.inputConatiner}>
             <View style={styles.inputName}>
-              <Image
-                source={icons.calendar}
-                style={{marginHorizontal: normalize(4)}}
-              />
-              <Text style={styles.inputText}>Days</Text>
+              <Text style={styles.inputText}>Start</Text>
+              <Text
+                style={[
+                  styles.inputText,
+                  {paddingHorizontal: normalize(2), color: 'red'},
+                ]}>
+                *
+              </Text>
             </View>
-            <CalendarInput
-              style={styles.input}
-              disabled={true}
-              // disabled={view}
-            ></CalendarInput>
+            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+              <RNDateTimePicker
+                style={{
+                  marginHorizontal: normalize(2),
+                }}
+                mode="date"
+                value={
+                  event?.startDate ? new Date(event?.startDate) : new Date()
+                }
+                minimumDate={new Date()}
+                is24Hour
+                locale="en-US"
+                dateFormat="day month year"
+              />
+              <RNDateTimePicker
+                style={{
+                  marginHorizontal: normalize(2),
+                }}
+                mode="time"
+                value={
+                  event?.startDate ? new Date(event?.startDate) : new Date()
+                }
+                is24Hour
+                locale="en-US"
+              />
+            </View>
           </View>
           <View style={styles.inputConatiner}>
             <View style={styles.inputName}>
-              <Image
-                source={icons.time}
-                style={{marginHorizontal: normalize(4)}}
-              />
-              <Text style={styles.inputText}>Times</Text>
+              <Text style={styles.inputText}>End</Text>
+              <Text
+                style={[
+                  styles.inputText,
+                  {paddingHorizontal: normalize(2), color: 'red'},
+                ]}>
+                *
+              </Text>
             </View>
-            <TimeInput
-              style={styles.input}
-              disabled={true}
-              // disabled={view}
-            ></TimeInput>
+            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+              <RNDateTimePicker
+                style={{
+                  marginHorizontal: normalize(2),
+                }}
+                mode="date"
+                value={
+                  event?.endDate ? new Date(event?.endDate) : new Date()
+                }
+                is24Hour
+                locale="en-US"
+                dateFormat="day month year"
+              />
+              <RNDateTimePicker
+                style={{
+                  marginHorizontal: normalize(2),
+                }}
+                mode="time"
+                value={
+                  event?.endDate ? new Date(event?.endDate) : new Date()
+                }
+                is24Hour
+                locale="en-US"
+              />
+            </View>
           </View>
           <View style={styles.inputConatiner}>
             <View style={styles.inputName}>
@@ -272,7 +333,7 @@ const EventDetailScreen: React.FC<any> = ({navigation, route}) => {
               maxLength={133}
             />
           </View>
-          {event?.status == 'OPEN' && (
+          {isHost && event?.status == 'OPEN' && (
             <TouchableOpacity
               onPress={async () => {
                 // setToggleEventCode(!toggleEventCode);
@@ -324,7 +385,7 @@ const EventDetailScreen: React.FC<any> = ({navigation, route}) => {
                 fontColor={colors.primary}
                 borderColor={colors.primary}
                 style={[styles.button]}
-                onPress={onPressCancel}
+                onPress={() => onPressCancelJoin}
               />
             )}
             {!joined && !isHost && event?.status == 'OPEN' && (
@@ -372,9 +433,10 @@ const styles = StyleSheet.create({
     height: '100%',
   },
   button: {
-    width: normalize(160),
+    width: normalize(136),
     height: normalize(40),
     marginHorizontal: normalize(8),
+    marginVertical: normalize(4),
     borderWidth: 0.5,
     borderRadius: normalize(8),
     color: colors.fontBlack,

@@ -32,6 +32,8 @@ export default {
   editProfile: require('./edit-profile.png'),
   logout: require('./logout.png'),
   changeImage: require('./change-image.png'),
+  back: require('./back.png'),
+  interest: require('./interest.png'),
 
   img: require('./img.png'),
   location: require('./location.png'),

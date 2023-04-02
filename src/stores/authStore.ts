@@ -79,7 +79,7 @@ export const useAuthStore = create<UserState>(set => ({
         text2: 'Bad request, please check your payload again!',
       });
 
-      throw e;
+      throw e
     } finally {
       set({loading: false});
     }

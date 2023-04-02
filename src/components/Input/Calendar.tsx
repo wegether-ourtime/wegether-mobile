@@ -12,6 +12,7 @@ import DateRangePicker from 'rn-select-date-range';
 import moment from 'moment';
 import {Touchable} from '../Button/Touchable';
 import {useEventStore} from '../../stores/eventStore';
+import RNDateTimePicker from '@react-native-community/datetimepicker';
 
 export const CalendarInput: React.FC<any> = props => {
   const {disabled, style, onChange} = props;
@@ -79,7 +80,16 @@ export const CalendarSheet = (
           <Text style={styles.header}>Choose Date</Text>
         </View>
         <View style={{marginVertical: normalize(10)}}>
-          <DateRangePicker
+          <RNDateTimePicker
+            mode="time"
+            value={new Date()}
+            is24Hour
+            // onChange={value => {
+            //   onChange(range.firstDate, range.secondDate);
+            // }}
+          />
+
+          {/* <DateRangePicker
             onSelectDateRange={range => {
               onChange(range.firstDate, range.secondDate);
             }}
@@ -91,7 +101,7 @@ export const CalendarSheet = (
             selectedDateStyle={styles.selectedDateStyle}
             clearBtnTitle={''}
             confirmBtnTitle={''}
-          />
+          /> */}
           {/* <Touchable
             label={'Save'}
             color={colors.primary}

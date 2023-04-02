@@ -38,7 +38,7 @@ export const ProfileOption: React.FC<any> = props => {
     {
       id: 1,
       name: 'Edit Interests',
-      icon: icons.movie,
+      icon: icons.interest,
       onSelect: () => {
         RootNavigation.navigate('Auth', {
           screen: 'InterestScreen',
@@ -81,9 +81,20 @@ export const ProfileOption: React.FC<any> = props => {
                 <TouchableOpacity style={styles.option} onPress={item.onSelect}>
                   <Image
                     source={item.icon}
-                    style={{marginTop: normalize(2)}}
+                    style={{
+                      marginTop: normalize(2),
+                      width: normalize(12),
+                      height: normalize(12),
+                    }}
+                    resizeMode="contain"
                   />
-                  <Text style={{marginLeft: normalize(16), fontFamily: fonts.medium}}>{item.name}</Text>
+                  <Text
+                    style={{
+                      marginLeft: normalize(16),
+                      fontFamily: fonts.medium,
+                    }}>
+                    {item.name}
+                  </Text>
                 </TouchableOpacity>
               );
             }}

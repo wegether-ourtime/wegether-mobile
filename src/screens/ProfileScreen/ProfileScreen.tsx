@@ -36,7 +36,7 @@ const ProfileScreen: React.FC<any> = ({navigation}) => {
   const userFriends = useUserFriendStore(state => state.userFriends);
   const loading = useUserStore(state => state.loading);
   const [coverImg, setCoverImg] = useState();
-  const [profileImg, setProfileImg] = useState();
+  const [profileImg, setProfileImg] = useState<any>();
   const [toggleNotification, setToggleNotification] = useState<boolean>(false);
   // const [userId, setUserId] = useState<any>();
   // const getUserId = async () => setUserId(await AsyncStorage.getItem('userId'));
@@ -92,11 +92,7 @@ const ProfileScreen: React.FC<any> = ({navigation}) => {
               userId,
             );
 
-          if (imgType === 'profile') {
-            setProfileImg(file?.path);
-          } else {
-            setCoverImg(file?.path);
-          }
+          await getUser();
         }
       },
     );
@@ -120,7 +116,7 @@ const ProfileScreen: React.FC<any> = ({navigation}) => {
       <View style={styles.userDetail}>
         <FastImage
           style={styles.cover}
-          source={{uri: coverImg}}
+          source={coverImg ? {uri: coverImg} : images.cover2}
         />
         <TouchableOpacity
           containerStyle={styles.changeCoverImg}
@@ -132,7 +128,14 @@ const ProfileScreen: React.FC<any> = ({navigation}) => {
           containerStyle={styles.profileContainer}
           size={normalize(100)}
           rounded
-          source={{uri: profileImg}}
+          imageProps={
+            profileImg
+              ? {}
+              : {
+                  resizeMode: 'contain',
+                }
+          }
+          source={profileImg ? {uri: profileImg} : images.profile2}
           // icon={icons.profile}
         />
         <TouchableOpacity
@@ -190,7 +193,14 @@ const ProfileScreen: React.FC<any> = ({navigation}) => {
                 justifyContent: 'center',
                 alignItems: 'center',
               }}>
-              <Text style={{color: colors.primary}}>Not have now.</Text>
+              <Text
+                style={{
+                  color: colors.primary,
+                  fontFamily: fonts.medium,
+                  fontSize: normalize(14),
+                }}>
+                Not have now.
+              </Text>
             </View>
           )}
           <FlatList
@@ -228,7 +238,9 @@ const ProfileScreen: React.FC<any> = ({navigation}) => {
                       alignSelf: 'center',
                       flexDirection: 'row',
                     }}>
-                    <TouchableOpacity style={{marginHorizontal: normalize(8)}}>
+                    <TouchableOpacity
+                      style={{marginHorizontal: normalize(8)}}
+                      onPress={() => onAcceptFriendRequest(item.userFriendId)}>
                       <Image
                         source={icons.tick}
                         style={{width: normalize(20), height: normalize(20)}}
@@ -239,7 +251,8 @@ const ProfileScreen: React.FC<any> = ({navigation}) => {
                       style={{
                         marginHorizontal: normalize(8),
                         marginTop: normalize(2),
-                      }}>
+                      }}
+                      onPress={() => onRejectFriendRequest(item.userFriendId)}>
                       <Image
                         source={icons.cross}
                         style={{width: normalize(20), height: normalize(20)}}
@@ -270,6 +283,7 @@ const styles = StyleSheet.create({
   cover: {
     height: normalize(200),
     width: '100%',
+    backgroundColor: colors.white,
   },
   profile: {
     borderRadius: normalize(2),

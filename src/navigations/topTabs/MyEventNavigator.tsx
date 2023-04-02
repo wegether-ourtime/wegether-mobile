@@ -22,7 +22,8 @@ const renderTabBar = (props: any) => (
   />
 );
 
-const MyEventNavigator: React.FC = () => {
+const MyEventNavigator: React.FC<any> = props => {
+  const {friendId} = props;
   const layout = useWindowDimensions();
   const [index, setIndex] = useState(0);
   const [routes] = useState([
@@ -33,9 +34,9 @@ const MyEventNavigator: React.FC = () => {
   const renderScene = ({route}: any) => {
     switch (route.key) {
       case 'joined':
-        return <JoinedScreen />;
+        return <JoinedScreen friendId={friendId} />;
       case 'hosted':
-        return <HostedScreen />;
+        return <HostedScreen friendId={friendId} />;
       default:
         return null;
     }

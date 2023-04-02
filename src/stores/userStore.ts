@@ -6,6 +6,7 @@ import User, {initialUserProfileForm, UserProfileForm} from '../models/User';
 interface UserState {
   users: User[];
   user: User | null;
+  friendId: string | null;
   userProfileForm: UserProfileForm | null;
   loading: boolean;
   getUsers: (criteria: any) => any;
@@ -15,12 +16,15 @@ interface UserState {
   //   deleteUser: (userId: string) => void;
   setUserProfileForm: (form: any) => void;
   clearUserProfileForm: () => void;
+  setFriendId: (userId: string) => void;
+  clearFriendId: () => void;
   // setLoading: (loading: boolean) => void;
 }
 
 export const useUserStore = create<UserState>(set => ({
   users: [],
   user: null,
+  friendId: null,
   userProfileForm: initialUserProfileForm,
   loading: false,
   getUsers: async (criteria: any) => {
@@ -82,6 +86,12 @@ export const useUserStore = create<UserState>(set => ({
   },
   clearUserProfileForm: () => {
     set({userProfileForm: initialUserProfileForm});
+  },
+  setFriendId: (friendId: string) => {
+    set({friendId});
+  },
+  clearFriendId: () => {
+    set({friendId: null});
   },
   // setLoading: (loading: boolean) => set({loading}),
 }));

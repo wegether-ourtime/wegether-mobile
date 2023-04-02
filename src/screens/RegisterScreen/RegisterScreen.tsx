@@ -10,8 +10,10 @@ import {Touchable} from '../../components/Button/Touchable';
 import CustomHeader from '../../components/Text/CustomHeader';
 import {useAuthStore} from '../../stores/authStore';
 import * as RootNavigation from '../../navigations/RootNavigation';
+import Spinner from 'react-native-loading-spinner-overlay/lib';
 
 const RegisterScreen: React.FC<any> = ({navigation}) => {
+  const loading = useAuthStore(state => state.loading);
   const form = useAuthStore(state => state.registerForm);
   const validateField = form
     ? !Object.values(form).some(x => x === null || x === '')
@@ -95,6 +97,7 @@ const RegisterScreen: React.FC<any> = ({navigation}) => {
           style={styles.input}
           editable={true}
           placeholder={'Email'}
+          autoCapitalize="none"
           // placeholderTextColor={colors.disable}
           onChangeText={value => onChangeText('email', value)}
         />
@@ -135,6 +138,11 @@ const RegisterScreen: React.FC<any> = ({navigation}) => {
             onSubmit();
           }}></Touchable>
       </View>
+      <Spinner
+        visible={loading}
+        textContent={'Loading...'}
+        textStyle={{color: '#FFF'}}
+      />
     </SafeAreaView>
   );
 };

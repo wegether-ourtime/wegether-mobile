@@ -34,7 +34,6 @@ export const Event: React.FC<any> = props => {
     suggestionTab,
     status,
   } = props;
-  let a = 1;
   const date = `${new Date(startDate).toLocaleDateString('th-TH', {
     year: 'numeric',
     month: 'numeric',

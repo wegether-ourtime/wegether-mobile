@@ -101,7 +101,15 @@ const InterestScreen: React.FC<any> = ({navigation, route}) => {
       <CustomHeader
         title="Share your interests"
         showBackBtn
-        onPressBack={() => navigation.goBack()}
+        onPressBack={() => {
+          if (register) {
+            navigation.goBack();
+          } else {
+            RootNavigation.navigate('Main', {
+              screen: 'MainScreen',
+            });
+          }
+        }}
       />
       <View style={styles.main}>
         <View style={[styles.info]}>

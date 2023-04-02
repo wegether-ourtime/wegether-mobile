@@ -36,7 +36,6 @@ const LoginScreen: React.FC<any> = ({navigation}) => {
     : null;
 
   const login = async () => {
-    // validateInput()
     if (validateField) {
       await useAuthStore.getState().login({...form});
       const user = useAuthStore.getState().user;

@@ -52,6 +52,8 @@ const SuggestionScreen: React.FC<Prop> = (props: Prop) => {
       await getEvents();
       Toast.show({
         type: 'success',
+        text1: 'Success',
+        text2: 'Join event success.'
       });
     } catch (err) {
       console.log(err);

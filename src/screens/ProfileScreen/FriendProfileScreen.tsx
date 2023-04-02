@@ -22,9 +22,13 @@ import {useAuthStore} from '../../stores/authStore';
 import {useFileStore} from '../../stores/fileStore';
 import {useUserFriendStore} from '../../stores/userFriendStore';
 import {useUserStore} from '../../stores/userStore';
+import * as RootNavigation from '../../navigations/RootNavigation';
 
 const FriendProfileScreen: React.FC<any> = ({navigation, route}) => {
   const [friendId] = useState(route?.params?.friendId);
+  const [previousScreen] = useState(route?.params?.previousScreen);
+  const [eventId] = useState(route?.params?.eventId);
+  const [chatName] = useState(route?.params?.chatName);
   const user = useUserStore(state => state.user);
   const userFriend = useUserFriendStore(state => state.userFriend);
   const loading = useUserStore(state => state.loading);
@@ -83,10 +87,25 @@ const FriendProfileScreen: React.FC<any> = ({navigation, route}) => {
   return (
     <View style={[stylesCentral.container]}>
       <View style={styles.userDetail}>
-        <FastImage
-          style={styles.cover}
-          source={{uri: coverImg}}
-        />
+        <FastImage style={styles.cover} source={{uri: coverImg}} />
+        <TouchableOpacity
+          containerStyle={styles.back}
+          onPress={() => {
+            console.log(previousScreen);
+            if (previousScreen) {
+              RootNavigation.navigate('Main', {
+                screen: previousScreen,
+                params: {
+                  eventId: eventId,
+                  chatName: chatName,
+                },
+              });
+            } else {
+              navigation.goBack();
+            }
+          }}>
+          <Image source={icons.back} />
+        </TouchableOpacity>
         {/* <TouchableOpacity
           containerStyle={styles.changeCoverImg}
           onPress={() => onPressChangeImg('cover')}>
@@ -165,7 +184,7 @@ const FriendProfileScreen: React.FC<any> = ({navigation, route}) => {
         </View>
       </View>
       <View style={{flex: 10}}>
-        <MyEventNavigator />
+        <MyEventNavigator friendId={friendId}/>
       </View>
       <Spinner
         visible={loading}
@@ -256,5 +275,11 @@ const styles = StyleSheet.create({
     fontFamily: font.medium,
     fontSize: normalize(14),
     // backgroundColor: 'red'
+  },
+  back: {
+    position: 'absolute',
+    left: normalize(16),
+    top: normalize(40),
+    zIndex: 1,
   },
 });
