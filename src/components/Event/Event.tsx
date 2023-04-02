@@ -71,7 +71,7 @@ export const Event: React.FC<any> = props => {
       }>
       <View style={styles.main}>
         <FastImage
-          source={eventImg ? {uri: eventImg} : images.cover}
+          source={{uri: eventImg}}
           style={styles.eventImage}
         />
         <View style={styles.eventDetail}>

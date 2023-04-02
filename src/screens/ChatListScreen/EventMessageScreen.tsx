@@ -59,7 +59,7 @@ const EventMessageScreen: React.FC<any> = ({navigation}) => {
                 containerStyle={styles.imgContainer}
                 size={normalize(56)}
                 rounded
-                source={eventImg ? {uri: eventImg.path} : images.cover}
+                source={{uri: eventImg?.path}}
               />
               {/* <FastImage source={item.icon} style={{marginTop: normalize(2)}}></Image> */}
               <View style={styles.chatDetail}>

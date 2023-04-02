@@ -9,6 +9,7 @@ import {stylesCentral} from '../../common/styles/StylesCentral';
 import {Touchable} from '../../components/Button/Touchable';
 import CustomHeader from '../../components/Text/CustomHeader';
 import {useAuthStore} from '../../stores/authStore';
+import * as RootNavigation from '../../navigations/RootNavigation';
 
 const RegisterScreen: React.FC<any> = ({navigation}) => {
   const form = useAuthStore(state => state.registerForm);
@@ -40,7 +41,13 @@ const RegisterScreen: React.FC<any> = ({navigation}) => {
         });
       } else {
         await useAuthStore.getState().register(form);
-        navigation.navigate('InterestScreen');
+        // navigation.navigate('InterestScreen');
+        RootNavigation.navigate('Auth', {
+          screen: 'InterestScreen',
+          params: {
+            register: true,
+          },
+        });
       }
     }
   };

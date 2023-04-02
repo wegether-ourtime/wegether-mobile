@@ -63,12 +63,20 @@ export const useAuthStore = create<UserState>(set => ({
       const {data} = await axios.post(`${BASE_URL}/auth/register`, payload);
       set({registerForm: initialRegisterForm});
 
+      const user = {
+        ...data.user,
+        token: data.accessToken,
+      };
+
+      await AsyncStorage.setItem('token', user.token);
+      await AsyncStorage.setItem('userId', user.userId);
+      set({user});
       return data;
     } catch (e) {
       Toast.show({
         type: 'fail',
         text1: 'Error',
-        text2: 'Desc',
+        text2: 'Bad request, please check your payload again!',
       });
 
       throw e;

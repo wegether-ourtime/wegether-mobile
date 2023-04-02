@@ -37,41 +37,56 @@ export const allCategories = [
   {
     id: 'b9e932a9-d0fe-4b49-9de1-e34928bc57f2',
     name: 'Travel',
-    icon: icons.party,
+    icon: icons.travel,
   },
   {
-    id: '485edcab-c43d-4074-8092-b4a7652b69de',
-    name: 'Nature',
-    icon: icons.party,
+    id: '17e3ea07-21be-4c31-a99f-a4f244d9a7ee',
+    name: 'Take a photo',
+    icon: icons.photo,
   },
   {
     id: 'b7af4749-90e4-4b75-b6f6-86f123d6d474',
     name: 'Health &Wellness',
-    icon: icons.party,
+    icon: icons.health,
   },
   {
     id: 'cd924f7a-4bf8-4248-abd8-27728272ee38',
     name: 'Culture',
-    icon: icons.party,
+    icon: icons.culture,
   },
   {
     id: '747f05c0-0d6d-4879-9fbd-9ebd9c8623b8',
     name: 'Food & Cooking',
-    icon: icons.party,
+    icon: icons.food,
   },
   {
     id: '5ba5d8ae-1e18-4abd-92b8-e705e8b8efbd',
     name: 'Education',
-    icon: icons.party,
+    icon: icons.education,
   },
   {
     id: 'cc0d5bd1-168a-400b-b3d9-3c976dd217c9',
     name: 'Gaming',
-    icon: icons.party,
+    icon: icons.gaming,
   },
   {
     id: '13bd27d4-2431-4c97-8d24-25ff301fd8c1',
     name: 'Language Exchange',
-    icon: icons.party,
+    icon: icons.language,
+  },
+  {
+    id: 'da299bcf-1fae-485c-a1e8-2ad3a8373d07',
+    name: 'Concert',
+    icon: icons.concert,
+  },
+  {
+    id: 'e9a1db74-5c35-4a8a-abfc-57dcbff06267',
+    name: 'Shoping',
+    icon: icons.shoping,
+  },
+  {
+    id: '0a7dd857-7fbb-4bfb-8ff7-73bfdde3e883',
+    name: 'Music',
+    icon: icons.music,
   },
 ];

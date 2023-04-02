@@ -200,6 +200,7 @@ const CreateEventScreen: React.FC<any> = ({navigation, route}) => {
                 height: normalize(200),
                 alignItems: 'center',
                 justifyContent: 'center',
+                // backgroundColor: colors.white
               },
             ]}>
             {eventImg ? (
@@ -221,29 +222,9 @@ const CreateEventScreen: React.FC<any> = ({navigation, route}) => {
               </>
             ) : (
               <TouchableOpacity
-                containerStyle={{
-                  height: '100%',
-                  width: '100%',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}
-                onPress={async () => {
-                  const img = await launchImageLibrary(
-                    {
-                      mediaType: 'photo',
-                    },
-                    res => {
-                      if (!res.didCancel) setEventImg(res);
-                    },
-                  );
-                }}>
-                <Image
-                  source={icons.addButton}
-                  style={{
-                    height: normalize(25),
-                    width: normalize(25),
-                  }}
-                />
+                containerStyle={styles.changeImg}
+                onPress={() => onPressChangeImg()}>
+                <Image source={icons.changeImage} />
               </TouchableOpacity>
             )}
           </View>

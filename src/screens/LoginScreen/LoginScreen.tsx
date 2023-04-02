@@ -120,7 +120,7 @@ const LoginScreen: React.FC<any> = ({navigation}) => {
             <Touchable
               label={'Don’t have any account ? Sign Up'}
               fontColor={'#757575'}
-              style={[styles.button, {marginTop: normalize(40)}]}
+              style={[styles.button, {marginTop: normalize(24)}]}
               fontSize={normalize(16)}
               onPress={() => {
                 navigation.navigate('RegisterScreen');

@@ -25,12 +25,12 @@ export const ParticipantSheet = (props: SheetProps) => {
 
   const getUserId = async () => {
     const userId = await AsyncStorage.getItem('userId');
-    setUserId(userId ?? '')
+    setUserId(userId ?? '');
   };
 
   useEffect(() => {
     getUserEvents();
-    getUserId()
+    getUserId();
   }, []);
 
   return (
@@ -63,11 +63,7 @@ export const ParticipantSheet = (props: SheetProps) => {
                 containerStyle={styles.imgContainer}
                 size={normalize(56)}
                 rounded
-                source={
-                  item?.user?.imgProfileUrl
-                    ? {uri: item?.user?.imgProfileUrl}
-                    : images.cover
-                }
+                source={{uri: item?.user?.imgProfileUrl}}
               />
               {/* <FastImage source={item.icon} style={{marginTop: normalize(2)}}></Image> */}
               <View style={styles.chatDetail}>

@@ -14,7 +14,7 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import {stylesApp} from '../../common/styles/AppStyle';
 import {Category} from '../../components/Category/Category';
 import {Touchable} from '../../components/Button/Touchable';
-import {colors, icons} from '../../common/assets';
+import {colors, font, icons} from '../../common/assets';
 import {normalize} from '../../common/function/normalize';
 import * as RootNavigation from '../../navigations/RootNavigation';
 import {useUserCategoryStore} from '../../stores/userCategoryStore';
@@ -23,9 +23,10 @@ import {Toast} from 'react-native-toast-message/lib/src/Toast';
 import {FlatList} from 'react-native-gesture-handler';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useFocusEffect} from '@react-navigation/native';
-import { allCategories } from '../../common/function/utility';
+import {allCategories} from '../../common/function/utility';
 
-const InterestScreen: React.FC<any> = ({navigation}) => {
+const InterestScreen: React.FC<any> = ({navigation, route}) => {
+  const [register] = useState(route?.params?.register);
   // const [userId] = useState(route?.params?.userId);
   const [selectCategories, setSelectCategories] = useState<string[]>([]);
   // const userCategories = useUserCategoryStore(state => state.userCategories);
@@ -61,12 +62,28 @@ const InterestScreen: React.FC<any> = ({navigation}) => {
 
   const onSubmit = async () => {
     const userId = await AsyncStorage.getItem('userId');
-    await updateUserCategories({userId, categoriesId: selectCategories});
-    Toast.show({
-      type: 'success',
-      text1: 'Success',
-      text2: 'Update intesrests success.',
+    const userCategory = await updateUserCategories({
+      userId,
+      categoriesId: selectCategories,
     });
+    if (userCategory) {
+      if (register) {
+        RootNavigation.navigate('Main', {
+          screen: 'MainScreen',
+        });
+      }
+      Toast.show({
+        type: 'success',
+        text1: 'Success',
+        text2: 'Update interests success.',
+      });
+    } else {
+      Toast.show({
+        type: 'fail',
+        text1: 'Error',
+        text2: 'Update interests fail.',
+      });
+    }
   };
 
   useEffect(() => {
@@ -88,7 +105,9 @@ const InterestScreen: React.FC<any> = ({navigation}) => {
       />
       <View style={styles.main}>
         <View style={[styles.info]}>
-          <Text>Choose at least one category to find your connection</Text>
+          <Text style={{fontFamily: font.medium, fontSize: normalize(14)}}>
+            Choose at least one category to find your connection
+          </Text>
         </View>
         <View style={styles.categories}>
           {categories.map((item: any, index: number) => {
@@ -114,7 +133,9 @@ const InterestScreen: React.FC<any> = ({navigation}) => {
           })}
         </View>
         <View style={{alignSelf: 'center'}}>
-          <Text>{selectCategories.length} / 3</Text>
+          <Text style={{fontFamily: font.medium, fontSize: normalize(14)}}>
+            {selectCategories.length} / 3
+          </Text>
         </View>
         <Touchable
           label={'Save'}

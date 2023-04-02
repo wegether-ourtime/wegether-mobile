@@ -120,7 +120,7 @@ const ProfileScreen: React.FC<any> = ({navigation}) => {
       <View style={styles.userDetail}>
         <FastImage
           style={styles.cover}
-          source={coverImg ? {uri: coverImg} : images.cover}
+          source={{uri: coverImg}}
         />
         <TouchableOpacity
           containerStyle={styles.changeCoverImg}

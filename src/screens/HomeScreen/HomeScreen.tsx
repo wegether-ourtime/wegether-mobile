@@ -24,7 +24,7 @@ const HomeScreen: React.FC<any> = ({navigation}) => {
             resizeMode={'contain'}
           />
         </View>
-        <Touchable
+        {/* <Touchable
           label={'Login with Facebook'}
           color={colors.white}
           fontColor={colors.primary}
@@ -33,7 +33,7 @@ const HomeScreen: React.FC<any> = ({navigation}) => {
             RootNavigation.navigate('Main', {
               screen: 'MainScreen',
             });
-          }}></Touchable>
+          }}></Touchable> */}
         <Touchable
           label={'Login with Email'}
           color={colors.primary}
@@ -45,7 +45,7 @@ const HomeScreen: React.FC<any> = ({navigation}) => {
         <Touchable
           label={'Don’t have any account ? Sign Up'}
           fontColor={'#757575'}
-          style={[styles.button, {marginTop: normalize(40)}]}
+          style={[styles.button, {marginTop: normalize(24)}]}
           fontSize={normalize(16)}
           onPress={() => {
             navigation.navigate('RegisterScreen');

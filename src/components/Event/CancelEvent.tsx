@@ -5,7 +5,7 @@ import ActionSheet, {
   SheetManager,
   SheetProps,
 } from 'react-native-actions-sheet';
-import {colors} from '../../common/assets';
+import {colors, font} from '../../common/assets';
 import {Touchable} from '../Button/Touchable';
 import icons from '../../common/assets/icons';
 import {useEventStore} from '../../stores/eventStore';
@@ -47,7 +47,9 @@ export const CancelEventSheet = (props: SheetProps) => {
       gestureEnabled={true}>
       <View style={styles.container}>
         <View style={styles.title}>
-          <Text>สาเหตุที่ยกเลิก</Text>
+          <Text style={{fontFamily: font.medium, fontSize: normalize(16)}}>
+            สาเหตุที่ยกเลิก
+          </Text>
         </View>
         <TouchableOpacity
           onPress={() => setReason('ต้องการเปลี่ยนกิจกรรม')}
@@ -65,6 +67,7 @@ export const CancelEventSheet = (props: SheetProps) => {
           /> */}
           <Text
             style={{
+              fontFamily: font.medium,
               marginHorizontal: normalize(8),
               ...(reason == 'ต้องการเปลี่ยนกิจกรรม'
                 ? {color: colors.white}
@@ -89,6 +92,7 @@ export const CancelEventSheet = (props: SheetProps) => {
           /> */}
           <Text
             style={{
+              fontFamily: font.medium,
               marginHorizontal: normalize(8),
               ...(reason == 'ติดธุระด่วน'
                 ? {color: colors.white}
@@ -113,6 +117,7 @@ export const CancelEventSheet = (props: SheetProps) => {
           /> */}
           <Text
             style={{
+              fontFamily: font.medium,
               marginHorizontal: normalize(8),
               ...(reason == 'มีเพื่อนทำกิจกรรมแล้ว'
                 ? {color: colors.white}
@@ -137,6 +142,7 @@ export const CancelEventSheet = (props: SheetProps) => {
           /> */}
           <Text
             style={{
+              fontFamily: font.medium,
               marginHorizontal: normalize(8),
               ...(reason == 'ไม่อยากเข้าร่วมกิจกรรมนี้แล้ว'
                 ? {color: colors.white}
@@ -159,6 +165,7 @@ export const CancelEventSheet = (props: SheetProps) => {
           /> */}
           <Text
             style={{
+              fontFamily: font.medium,
               marginHorizontal: normalize(8),
               ...(reason == 'อื่นๆ'
                 ? {color: colors.white}

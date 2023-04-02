@@ -132,7 +132,7 @@ const EventDetailScreen: React.FC<any> = ({navigation, route}) => {
               },
             ]}>
             <FastImage
-              source={eventImgUri ? {uri: eventImgUri} : images.cover}
+              source={{uri: eventImgUri}}
               style={{height: '100%', width: '100%'}}
             />
           </View>
@@ -287,34 +287,16 @@ const EventDetailScreen: React.FC<any> = ({navigation, route}) => {
             </TouchableOpacity>
           )}
 
-          {isHost ? (
-            <View
-              style={{
-                flexDirection: 'row',
-                flexWrap: 'wrap',
-              }}>
-              <View style={{width: '50%'}}>
-                <Touchable
-                  label={'Cancel'}
-                  color={colors.white}
-                  fontColor={colors.primary}
-                  style={[styles.button]}
-                  onPress={onPressCancel}></Touchable>
-              </View>
-              <View style={{width: '50%'}}>
-                <Touchable
-                  label={'Chat'}
-                  color={colors.primary}
-                  fontColor={colors.white}
-                  style={[styles.button]}
-                  onPress={() => {
-                    RootNavigation.navigate('Main', {
-                      screen: 'ChatScreen',
-                      params: {chatId: ''},
-                    });
-                  }}></Touchable>
-              </View>
-              <View style={{width: '100%'}}>
+          <View
+            style={{
+              marginVertical: normalize(8),
+              flexDirection: 'row',
+              alignContent: 'center',
+              justifyContent: 'center',
+              flexWrap: 'wrap',
+            }}>
+            {isHost && event?.status == 'OPEN' && (
+              <>
                 <Touchable
                   label={'Edit'}
                   color={colors.primary}
@@ -325,46 +307,54 @@ const EventDetailScreen: React.FC<any> = ({navigation, route}) => {
                       screen: 'EventFormScreen',
                       params: {isEdit: true, eventId},
                     });
-                  }}></Touchable>
-              </View>
-            </View>
-          ) : (
-            <>
-              {joined ? (
-                <>
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                      alignContent: 'center',
-                    }}>
-                    <View style={{width: '50%'}}>
-                      <Touchable
-                        label={'Cancel Join'}
-                        color={colors.white}
-                        fontColor={colors.primary}
-                        style={[styles.button]}
-                        onPress={onPressCancel}></Touchable>
-                    </View>
-                    <View style={{width: '50%'}}>
-                      <Touchable
-                        label={'Chat'}
-                        color={colors.primary}
-                        fontColor={colors.white}
-                        style={[styles.button]}
-                        onPress={() => {}}></Touchable>
-                    </View>
-                  </View>
-                </>
-              ) : (
+                  }}
+                />
                 <Touchable
-                  label={'Join'}
-                  color={colors.primary}
-                  fontColor={colors.white}
+                  label={'Cancel'}
+                  color={colors.white}
+                  fontColor={colors.primary}
                   style={[styles.button]}
-                  onPress={onPressJoin}></Touchable>
-              )}
-            </>
-          )}
+                  onPress={onPressCancel}></Touchable>
+              </>
+            )}
+            {joined && !isHost && event?.status == 'OPEN' && (
+              <Touchable
+                label={'Cancel Join'}
+                color={colors.white}
+                fontColor={colors.primary}
+                borderColor={colors.primary}
+                style={[styles.button]}
+                onPress={onPressCancel}
+              />
+            )}
+            {!joined && !isHost && event?.status == 'OPEN' && (
+              <Touchable
+                label={'Join'}
+                color={colors.primary}
+                fontColor={colors.white}
+                borderColor={colors.white}
+                style={[styles.button]}
+                onPress={onPressJoin}></Touchable>
+            )}
+            {(isHost || joined) && (
+              <Touchable
+                label={'Chat'}
+                color={colors.primary}
+                fontColor={colors.white}
+                borderColor={colors.white}
+                style={[styles.button]}
+                onPress={() => {
+                  RootNavigation.navigate('Main', {
+                    screen: 'ChatScreen',
+                    params: {
+                      eventId: event?.eventId,
+                      chatName: event?.eventName,
+                    },
+                  });
+                }}
+              />
+            )}
+          </View>
         </ScrollView>
       </View>
       <Spinner
@@ -382,10 +372,14 @@ const styles = StyleSheet.create({
     height: '100%',
   },
   button: {
-    margin: normalize(20),
-    marginHorizontal: normalize(10),
-    // marginBottom: normalize(0),
-    padding: normalize(10),
+    width: normalize(160),
+    height: normalize(40),
+    marginHorizontal: normalize(8),
+    borderWidth: 0.5,
+    borderRadius: normalize(8),
+    color: colors.fontBlack,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   buttonContainer: {
     backgroundColor: 'red',
@@ -417,7 +411,8 @@ const styles = StyleSheet.create({
   },
   eventCodeButton: {
     height: normalize(40),
-    marginVertical: normalize(16),
+    marginTop: normalize(16),
+    marginBottom: normalize(8),
     marginHorizontal: normalize(80),
     borderColor: colors.primary,
     borderWidth: 0.5,
